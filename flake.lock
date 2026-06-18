@@ -1,0 +1,94 @@
+{
+  "nodes": {
+    "flix": {
+      "inputs": {
+        "my-nix-utils": "my-nix-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1781102683,
+        "narHash": "sha256-WkVhShwvNnmk76SiANCzOLMh10SjdvCZHii9pVhenRs=",
+        "owner": "Cj-bc",
+        "repo": "flix.nix",
+        "rev": "e7ab25a21b6bb26faaa39b527e421d592a97fee6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Cj-bc",
+        "repo": "flix.nix",
+        "type": "github"
+      }
+    },
+    "my-nix-utils": {
+      "locked": {
+        "lastModified": 1780765637,
+        "narHash": "sha256-0oOcHxg99EN3PHW9B2u7oAvBxp7h2b9Jh/L1XQH6WO8=",
+        "owner": "Cj-bc",
+        "repo": "my-nix-utils",
+        "rev": "a159b08464f873e65469326940f63d5bd87fa214",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Cj-bc",
+        "repo": "my-nix-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1780243769,
+        "narHash": "sha256-x5UQuRsH3MqI0U9afaXSNqzTPSeZlRLvFAav2Ux1pNw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "331800de5053fcebacf6813adb5db9c9dca22a0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1780749050,
+        "narHash": "sha256-3av0pIjlOWQ6rDbNOmpUSvbNnJkGORQKKjb4LtCZsIY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a799d3e3886da994fa307f817a6bc705ae538eeb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flix": "flix",
+        "nixpkgs": "nixpkgs_2",
+        "utils": "utils"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1780765637,
+        "narHash": "sha256-0oOcHxg99EN3PHW9B2u7oAvBxp7h2b9Jh/L1XQH6WO8=",
+        "owner": "Cj-bc",
+        "repo": "my-nix-utils",
+        "rev": "a159b08464f873e65469326940f63d5bd87fa214",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Cj-bc",
+        "repo": "my-nix-utils",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
