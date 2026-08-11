@@ -24,5 +24,5 @@ pub mod Time.LocalDateTime {
   pub def between(d1: LocalDateTime, d2: LocalDateTime): Duration =
     let LocalDateTime(t1) = d1;
     let LocalDateTime(t2) = d2;
-    Duration.Duration(Int64.abs(d1 - d2));
+    Duration.Duration(Int64.abs(t1 - t2))
 }
