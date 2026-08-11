@@ -1,4 +1,4 @@
-# njdatetime.flix -- no-java dependent DateTime library for flix
+# paranoid-time.flix -- no-java dependent DateTime library for flix
 
 This library provides very basic types and utilities for manipulating DateTime.
 Requires no Java interop, thus no `unrestricted` security context is required.  

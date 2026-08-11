@@ -12,7 +12,7 @@
       let pkgs = import nixpkgs { system = system; overlays = [ ]; };
       in { 
         packages.${system}.default = pkgs.stdenv.mkDerivation {
-          name = "datetime.flix";
+          name = "paranoid-time.flix";
           version = "0.1.0";
           src = "src";
           buildInputs = [ flix.packages.${system}.flix_0_73_0 ];
