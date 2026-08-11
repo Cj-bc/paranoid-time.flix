@@ -13,7 +13,7 @@
       in { 
         packages.${system}.default = pkgs.stdenv.mkDerivation {
           name = "paranoid-time.flix";
-          version = "0.1.0";
+          version = "0.1.1";
           src = "src";
           buildInputs = [ flix.packages.${system}.flix_0_75_1 ];
         };
