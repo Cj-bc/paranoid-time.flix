@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+# `flix release` only needs to create a GitHub Release and upload the
+# built artifact to it, so the auto-issued GITHUB_TOKEN only needs
+# `contents: write`. Everything else defaults to `none` because this
+# block is explicit.
+permissions:
+  contents: write
+
+# Avoid two release runs racing for the same tag; never cancel a run
+# that may already be mid-publish.
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: nixbuild/nix-quick-install-action@v35
+
+      - name: Verify tag matches flix.toml version
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          tag_version="${TAG_NAME#v}"
+          toml_version=$(grep '^version' flix.toml | sed -E 's/version *= *"([^"]+)"/\1/')
+          if [ "$tag_version" != "$toml_version" ]; then
+            echo "::error::Tag $TAG_NAME does not match flix.toml version ($toml_version)"
+            exit 1
+          fi
+
+      - name: Check
+        run: nix develop -c flix check
+
+      - name: Test
+        run: nix develop -c flix test
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: nix develop -c flix release --github-token "$GITHUB_TOKEN"
