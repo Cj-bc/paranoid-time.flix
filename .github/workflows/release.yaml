@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*'
 
 # Avoid two release runs racing for the same tag; never cancel a run
 # that may already be mid-publish.
