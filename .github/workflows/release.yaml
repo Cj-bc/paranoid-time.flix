@@ -2,9 +2,19 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      tagName:
+        description: tag name to release
+        required: true
+        type: string
   push:
     tags:
       - 'v*'
+
+env:
+  TAG_NAME: ${{ case (
+    github.event_name == "push", github.ref_name
+    inputs.tagName) }}
 
 # Avoid two release runs racing for the same tag; never cancel a run
 # that may already be mid-publish.
@@ -37,8 +47,6 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v35
 
       - name: Verify tag matches flix.toml version
-        env:
-          TAG_NAME: ${{ github.ref_name }}
         run: |
           tag_version="${TAG_NAME#v}"
           toml_version=$(grep '^version' flix.toml | sed -E 's/version *= *"([^"]+)"/\1/')
