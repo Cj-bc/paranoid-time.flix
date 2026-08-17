@@ -13,7 +13,7 @@ on:
 
 env:
   TAG_NAME: ${{ case (
-    github.event_name == "push", github.ref_name
+    github.event_name == 'push', github.ref_name
     inputs.tagName) }}
 
 # Avoid two release runs racing for the same tag; never cancel a run
