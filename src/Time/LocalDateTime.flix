@@ -30,17 +30,17 @@ pub mod Time.LocalDateTime {
     let LocalDateTime(t2) = d2;
     Duration.Duration(Int64.abs(t1 - t2))
 
-  pub def second(date: LocalDateTime): Int64 =
+  pub def second(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.modulo(t, 60i64)
+    Int64.truncateToInt32(Int64.modulo(t, 60i64))
 
-  pub def minute(date: LocalDateTime): Int64 =
+  pub def minute(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.modulo(t, 3600i64) / 60i64
+    Int64.truncateToInt32(Int64.modulo(t, 3600i64) / 60i64)
 
-  pub def hour(date: LocalDateTime): Int64 =
+  pub def hour(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.modulo(t, 86400i64) / 3600i64
+    Int64.truncateToInt32(Int64.modulo(t, 86400i64) / 3600i64)
 
   ///
   /// Returns the floor of `x / n`, i.e. rounding towards negative infinity.
@@ -68,18 +68,18 @@ pub mod Time.LocalDateTime {
     let finalY = if (m <= 2i64) y + 1i64 else y;
     (finalY, m, d)
 
-  pub def year(date: LocalDateTime): Int64 =
+  pub def year(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
     let (y, _, _) = civilFromDays(floorDiv(t, 86400i64));
-    y
+    Int64.truncateToInt32(y)
 
-  pub def month(date: LocalDateTime): Int64 =
+  pub def month(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
     let (_, m, _) = civilFromDays(floorDiv(t, 86400i64));
-    m
+    Int64.truncateToInt32(m)
 
-  pub def dayOfMonth(date: LocalDateTime): Int64 =
+  pub def dayOfMonth(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
     let (_, _, d) = civilFromDays(floorDiv(t, 86400i64));
-    d
+    Int64.truncateToInt32(d)
 }
