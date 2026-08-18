@@ -3,10 +3,11 @@ pub mod Time.LocalDateTime {
   use Time.Duration
   use Time.TimeUnit
 
+  /// Keeps time in milliseconds since the epoch
   pub enum LocalDateTime(Int64) with Eq, Order, Hash
 
   pub def now(): LocalDateTime \ Clock =
-    LocalDateTime(Clock.currentTime(TimeUnit.Seconds))
+    LocalDateTime(Clock.now())
 
   pub def today(): LocalDateTime \ Clock =
     LocalDateTime(Clock.currentTime(TimeUnit.Days))
