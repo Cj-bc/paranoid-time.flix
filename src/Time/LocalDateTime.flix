@@ -9,9 +9,6 @@ pub mod Time.LocalDateTime {
   pub def now(): LocalDateTime \ Clock =
     LocalDateTime(Clock.now())
 
-  pub def today(): LocalDateTime \ Clock =
-    LocalDateTime(Clock.currentTime(TimeUnit.Days))
-
   pub def add(date: LocalDateTime, d: Duration): LocalDateTime =
     let LocalDateTime(t) = date;
     let Duration(d2) = d;
