@@ -11,13 +11,11 @@ pub mod Time.LocalDateTime {
 
   pub def add(date: LocalDateTime, d: Duration): LocalDateTime =
     let LocalDateTime(t) = date;
-    let Duration(d2) = d;
-    LocalDateTime(t + d2)
+    LocalDateTime(t + Duration.toMillis(d))
 
   pub def sub(date: LocalDateTime, d: Duration): LocalDateTime =
     let LocalDateTime(t) = date;
-    let Duration(d2) = d;
-    LocalDateTime(t - d2)
+    LocalDateTime(t - Duration.toMillis(d))
 
   pub def between(d1: LocalDateTime, d2: LocalDateTime): Duration =
     let LocalDateTime(t1) = d1;
