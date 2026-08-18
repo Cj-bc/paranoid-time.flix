@@ -4,26 +4,21 @@ pub mod Time.LocalDateTime {
   use Time.TimeUnit
 
   ///
-  /// The wrapped `Int64` is seconds since the 1970-01-01T00:00:00Z epoch (UTC).
+  /// Keeps time in milliseconds since the epoch.
   /// The getters below assume this representation.
   ///
   pub enum LocalDateTime(Int64) with Eq, Order, Hash
 
   pub def now(): LocalDateTime \ Clock =
-    LocalDateTime(Clock.currentTime(TimeUnit.Seconds))
-
-  pub def today(): LocalDateTime \ Clock =
-    LocalDateTime(Clock.currentTime(TimeUnit.Days))
+    LocalDateTime(Clock.now())
 
   pub def add(date: LocalDateTime, d: Duration): LocalDateTime =
     let LocalDateTime(t) = date;
-    let Duration(d2) = d;
-    LocalDateTime(t + d2)
+    LocalDateTime(t + Duration.toMillis(d))
 
   pub def sub(date: LocalDateTime, d: Duration): LocalDateTime =
     let LocalDateTime(t) = date;
-    let Duration(d2) = d;
-    LocalDateTime(t - d2)
+    LocalDateTime(t - Duration.toMillis(d))
 
   pub def between(d1: LocalDateTime, d2: LocalDateTime): Duration =
     let LocalDateTime(t1) = d1;
@@ -32,15 +27,15 @@ pub mod Time.LocalDateTime {
 
   pub def second(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.truncateToInt32(Int64.modulo(t, 60i64))
+    Int64.truncateToInt32(Int64.modulo(t, 60_000i64) / 1_000i64)
 
   pub def minute(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.truncateToInt32(Int64.modulo(t, 3600i64) / 60i64)
+    Int64.truncateToInt32(Int64.modulo(t, 3_600_000i64) / 60_000i64)
 
   pub def hour(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    Int64.truncateToInt32(Int64.modulo(t, 86400i64) / 3600i64)
+    Int64.truncateToInt32(Int64.modulo(t, 86_400_000i64) / 3_600_000i64)
 
   ///
   /// Returns the floor of `x / n`, i.e. rounding towards negative infinity.
@@ -70,16 +65,16 @@ pub mod Time.LocalDateTime {
 
   pub def year(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    let (y, _, _) = civilFromDays(floorDiv(t, 86400i64));
+    let (y, _, _) = civilFromDays(floorDiv(t, 86_400_000i64));
     Int64.truncateToInt32(y)
 
   pub def month(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    let (_, m, _) = civilFromDays(floorDiv(t, 86400i64));
+    let (_, m, _) = civilFromDays(floorDiv(t, 86_400_000i64));
     Int64.truncateToInt32(m)
 
   pub def dayOfMonth(date: LocalDateTime): Int32 =
     let LocalDateTime(t) = date;
-    let (_, _, d) = civilFromDays(floorDiv(t, 86400i64));
+    let (_, _, d) = civilFromDays(floorDiv(t, 86_400_000i64));
     Int64.truncateToInt32(d)
 }

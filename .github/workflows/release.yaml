@@ -58,4 +58,4 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: nix develop -c flix release --github-token "$GITHUB_TOKEN"
+        run: echo y | nix develop -c flix release --github-token "$GITHUB_TOKEN"
