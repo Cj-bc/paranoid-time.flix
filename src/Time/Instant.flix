@@ -9,9 +9,23 @@ pub mod Time.Instant {
   pub def now(): Instant \ Clock =
     Instant(Clock.now())
 
-  pub def add(date: Instant, d: Duration): Instant =
-    let Instant(t) = date;
-    Instant(t + Duration.toMillis(d))
+  /// Returns Ok() when calculated Instant is in valud range, otherwise return the largest/smallest value.
+  def internalTryAdd(t: Instant, d: Duration): Result[Int64, Instant] =
+    let Instant(tms) = t;
+    let dms = Duration.toMillis(d);
+    if (dms < 0i64 and tms < (Int64.minValue() - dms)) Err(Int64.minValue())
+    else
+      if (0i64 < dms and (Int64.maxValue() - dms) < tms) Err(Int64.maxValue())
+      else Ok(Instant(tms + dms))
+
+  pub def tryAdd(t: Instant, d: Duration): Option[Instant] =
+    internalTryAdd(t, d) |> Result.toOption
+
+  pub def saturatingAdd(t: Instant, d: Duration): Instant =
+    match internalTryAdd(t, d) {
+      case Ok(v) => v
+      case Err(v) => Instant(v)
+    }
 
   pub def sub(date: Instant, d: Duration): Instant =
     let Instant(t) = date;
