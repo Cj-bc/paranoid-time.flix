@@ -48,5 +48,5 @@ pub mod Time.Instant {
   pub def between(d1: Instant, d2: Instant): Duration =
     let Instant(t1) = d1;
     let Instant(t2) = d2;
-    Duration.Duration(Int64.abs(t1 - t2))
+    Duration.milliseconds(Int64.abs(t1 - t2))
 }
