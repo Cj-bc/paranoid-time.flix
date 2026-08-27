@@ -27,9 +27,23 @@ pub mod Time.Instant {
       case Err(v) => Instant(v)
     }
 
-  pub def sub(date: Instant, d: Duration): Instant =
-    let Instant(t) = date;
-    Instant(t - Duration.toMillis(d))
+  /// Returns Ok() when calculated Instant is in valud range, otherwise return the largest/smallest value.
+  def internalTrySub(t: Instant, d: Duration): Result[Int64, Instant] =
+    use Monad.{>>=};
+
+    let Duration(dms) = d;
+    if (dms == Int64.minValue()) {
+      internalTryAdd(t, Duration(-(dms + 1i64))) >>= flip(internalTryAdd)(Duration.milliseconds(1))
+    } else internalTryAdd(t, Duration(dms))
+
+  pub def trySub(date: Instant, d: Duration): Option[Instant] =
+    internalTrySub(date, d) |> Result.toOption
+
+  pub def saturatingSub(t: Instant, d: Duration): Instant =
+    match internalTrySub(t, d) {
+      case Ok(v) => v
+      case Err(v) => Instant(v)
+    }
 
   pub def between(d1: Instant, d2: Instant): Duration =
     let Instant(t1) = d1;
