@@ -45,8 +45,10 @@ pub mod Time.Instant {
       case Err(v) => Instant(v)
     }
 
-  pub def between(d1: Instant, d2: Instant): Duration =
+  pub def between(d1: Instant, d2: Instant): Option[Duration] =
+    use Functor.{<$>};
+
     let Instant(t1) = d1;
     let Instant(t2) = d2;
-    Duration.milliseconds(Int64.abs(t1 - t2))
+    Duration.milliseconds <$> Int64.tryToInt32(Int64.abs(t1 - t2))
 }
