@@ -11,7 +11,8 @@ pub mod Time.Instant {
   }) with Eq, Order, Hash
 
   pub def now(): Instant \ Clock =
-    Instant(Clock.now())
+    Instant({secondsSinceEpoch = clock.currentTime(TimeUnit.Seconds),
+             nano = Int32.remainder(clock.currentTime(TimeUnit.NanoSeconds))})
 
   /// Returns Ok() when calculated Instant is in valud range, otherwise return the largest/smallest value.
   def internalTryAdd(t: Instant, d: Duration): Result[Int64, Instant] =
