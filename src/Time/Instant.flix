@@ -3,8 +3,12 @@ pub mod Time.Instant {
   use Time.Duration
   use Time.TimeUnit
 
-  /// Keeps time in milliseconds since the epoch
-  pub enum Instant(Int64) with Eq, Order, Hash
+  pub enum Instant({
+    /// stores seconds since Java Epoch (1970-01-01T00:00:00Z)
+    secondsSinceEpoch: Int64,
+    /// nano seconds. [0, 999_999_999]
+    nano: Int32
+  }) with Eq, Order, Hash
 
   pub def now(): Instant \ Clock =
     Instant(Clock.now())
