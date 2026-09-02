@@ -40,23 +40,23 @@ mod TestTime.Instant {
   //
 
   @Test
-  def compare01_largerNanoButEarlierSecond_isLessThan(): Unit \ Assert =
+  def compare01(): Unit \ Assert =
     Assert.assertTrue(instant(0i64, 999_999_999) < instant(1i64, 0))
 
   @Test
-  def compare02_beforeTheEpoch_isLessThanTheEpoch(): Unit \ Assert =
+  def compare02(): Unit \ Assert =
     Assert.assertTrue(instant(-1i64, 999_999_999) < instant(0i64, 0))
 
   @Test
-  def compare03_sameSecondAndSmallerNano_isLessThan(): Unit \ Assert =
+  def compare03(): Unit \ Assert =
     Assert.assertTrue(instant(3i64, 1) < instant(3i64, 2))
 
   @Test
-  def eq01_bothFieldsEqual_isTrue(): Unit \ Assert =
+  def eq01(): Unit \ Assert =
     Assert.assertTrue(instant(3i64, 1) == instant(3i64, 1))
 
   @Test
-  def eq02_onlyNanoDiffers_isFalse(): Unit \ Assert =
+  def eq02(): Unit \ Assert =
     Assert.assertTrue(instant(3i64, 1) != instant(3i64, 2))
 
   //
