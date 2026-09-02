@@ -111,8 +111,9 @@ mod TestTime.Instant {
   /// A carry alone is enough to overflow.
   @Test
   def tryAdd_carryPastTheLatestInstant_returnsNone(): Unit \ Assert =
+    // The duration is under a second, so only the carry out of `nano` overflows the seconds.
     Assert.assertEq(expected = None,
-                    Time.Instant.tryAdd(instant(Int64.maxValue(), 999_999_999), Duration.nanoseconds(1i64))
+                    Time.Instant.tryAdd(instant(Int64.maxValue(), 500_000_000), Duration.milliseconds(600))
                       |> Option.map(parts))
 
   @Test
