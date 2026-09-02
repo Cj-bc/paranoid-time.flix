@@ -17,6 +17,22 @@ mod TestTime.Instant {
 
   def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
 
+  def nanosPerSecond(): Int64 = 1_000_000_000i64
+
+  /// Returns the `Instant` that is `nanos` nanoseconds after the epoch. `nanos` must not be negative.
+  def epochPlusNanos(nanos: Int64): Instant =
+    instant(nanos / nanosPerSecond(), Int64.truncateToInt32(Int64.remainder(nanos, nanosPerSecond())))
+
+  /// The latest `Instant` whose distance from the epoch still fits in a `Duration`.
+  def epochPlusLargestDuration(): Instant = epochPlusNanos(Int64.maxValue())
+
+  /// One nanosecond later than `epochPlusLargestDuration()`, the first distance that no longer fits.
+  /// It is also how far `Int64.minValue()` nanoseconds reaches when subtracted from the epoch,
+  /// since negating that duration gives `Int64.maxValue()` plus one nanosecond.
+  def epochPastLargestDuration(): Instant =
+    let Instant(i) = epochPlusLargestDuration();
+    instant(i#secondsSinceEpoch, i#nano + 1)
+
   //
   // Order/Eq
   //
@@ -139,7 +155,7 @@ mod TestTime.Instant {
   /// `Int64.minValue()` nanoseconds cannot be negated as a whole, but is still subtracted exactly.
   @Test
   def trySub04(): Unit \ Assert =
-    Assert.assertEq(expected = Some((9_223_372_036i64, 854_775_808)),
+    Assert.assertEq(expected = Some(parts(epochPastLargestDuration())),
                     Time.Instant.trySub(epoch(), Duration.nanoseconds(Int64.minValue()))
                       |> Option.map(parts))
 
@@ -206,10 +222,10 @@ mod TestTime.Instant {
   @Test
   def between07(): Unit \ Assert =
     Assert.assertEq(expected = Some(Duration.nanoseconds(Int64.maxValue())),
-                    Time.Instant.between(epoch(), instant(9_223_372_036i64, 854_775_807)))
+                    Time.Instant.between(epoch(), epochPlusLargestDuration()))
 
   /// One nanosecond more does not fit.
   @Test
   def between08(): Unit \ Assert =
-    Assert.assertEq(expected = None, Time.Instant.between(epoch(), instant(9_223_372_036i64, 854_775_808)))
+    Assert.assertEq(expected = None, Time.Instant.between(epoch(), epochPastLargestDuration()))
 }
