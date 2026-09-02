@@ -1,6 +1,8 @@
 mod TestTime.Instant {
+  use Time.Clock
   use Time.Duration
   use Time.Instant.Instant
+  use Time.TimeUnit
 
   /// Builds an `Instant` from its two internal fields.
   def instant(secondsSinceEpoch: Int64, nano: Int32): Instant =
@@ -61,11 +63,76 @@ mod TestTime.Instant {
   // now
   //
 
+  ///
+  /// Handles `Clock` with a clock frozen at `epochMilli` milliseconds since the epoch.
+  ///
+  /// Every unit is answered from that one value, the way `Time.Clock.handle` derives them
+  /// from `System.currentTimeMillis()`, so the frozen clock stays consistent across units.
+  ///
+  def withClockFrozenAt(epochMilli: Int64, f: Unit -> a \ ef): a \ (ef - Clock) =
+    run {
+      f()
+    } with handler Clock {
+      def currentTime(u, k) = k(match u {
+        case TimeUnit.Days         => epochMilli / 86_400_000i64
+        case TimeUnit.Hours        => epochMilli / 3_600_000i64
+        case TimeUnit.Microseconds => epochMilli * 1_000i64
+        case TimeUnit.Milliseconds => epochMilli
+        case TimeUnit.Minutes      => epochMilli / 60_000i64
+        case TimeUnit.Nanoseconds  => epochMilli * 1_000_000i64
+        case TimeUnit.Seconds      => epochMilli / 1_000i64
+      })
+    }
+
+  /// Returns the two internal fields of `now()` read from a clock frozen at `epochMilli`.
+  def nowFrozenAt(epochMilli: Int64): (Int64, Int32) =
+    withClockFrozenAt(epochMilli, () -> parts(Time.Instant.now()))
+
+  ///
+  /// `Int64.maxValue()` milliseconds is 9_223_372_036_854_775 whole seconds plus 807
+  /// milliseconds, so the split neither overflows nor loses the leftover milliseconds.
+  ///
+  def latestClockInstant(): Instant = instant(9_223_372_036_854_775i64, 807_000_000)
+
+  ///
+  /// `Int64.minValue()` milliseconds is 808 milliseconds short of -9_223_372_036_854_775
+  /// whole seconds. Rounding towards negative infinity puts it one second lower, at
+  /// -9_223_372_036_854_776 seconds plus the remaining 192 milliseconds.
+  ///
+  def earliestClockInstant(): Instant = instant(-9_223_372_036_854_776i64, 192_000_000)
+
   @Test
   def now_underTheClockHandler_hasWholeMillisecondNano(): Unit \ Assert + IO =
     // `Clock` only offers millisecond resolution, so `nano` is a whole number of milliseconds.
     let (_, nano) = Time.Clock.runWithIO(() -> parts(Time.Instant.now()));
     Assert.assertTrue(0 <= nano and nano <= 999_999_999 and Int32.remainder(nano, 1_000_000) == 0)
+
+  @Test
+  def now_atTheEpoch_returnsBothFieldsZero(): Unit \ Assert =
+    Assert.assertEq(expected = parts(epoch()), nowFrozenAt(0i64))
+
+  /// One millisecond before the epoch takes the negative branch of the internal `floorDiv`.
+  @Test
+  def now_oneMillisecondBeforeTheEpoch_borrowsASecondIntoTheNano(): Unit \ Assert =
+    Assert.assertEq(expected = (-1i64, 999_000_000), nowFrozenAt(-1i64))
+
+  @Test
+  def now_atTheLatestClockValue_splitsItWithoutOverflowing(): Unit \ Assert =
+    Assert.assertEq(expected = parts(latestClockInstant()), nowFrozenAt(Int64.maxValue()))
+
+  @Test
+  def now_atTheEarliestClockValue_keepsTheNanoNonNegative(): Unit \ Assert =
+    Assert.assertEq(expected = parts(earliestClockInstant()), nowFrozenAt(Int64.minValue()))
+
+  /// Guards the two hand-computed boundary instants against a slip in their arithmetic.
+  @Test
+  def now_atEitherClockExtreme_reconstructsTheMillisecondsItWasGiven(): Unit \ Assert =
+    let asMillis = t -> {
+      let (seconds, nano) = parts(t);
+      seconds * 1_000i64 + Int32.toInt64(nano) / 1_000_000i64
+    };
+    Assert.assertEq(expected = (Int64.maxValue(), Int64.minValue()),
+                    (asMillis(latestClockInstant()), asMillis(earliestClockInstant())))
 
   //
   // tryAdd/saturatingAdd
