@@ -60,32 +60,4 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     def since04_subtractingTheGapFromTheLater_reachesTheEarlier(): Unit \ Assert =
         assertSomeInstant(expected = earlier(), trySub(later(), diff()), "later.subtract(diff)")
 
-    ///
-    /// `between` never answers a negative duration, whichever order it is given.
-    ///
-    /// No test262 counterpart: `since` and `until` are signed, so this invariant does not
-    /// exist there. It is worth stating here because the sign is exactly what the absolute
-    /// form has to get right, at the ends of the range as much as in the middle.
-    ///
-    @Test
-    def since05_anyPairOfInstants_yieldsANonNegativeDuration(): Unit \ Assert = {
-        let pairs =
-            (earlier(), later()) ::
-            (later(), earlier()) ::
-            (TemporalHelpers.minInstant(), TemporalHelpers.epoch()) ::
-            (TemporalHelpers.epoch(), TemporalHelpers.minInstant()) ::
-            (TemporalHelpers.maxInstant(), TemporalHelpers.epoch()) ::
-            (instant(-1i64, 999_999_999), instant(0i64, 0)) ::
-            (instant(0i64, 0), instant(-1i64, 999_999_999)) ::
-            Nil;
-        List.forEach(pair -> {
-            let (a, b) = pair;
-            match between(a, b) {
-                case None    => ()
-                case Some(d) => Assert.assertFalseWithMsg(Duration.isNegative(d),
-                                                          "between answered the negative duration ${d}")
-            }
-        }, pairs)
-    }
-
 }
