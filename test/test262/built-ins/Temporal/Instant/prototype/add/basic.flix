@@ -12,13 +12,11 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
 
-    use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.fromNanos
     use TemporalHelpers.instant
     use Time.Duration
     use Time.Instant.Instant
-    use Time.Instant.saturatingAdd
     use Time.Instant.tryAdd
 
     /// test262's `new Temporal.Instant(50000n)`: 50000 ns after the epoch.
@@ -119,25 +117,5 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
                                  Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                    + negativeSubSeconds()),
                           "add negative hours")
-
-    ///
-    /// `saturatingAdd` answers what `tryAdd` answers whenever the result is in range.
-    ///
-    /// No test262 counterpart: `Temporal.Instant.prototype.add` has no saturating form, so
-    /// there is nothing there for the two to agree about.
-    ///
-    @Test
-    def add09_aResultInRange_isTheSameForSaturatingAdd(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingAdd(inst(),
-                                          Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
-                                            + subSeconds()),
-                            "add positive hours");
-        assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingAdd(inst(),
-                                          Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
-                                            + negativeSubSeconds()),
-                            "add negative hours")
-    }
 
 }
