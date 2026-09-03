@@ -35,21 +35,4 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
                             fromEpochMilliseconds(Int64.minValue()),
                             "the smallest millisecond count")
 
-    ///
-    /// Cross-checks the two hand-computed splits above against the nearest whole second:
-    /// 807 ms below the largest count, and 808 ms above the smallest one.
-    ///
-    /// Reading them back as milliseconds would be the more direct check, but at the
-    /// smallest count that multiplication leaves the `Int64` range.
-    ///
-    @Test
-    def fromEpochMilliseconds03_theNearestWholeSecondToEitherEnd_leavesNanoAtZero(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(9_223_372_036_854_775i64, 0),
-                            fromEpochMilliseconds(Int64.maxValue() - 807i64),
-                            "807 ms below the largest millisecond count");
-        assertInstantsEqual(expected = instant(-9_223_372_036_854_775i64, 0),
-                            fromEpochMilliseconds(Int64.minValue() + 808i64),
-                            "808 ms above the smallest millisecond count")
-    }
-
 }

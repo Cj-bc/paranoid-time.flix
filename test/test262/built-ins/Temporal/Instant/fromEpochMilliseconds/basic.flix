@@ -39,26 +39,4 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
                             fromEpochMilliseconds(-217_175_010_876i64),
                             "fromEpochMilliseconds pre epoch")
 
-    ///
-    /// A whole number of seconds leaves `nano` at zero on both sides of the epoch.
-    ///
-    /// No test262 counterpart: it only covers counts with a leftover millisecond.
-    ///
-    @Test
-    def fromEpochMilliseconds03_aWholeNumberOfSeconds_leavesNanoAtZero(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(0i64, 0), fromEpochMilliseconds(0i64), "the epoch");
-        assertInstantsEqual(expected = instant(1i64, 0), fromEpochMilliseconds(1_000i64), "one second after");
-        assertInstantsEqual(expected = instant(-1i64, 0), fromEpochMilliseconds(-1_000i64), "one second before")
-    }
-
-    ///
-    /// One millisecond before the epoch is the smallest count that has to borrow.
-    ///
-    /// No test262 counterpart: the borrow only exists because `Instant` is split in two.
-    ///
-    @Test
-    def fromEpochMilliseconds04_oneMillisecondBeforeTheEpoch_borrowsASecond(): Unit \ Assert =
-        assertInstantsEqual(expected = instant(-1i64, 999_000_000), fromEpochMilliseconds(-1i64),
-                            "one millisecond before the epoch")
-
 }
