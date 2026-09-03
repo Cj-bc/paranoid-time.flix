@@ -75,6 +75,11 @@ pub mod Time.Instant {
     Instant({secondsSinceEpoch = floorDiv(ms, millisPerSecond()),
              nano = Int64.truncateToInt32(Int64.modulo(ms, millisPerSecond()) * nanosPerMilli())})
 
+  /// Returns the `Instant` that is `ns` nanoseconds after the epoch.
+  pub def fromEpochNanoseconds(ns: Int64): Instant =
+    Instant({secondsSinceEpoch = floorDiv(ns, nanosPerSecond()),
+             nano = Int64.truncateToInt32(Int64.modulo(ns, nanosPerSecond()))})
+
   pub def now(): Instant \ Clock =
     fromEpochMilliseconds(Clock.currentTime(TimeUnit.Milliseconds))
 
