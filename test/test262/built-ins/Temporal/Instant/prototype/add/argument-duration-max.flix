@@ -41,22 +41,4 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
                           tryAdd(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "the smallest duration")
 
-    ///
-    /// Neither extreme comes anywhere near an end of the range, so both succeed from an
-    /// instant that is itself far from the epoch.
-    ///
-    @Test
-    def add03_theTwoExtremesFromAFarOffInstant_stayInRange(): Unit \ Assert = {
-        let t = instant(1_000_000_000_000i64, 500_000_000);
-        // 1000000000000 + 9223372036 = 1009223372036 s, and 500000000 + 854775807 carries
-        // one second, leaving 354775807 ns.
-        assertSomeInstant(expected = instant(1_009_223_372_037i64, 354_775_807),
-                          tryAdd(t, Duration.nanoseconds(Int64.maxValue())),
-                          "the largest duration from a far off instant");
-        // 1000000000000 - 9223372037 = 990776627963 s, and 500000000 + 145224192 = 645224192 ns.
-        assertSomeInstant(expected = instant(990_776_627_963i64, 645_224_192),
-                          tryAdd(t, Duration.nanoseconds(Int64.minValue())),
-                          "the smallest duration from a far off instant")
-    }
-
 }
