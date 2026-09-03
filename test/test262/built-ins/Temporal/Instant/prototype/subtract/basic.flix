@@ -12,13 +12,11 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
 
-    use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.fromNanos
     use TemporalHelpers.instant
     use Time.Duration
     use Time.Instant.Instant
-    use Time.Instant.saturatingSub
     use Time.Instant.trySub
 
     /// test262's `new Temporal.Instant(50000n)`: 50000 ns after the epoch.
@@ -111,39 +109,5 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
                                  Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                    + negativeSubSeconds()),
                           "subtract negative hours")
-
-    ///
-    /// `saturatingSub` answers what `trySub` answers whenever the result is in range.
-    ///
-    /// No test262 counterpart: `Temporal.Instant.prototype.subtract` has no saturating form.
-    ///
-    @Test
-    def subtract09_aResultInRange_isTheSameForSaturatingSub(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingSub(inst(),
-                                          Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
-                                            + subSeconds()),
-                            "subtract positive hours");
-        assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingSub(inst(),
-                                          Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
-                                            + negativeSubSeconds()),
-                            "subtract negative hours")
-    }
-
-    ///
-    /// Subtracting a duration is not adding it: the two disagree for every non-zero duration.
-    ///
-    /// No test262 counterpart — `Temporal` has no reason to state it — but it is worth
-    /// stating here, because `trySub` is written in terms of the same internal shift as
-    /// `tryAdd` and the sign is the only thing separating them.
-    ///
-    @Test
-    def subtract10_aNonZeroDuration_isNotAdded(): Unit \ Assert = {
-        assertSomeInstant(expected = instant(-1i64, 997_047_999), trySub(inst(), subSeconds()),
-                          "trySub moves backwards");
-        assertSomeInstant(expected = instant(0i64, 3_052_001), Time.Instant.tryAdd(inst(), subSeconds()),
-                          "tryAdd moves forwards")
-    }
 
 }

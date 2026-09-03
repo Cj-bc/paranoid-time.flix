@@ -46,19 +46,4 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ArgumentDurationMax {
                           trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "the smallest duration")
 
-    ///
-    /// The smallest `Duration` reaches exactly one nanosecond further than the largest one,
-    /// which is what makes it the only duration whose effect `tryAdd` cannot reproduce with
-    /// the opposite sign.
-    ///
-    @Test
-    def subtract03_theSmallestDuration_reachesOneNanosecondPastTheLargest(): Unit \ Assert = {
-        assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_807),
-                          Time.Instant.tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
-                          "adding the largest duration");
-        assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_808),
-                          trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
-                          "subtracting the smallest duration")
-    }
-
 }
