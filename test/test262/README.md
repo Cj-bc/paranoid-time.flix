@@ -18,6 +18,10 @@ test/test262/
 
 `.js` becomes `.flix`; nothing else about a path changes.
 
+Only cases that carry a test262 case over live here. Cases about behaviour test262 has
+nothing to say about are in `test/TestTime/Instant/`, one file per function — see the
+README there.
+
 Two Flix rules shape the module declarations:
 
 - A `pub mod A.B.C` has to live in a file whose path ends `A/B/C.flix`. `TemporalHelpers`
@@ -91,26 +95,11 @@ only the throwing form — and is marked as such where it appears.
 *absolute* gap, so the argument order does not matter, and it answers an `Option`, since a
 gap wider than a `Duration` has no answer.
 
-Cases with no test262 counterpart are marked "No test262 counterpart" in their doc comment
-together with the reason. They fall into three groups: anything about the two-field split
-(carry, borrow, `nano` staying non-negative, an overflow caused by the carry alone), the
-`saturating` operations, and the properties `between` has because it is unsigned.
-
-## A case that fails on purpose
-
-`prototype/since/float64-representable-integer.flix::since05` asserts what the documented
-contract of `between` says — "the absolute amount of time between `d1` and `d2`, or `None`
-when it is too large to fit in a `Duration`" — and the implementation does not meet it.
-
-A gap of 9223372036000000001 ns fits in a `Duration`; it is 854775806 ns under
-`Int64.maxValue()`. Spread as 9223372037 whole seconds minus 999999999 nanoseconds, it is
-rejected: `between` turns down a second count over 9223372036 before the negative
-nanosecond difference is allowed to bring the total back under the ceiling. Every gap that
-is not spread across an extra second — including the largest one, `Int64.maxValue()` ns
-exactly — is reported correctly, so this is the only shape that trips it.
-
-The case is written to the contract rather than to the behaviour, so it stays red until
-`between` is fixed.
+The one exception to "nothing carried over unchanged" being enough to keep a case here is
+the `saturating` half of an out-of-range case: `Temporal` has only the throwing form, but
+the case is still testing what test262 tests — the boundary — so it stays with its `try`
+half rather than moving out. Everything else with no test262 case behind it is in
+`test/TestTime/Instant/`.
 
 ## What is not ported
 
