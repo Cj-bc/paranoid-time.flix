@@ -71,12 +71,12 @@ pub mod Time.Instant {
     if (Int64.remainder(x, n) < 0i64) q - 1i64 else q
 
   /// Returns the `Instant` that is `ms` milliseconds after the epoch.
-  def ofEpochMilli(ms: Int64): Instant =
+  pub def fromEpochMilliseconds(ms: Int64): Instant =
     Instant({secondsSinceEpoch = floorDiv(ms, millisPerSecond()),
              nano = Int64.truncateToInt32(Int64.modulo(ms, millisPerSecond()) * nanosPerMilli())})
 
   pub def now(): Instant \ Clock =
-    ofEpochMilli(Clock.currentTime(TimeUnit.Milliseconds))
+    fromEpochMilliseconds(Clock.currentTime(TimeUnit.Milliseconds))
 
   ///
   /// Returns the `Instant` that is `seconds` seconds and `nanos` nanoseconds after `t`.
