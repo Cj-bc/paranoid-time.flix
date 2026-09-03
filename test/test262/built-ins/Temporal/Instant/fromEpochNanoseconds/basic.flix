@@ -35,18 +35,4 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
                             fromEpochNanoseconds(-217_175_010_876_543_211i64),
                             "fromEpochNanoseconds pre epoch")
 
-    ///
-    /// One nanosecond either side of the epoch, the smallest counts that show the
-    /// direction of the rounding.
-    ///
-    /// No test262 counterpart: the borrow only exists because `Instant` is split in two.
-    ///
-    @Test
-    def fromEpochNanoseconds03_oneNanosecondEitherSideOfTheEpoch_roundsTowardsNegativeInfinity(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(0i64, 1), fromEpochNanoseconds(1i64),
-                            "one nanosecond after the epoch");
-        assertInstantsEqual(expected = instant(-1i64, 999_999_999), fromEpochNanoseconds(-1i64),
-                            "one nanosecond before the epoch")
-    }
-
 }

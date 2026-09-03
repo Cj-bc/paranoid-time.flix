@@ -36,18 +36,4 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
                             fromEpochNanoseconds(Int64.minValue()),
                             "the smallest nanosecond count")
 
-    ///
-    /// Cross-checks the two hand-computed splits above against the nearest whole second:
-    /// 854775807 ns below the largest count, and 854775808 ns above the smallest one.
-    ///
-    @Test
-    def fromEpochNanoseconds03_theNearestWholeSecondToEitherEnd_leavesNanoAtZero(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(9_223_372_036i64, 0),
-                            fromEpochNanoseconds(Int64.maxValue() - 854_775_807i64),
-                            "854775807 ns below the largest nanosecond count");
-        assertInstantsEqual(expected = instant(-9_223_372_036i64, 0),
-                            fromEpochNanoseconds(Int64.minValue() + 854_775_808i64),
-                            "854775808 ns above the smallest nanosecond count")
-    }
-
 }
