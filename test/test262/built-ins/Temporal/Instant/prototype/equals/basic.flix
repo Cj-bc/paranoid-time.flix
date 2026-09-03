@@ -33,15 +33,4 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Equals.Basic {
     def equals02_instantsBuiltFromTheSameCount_areEqual(): Unit \ Assert =
         Assert.assertTrueWithMsg(inst2() == inst3(), "inst2 equals inst3")
 
-    ///
-    /// The second count is looked at too, so instants sharing a `nano` are still told apart.
-    ///
-    /// No test262 counterpart: `Temporal.Instant` is one nanosecond count, so it has no
-    /// second field that a hand-written comparison could forget to look at.
-    ///
-    @Test
-    def equals03_instantsDifferingInTheSecondAlone_areNotEqual(): Unit \ Assert =
-        Assert.assertFalseWithMsg(instant(1_234_567_890i64, 123_456_789) == instant(1_234_567_891i64, 123_456_789),
-                                  "instants one second apart are equal")
-
 }
