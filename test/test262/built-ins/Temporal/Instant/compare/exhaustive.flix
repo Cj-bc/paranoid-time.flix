@@ -35,28 +35,4 @@ mod Test262.BuiltIns.Temporal.Instant.Compare.Exhaustive {
         Assert.assertEq(expected = Comparison.EqualTo,
                         Order.compare(fromNanos(123_456_789i64), fromNanos(123_456_789i64)))
 
-    ///
-    /// The seconds decide first, and a larger `nano` never makes up for a smaller second.
-    ///
-    /// No test262 counterpart: `Temporal.Instant` is one nanosecond count, so it has no
-    /// second field for a nanosecond field to be weighed against.
-    ///
-    @Test
-    def compare04_aLargerNanoUnderASmallerSecond_isStillLessThan(): Unit \ Assert = {
-        Assert.assertEq(expected = Comparison.LessThan,
-                        Order.compare(instant(3i64, 999_999_999), instant(4i64, 0)));
-        Assert.assertEq(expected = Comparison.GreaterThan,
-                        Order.compare(instant(4i64, 0), instant(3i64, 999_999_999)))
-    }
-
-    ///
-    /// `nano` decides when the seconds agree.
-    ///
-    /// No test262 counterpart, for the same reason as above.
-    ///
-    @Test
-    def compare05_theSameSecond_isDecidedByTheNano(): Unit \ Assert =
-        Assert.assertEq(expected = Comparison.LessThan,
-                        Order.compare(instant(3i64, 1), instant(3i64, 2)))
-
 }

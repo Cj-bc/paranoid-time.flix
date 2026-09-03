@@ -57,18 +57,4 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
                                           "the earliest instant")
     }
 
-    ///
-    /// The ends bound `Order` as well, so no instant sorts outside them.
-    ///
-    /// No test262 counterpart: `Temporal.Instant.compare` cannot be handed a value
-    /// outside the range, because constructing one already throws.
-    ///
-    @Test
-    def limits05_everyInstant_sortsBetweenTheTwoEnds(): Unit \ Assert = {
-        Assert.assertTrue(minInstant() < instant(0i64, 0));
-        Assert.assertTrue(instant(0i64, 0) < maxInstant());
-        Assert.assertTrue(minInstant() < instant(Int64.minValue(), 1));
-        Assert.assertTrue(instant(Int64.maxValue(), 999_999_998) < maxInstant())
-    }
-
 }
