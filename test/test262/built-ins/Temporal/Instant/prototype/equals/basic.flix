@@ -1,3 +1,6 @@
+// Copyright 2021 the V8 project authors. All rights reserved.
+// This code is governed by the BSD license found in test/test262/LICENSE.
+// Adapted for Time.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/equals/basic.js`
 /// (esid: sec-temporal.instant.prototype.equals).

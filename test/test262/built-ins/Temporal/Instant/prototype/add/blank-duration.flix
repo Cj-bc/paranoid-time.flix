@@ -1,3 +1,6 @@
+// Copyright (C) 2025 Igalia, S.L. All rights reserved.
+// This code is governed by the BSD license found in test/test262/LICENSE.
+// Adapted for Time.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/add/blank-duration.js`
 /// (esid: sec-temporal.instant.prototype.add).

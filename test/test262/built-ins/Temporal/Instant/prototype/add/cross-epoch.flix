@@ -1,3 +1,6 @@
+// Copyright (C) 2018 Bloomberg LP. All rights reserved.
+// This code is governed by the BSD license found in test/test262/LICENSE.
+// Adapted for Time.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/add/cross-epoch.js`
 /// (esid: sec-temporal.instant.prototype.add).
