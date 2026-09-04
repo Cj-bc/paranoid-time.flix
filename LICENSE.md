@@ -19,3 +19,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Third-party code
+
+`test/test262/` holds test cases derived from [test262](https://github.com/tc39/test262),
+the ECMAScript test suite, which Ecma International publishes under the BSD 3-clause
+licence rather than the MIT licence above. That licence is reproduced verbatim in
+`test/test262/LICENSE`, and each derived file keeps the copyright notice of the test262
+file it came from.
+
+Nothing under `src/` is derived from test262.
