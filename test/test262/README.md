@@ -8,6 +8,24 @@ Source revision: [`2808d41`][rev] (`test/built-ins/Temporal/Instant`).
 [test262]: https://github.com/tc39/test262
 [rev]: https://github.com/tc39/test262/tree/2808d4143f00993c2e65456d9a99b8f82b6743f9/test/built-ins/Temporal/Instant
 
+## Licence
+
+The cases here are derived from test262, which is published by Ecma International under
+the BSD 3-clause licence. A verbatim copy is in `test/test262/LICENSE`, and every ported
+file keeps the copyright notice of the test262 file it came from, as that licence
+requires:
+
+```flix
+// Copyright (C) 2021 Igalia, S.L. All rights reserved.
+// This code is governed by the BSD license found in test/test262/LICENSE.
+// Adapted for Time.Instant; the module doc comment says what changed.
+```
+
+The notices name Igalia, Bloomberg LP, André Bargull and the V8 project authors, each on
+the files they wrote. `harness/TemporalHelpers.flix` is *not* derived from test262's
+`harness/temporalHelpers.js` — it only plays the same role — so it carries no such notice
+and is under this repository's own licence, as is the rest of the project.
+
 ## Layout
 
 ```

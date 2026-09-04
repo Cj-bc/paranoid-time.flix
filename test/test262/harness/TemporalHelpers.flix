@@ -8,6 +8,11 @@
 /// `pub mod` to sit at a path that matches its name, which is why this file is
 /// `TemporalHelpers.flix` rather than the lower-case name test262 gives it.
 ///
+/// It only plays the same role. None of the code below is taken or translated from
+/// test262's harness, so this file carries no test262 copyright notice and is under this
+/// repository's own licence. The ported cases beside it do carry one; see
+/// `test/test262/LICENSE`.
+///
 pub mod TemporalHelpers {
 
     use Time.Duration
