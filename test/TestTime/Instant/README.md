@@ -64,6 +64,18 @@ negative nanosecond difference count.
 The case is written to the contract rather than to the behaviour, so it stays red until
 `between` is fixed.
 
+## Licence
+
+These cases are not derived from test262, so they carry no test262 copyright notice and
+are under this repository's own licence.
+
+Four of them do reuse expected values worked out by a test262 case, so that the claim is
+checked against numbers pinned elsewhere: `SaturatingAdd.flix` and `SaturatingSub.flix`
+(from `prototype/{add,subtract}/basic.js`), `TrySub.flix` (from both), and `Between.flix`
+(the two dated instants of `prototype/since/add-subtract.js`). Each file's doc comment says
+so. test262 is under the BSD 3-clause licence, a copy of which is in
+`test/test262/LICENSE`.
+
 ## Helpers
 
 The instant builders and the assertion wrappers come from `test/test262/harness`, which is
