@@ -134,20 +134,21 @@ pub mod Time.Instant {
       case Err(v) => v
     }
 
+  pub def toEpochNanos(t: Instant): Option[Int64] =
+    let Instant(v) = t;
+    if (v#secondsSinceEpoch <= 0i64)
+      // won't underflow because v#nanos can't be smaller than 0
+      v#secondsSinceEpoch * nanosPerSecond() + v#nanos
+    else
+      if (Int64.maxValue() - v#secondsSinceEpoch < nanosPerSecond())
+        None
+      else
+        Some(v#secondsSinceEpoch * nanosPerSeconds() + v#nanos)
+
   /// Returns the absolute amount of time between `d1` and `d2`,
   /// or None when it is too large to fit in a `Duration`.
   pub def between(d1: Instant, d2: Instant): Option[Duration] =
-    let Instant(earlier) = Order.min(d1, d2);
-    let Instant(later) = Order.max(d1, d2);
-    if (earlier#secondsSinceEpoch < 0i64 and (Int64.maxValue() + earlier#secondsSinceEpoch) < later#secondsSinceEpoch)
-      None
-    else
-      let seconds = later#secondsSinceEpoch - earlier#secondsSinceEpoch;
-      // In (-1_000_000_000, 1_000_000_000). Negative only when `seconds` is positive.
-      let nanos = Int32.toInt64(later#nano) - Int32.toInt64(earlier#nano);
-      if ((Int64.maxValue() / nanosPerSecond()) < seconds) None
-      else
-        let secondsAsNanos = seconds * nanosPerSecond();
-        if (0i64 < nanos and (Int64.maxValue() - nanos) < secondsAsNanos) None
-        else Some(Duration.nanoseconds(secondsAsNanos + nanos))
+    use Applicative.<*>;
+    use Functor.<$>;
+    Sub.sub <$> toEpochNanos(Order.max(d1, d2)) <*> toEpochNanos(Order.min(d1, d2))
 }
