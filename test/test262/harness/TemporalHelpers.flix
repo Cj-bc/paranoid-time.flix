@@ -140,4 +140,19 @@ pub mod TemporalHelpers {
     pub def assertNoDuration(actual: Option[Duration], msg: String): Unit \ Assert =
         Assert.assertEqWithMsg(expected = None, actual, "${msg}: expected None, got ${actual}")
 
+    ///
+    /// test262's `assert.sameValue(instant.epochNanoseconds, ...)`, for the
+    /// `Option[Int64]` that `toEpochNanos` answers with.
+    ///
+    pub def assertSomeNanos(expected: {expected = Int64}, actual: Option[Int64], msg: String): Unit \ Assert =
+        Assert.assertEqWithMsg(expected = Some(expected#expected), actual, "${msg}: expected ${Some(expected#expected)}, got ${actual}")
+
+    ///
+    /// `toEpochNanos` answers `None` for an instant too far from the epoch to count in an
+    /// `Int64`. test262 has no counterpart: `epochNanoseconds` is an arbitrary-precision
+    /// `BigInt`, so it is never out of range.
+    ///
+    pub def assertNoNanos(actual: Option[Int64], msg: String): Unit \ Assert =
+        Assert.assertEqWithMsg(expected = None, actual, "${msg}: expected None, got ${actual}")
+
 }
