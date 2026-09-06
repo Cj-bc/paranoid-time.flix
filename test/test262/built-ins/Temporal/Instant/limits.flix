@@ -18,7 +18,7 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
 
     use TemporalHelpers.assertNoInstant
     use TemporalHelpers.assertSaturated
-    use TemporalHelpers.instant
+    use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
     use Time.Duration
@@ -54,10 +54,10 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
     /// test262: `new Temporal.Instant(limit)` and `new Temporal.Instant(-limit)` are fine.
     @Test
     def limits04_theEndsThemselves_areRepresentable(): Unit \ Assert = {
-        TemporalHelpers.assertSomeInstant(expected = maxInstant(), tryAdd(maxInstant(), Duration.zero()),
-                                          "the latest instant");
-        TemporalHelpers.assertSomeInstant(expected = minInstant(), tryAdd(minInstant(), Duration.zero()),
-                                          "the earliest instant")
+        assertSomeInstant(expected = maxInstant(), tryAdd(maxInstant(), Duration.zero()),
+                          "the latest instant");
+        assertSomeInstant(expected = minInstant(), tryAdd(minInstant(), Duration.zero()),
+                          "the earliest instant")
     }
 
 }

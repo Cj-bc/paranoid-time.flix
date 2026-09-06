@@ -20,6 +20,7 @@ mod TestTime.Instant.TrySub {
     use TemporalHelpers.minInstant
     use Time.Duration
     use Time.Instant.Instant
+    use Time.Instant.tryAdd
     use Time.Instant.trySub
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
@@ -51,7 +52,7 @@ mod TestTime.Instant.TrySub {
     def trySub02_aNonZeroDuration_isNotAdded(): Unit \ Assert = {
         assertSomeInstant(expected = instant(-1i64, 997_047_999), trySub(inst(), subSeconds()),
                           "trySub moves backwards");
-        assertSomeInstant(expected = instant(0i64, 3_052_001), Time.Instant.tryAdd(inst(), subSeconds()),
+        assertSomeInstant(expected = instant(0i64, 3_052_001), tryAdd(inst(), subSeconds()),
                           "tryAdd moves forwards")
     }
 
@@ -64,7 +65,7 @@ mod TestTime.Instant.TrySub {
     @Test
     def trySub03_theSmallestDuration_reachesOneNanosecondPastTheLargest(): Unit \ Assert = {
         assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_807),
-                          Time.Instant.tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
+                          tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
                           "adding the largest duration");
         assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_808),
                           trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
