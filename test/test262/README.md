@@ -69,6 +69,7 @@ Two Flix rules shape the module declarations:
 | `prototype/add/result-out-of-range.flix` | `prototype/add/result-out-of-range.js` | `tryAdd`, `saturatingAdd` |
 | `prototype/add/add-large-subseconds.flix` | `prototype/add/add-large-subseconds.js` | `tryAdd` |
 | `prototype/add/argument-duration-max.flix` | `prototype/add/argument-duration-max.js` | `tryAdd` |
+| `prototype/epochNanoseconds/basic.flix` | `prototype/epochNanoseconds/basic.js` | `toEpochNanos` |
 | `prototype/equals/basic.flix` | `prototype/equals/basic.js` | `Eq[Instant]` |
 | `prototype/equals/cross-epoch.flix` | `prototype/equals/cross-epoch.js` | `Eq[Instant]` |
 | `prototype/since/add-subtract.flix` | `prototype/since/add-subtract.js` | `between`, `tryAdd`, `trySub` |
@@ -109,6 +110,11 @@ one test262 case usually becomes two: `try*` answers `None`, and `saturating*` a
 end it ran into. The saturating half has no counterpart in test262 at all — `Temporal` has
 only the throwing form — and is marked as such where it appears.
 
+`toEpochNanos` answers an `Option` for a third reason again: `epochNanoseconds` is an
+arbitrary-precision `BigInt` and cannot fail, where the count here is an `Int64` and most
+of an `Instant`'s range has none. Nothing in test262 exercises that, so `basic.js` is all
+that comes over and the range is pinned in `test/TestTime/Instant/ToEpochNanos.flix`.
+
 `since` and `until` are both covered by `between`, which differs from both: it answers the
 *absolute* gap, so the argument order does not matter, and it answers an `Option`, since a
 gap wider than a `Duration` has no answer.
@@ -143,7 +149,9 @@ Whole groups of test262 files have nothing to test against here:
   `invalid-increments.js`, `round-cross-unit-boundary.js`, `minutes-and-hours.js`,
   `largest-unit-default.js`. `between` takes no options.
 - **Unimplemented members.** `prototype/`'s `round`, `toString`, `toJSON`, `until`,
-  `epochMilliseconds`, `epochNanoseconds`, `toZonedDateTimeISO` and the rest.
+  `epochMilliseconds`, `toZonedDateTimeISO` and the rest. `epochNanoseconds` *is*
+  implemented, as `toEpochNanos`, so its `basic.js` is ported; the `branding.js` and
+  `prop-desc.js` beside it are object plumbing and are not.
 
 `Temporal.Now.instant` lives outside this tree, under
 `test/built-ins/Temporal/Now/instant/`; `now()` is covered by `test/TestMain/Instant.flix`.
