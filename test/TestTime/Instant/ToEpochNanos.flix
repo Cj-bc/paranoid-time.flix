@@ -106,17 +106,16 @@ mod TestTime.Instant.ToEpochNanos {
     def toEpochNanos07_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
         List.forEach(ns -> assertSomeNanos(expected = ns, toEpochNanos(fromEpochNanoseconds(ns)),
                                            "the round trip through the two fields"),
-                     Int64.minValue() ::
-                     Int64.minValue() + 1i64 ::
-                     -217_175_010_876_543_211i64 ::
-                     -1_000_000_000i64 ::
-                     -1i64 ::
-                     0i64 ::
-                     1i64 ::
-                     1_000_000_000i64 ::
-                     217_175_010_123_456_789i64 ::
-                     Int64.maxValue() - 1i64 ::
-                     Int64.maxValue() ::
-                     Nil)
-
+                     List#{
+                       Int64.minValue(),
+                       Int64.minValue() + 1i64,
+                       -217_175_010_876_543_211i64,
+                       -1_000_000_000i64,
+                       -1i64,
+                       0i64,
+                       1i64,
+                       1_000_000_000i64,
+                       217_175_010_123_456_789i64,
+                       Int64.maxValue() - 1i64,
+                       Int64.maxValue()})
 }
