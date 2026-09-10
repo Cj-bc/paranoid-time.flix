@@ -50,61 +50,35 @@ range of +/-9.22e18 *seconds*. So all but a billionth of that range has no count
 where exactly the two ends of it fall — including the `nano` that pays back the borrowed
 second at the bottom — is a question only this form raises.
 
-## Cases that fail on purpose
+## What the boundary cases pin
 
-### `ToEpochNanos.flix`: the range guard
+`toEpochNanos` and `between` both have to reach the ends of the `Int64` nanosecond line
+without overflowing on the way, and the two functions fail there in three distinguishable
+ways. The cases are laid out to separate them, because a guard that catches one can miss
+the others:
 
-`toEpochNanos` answers `Option[Int64]`, so `None` is its way of saying an instant is too
-far from the epoch to count. Three cases hold it to that and the implementation does not
-meet any of them:
+| Shape | `toEpochNanos` | `between` |
+| --- | --- | --- |
+| exactly at the end | `02`, `04` | `02` |
+| one nanosecond past — the *sum* runs over | `03`, `05` | `03` |
+| one whole second past — the *multiplication* overflows first | `06` | `04` |
+| far past, at the ends of `Instant` itself | `07` | `05` |
 
-- `toEpochNanos03` — `instant(9223372036, 854775808)`, one nanosecond past the largest
-  count, answers `Some(-9223372036854775808)`. The guard it is checked against,
-  `Int64.maxValue() - secondsSinceEpoch < nanosPerSecond()`, compares a count of *seconds*
-  against a count of *nanoseconds per second*; it only bites above about 9.22e18 seconds,
-  which is nine orders of magnitude too high to catch this.
-- `toEpochNanos05` — `instant(-9223372037, 145224191)`, one nanosecond past the smallest
-  count, answers `Some(9223372036854775807)`.
-- `toEpochNanos06` — `minInstant()` answers `Some(0)`. Instants at or below the epoch take
-  the other branch, which has no guard at all, so `secondsSinceEpoch * nanosPerSecond()`
-  overflows silently.
+The third row is the one an implementation is most likely to miss: `secondsSinceEpoch *
+nanosPerSecond()` overflows before the nanosecond part is added at all, so a guard written
+only against the total never sees it. Both functions handle the two end seconds by walking
+in from `Int64.maxValue()` / `Int64.minValue()` rather than multiplying out.
 
-All three are the same root cause, and the same one behind the `between` failures below: `between` is now defined as the difference of two `toEpochNanos` results.
+`between` has a fourth shape of its own, `between07`: a gap that fits in a `Duration` while
+*neither end of it* has an `Int64` count from the epoch. It is spread as 9223372037 whole
+seconds minus 999999999 nanoseconds, so the borrow has to bring the second count back under
+the ceiling before it is measured against it. Taking the gap as the difference of two
+`toEpochNanos` results cannot answer it, which is why `between` subtracts field by field.
+`between01` is the degenerate case of the same thing: the gap between an instant and itself
+is zero however far from the epoch it sits.
 
-The 2^63 ns either side of the epoch that *do* have a count are all reported correctly —
-`toEpochNanos01`, `02`, `04` and `07` pin that, `07` by round-tripping through
-`fromEpochNanoseconds` at both ends — so it is only the range guard that is missing.
-
-### `Between.flix`: the ceiling
-
-`between` is now `toEpochNanos(later) - toEpochNanos(earlier)`, so the missing guard above
-reaches it too: an endpoint whose count overflows silently comes back as a wrapped number,
-and the subtraction then reports a gap that is not the one asked for. Three cases here are
-red for that reason, all written to the documented contract — "the absolute amount of time
-between `d1` and `d2`, or `None` when it is too large to fit in a `Duration`":
-
-- `between01` — `between(maxInstant(), maxInstant())` answers `None`. The gap between an
-  instant and itself is zero however far from the epoch it sits, but the latest instant has
-  no `Int64` count, so there is nothing to subtract. (The same case's `minInstant()` and
-  `epoch()` halves pass.)
-- `between03` — one nanosecond past the largest gap that fits answers a wrapped negative
-  duration instead of `None`.
-- `between04` — the earliest instant against the epoch answers `Some(0ns)` for a gap of
-  about 9.22e18 seconds.
-
-Two cases outside this directory are red from the same cause: `since01` in
-`test/test262/.../prototype/since/float64-representable-integer.flix`, and `between08` in
-`test/TestMain/Instant.flix`.
-
-`between06` is the case that was written to fail on purpose, when `between` still did its
-own subtraction and turned down any second count over 9223372036. It currently passes,
-which is an accident rather than a fix: both endpoints overflow and the two wraps happen to
-cancel. It is left as it is, written to the contract.
-
-Giving `toEpochNanos` a working range guard clears every case above except `between01` and
-`between06`. Those two need `between` itself to stop going through absolute epoch counts:
-the gap between two instants can fit in a `Duration` while neither endpoint fits in an
-`Int64` count of nanoseconds from the epoch, which is exactly what both of them ask for.
+Each guard was checked by mutation rather than by inspection — inverting or loosening any
+one of them by a single nanosecond or second turns at least one case red.
 
 ## Licence
 
@@ -125,3 +99,14 @@ The instant builders and the assertion wrappers come from `test/test262/harness`
 test262's own `temporalHelpers.js`. Sharing it keeps one definition of how an `Instant` is
 built and compared across both trees; `Instant` holds a record, so Flix cannot derive
 `ToString` for it and it cannot be handed to `Assert.assertEq` directly.
+
+The two ends of the countable range are named there too, as
+`largestInstantPairToNanoseconds` and `smallestInstantPairToNanoseconds`, rather than
+written out at each call site. Cases a fixed distance from an end derive it — `nano + 1`,
+`seconds + 1` — so that the boundary is stated once and every case that reaches for it says
+which side of it, and how far, it means to be.
+
+`FromEpochNanoseconds.flix` is the exception: its two cases are *about* the offsets
+854775807 and 854775808, which is what the doc comment cross-checks, and both already enter
+through `Int64.maxValue()` / `Int64.minValue()`. Restating them through the pair helpers
+would hide the subject of the case behind the arithmetic.
