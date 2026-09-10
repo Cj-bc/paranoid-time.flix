@@ -54,13 +54,14 @@ mod TestTime.Instant.ToEpochNanos {
     @Test
     def toEpochNanos02_theLargestCountThatFits_isReported(): Unit \ Assert =
         assertSomeNanos(expected = Int64.maxValue(),
-                        toEpochNanos(instant(9_223_372_036i64, 854_775_807)),
+                        toEpochNanos(largestInstantPairToNanoseconds() ||> instant),
                         "the largest count that fits in an Int64")
 
     /// One nanosecond further and there is no count for it.
     @Test
     def toEpochNanos03_oneNanosecondPastTheLargestCount_hasNoCount(): Unit \ Assert =
-        assertNoNanos(toEpochNanos(instant(9_223_372_036i64, 854_775_808)),
+        let (s, nano) = largestInstantPairToNanoseconds();
+        assertNoNanos(toEpochNanos(instant(s, nano + 1)),
                       "one nanosecond past the largest count that fits")
 
     ///
@@ -71,7 +72,7 @@ mod TestTime.Instant.ToEpochNanos {
     @Test
     def toEpochNanos04_theSmallestCountThatFits_isReported(): Unit \ Assert =
         assertSomeNanos(expected = Int64.minValue(),
-                        toEpochNanos(instant(-9_223_372_037i64, 145_224_192)),
+                        toEpochNanos(smallestInstantPairToNanoseconds() ||> instant),
                         "the smallest count that fits in an Int64")
 
     ///
@@ -82,7 +83,8 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     @Test
     def toEpochNanos05_oneNanosecondPastTheSmallestCount_hasNoCount(): Unit \ Assert =
-        assertNoNanos(toEpochNanos(instant(-9_223_372_037i64, 145_224_191)),
+        let (s, nano) = smallestInstantPairToNanoseconds();
+        assertNoNanos(toEpochNanos(instant(s, nano - 1)),
                       "one nanosecond past the smallest count that fits")
 
     ///

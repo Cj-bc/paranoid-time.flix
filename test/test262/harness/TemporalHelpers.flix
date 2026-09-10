@@ -46,6 +46,12 @@ pub mod TemporalHelpers {
     ///
     pub def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
 
+    /// Pair of secondsSinceEpoch and nanoseconds of largest instant that can be converted to Int64 nanoseconds
+    pub def largestInstantPairToNanoseconds(): (Int64, Int32) = (9_223_372_036i64, 854_775_807)
+
+    /// Pair of secondsSinceEpoch and nanoseconds of smallest instant that can be converted to Int64 nanoseconds
+    pub def smallestInstantPairToNanoseconds(): (Int64, Int32) = (-9_223_372_037i64, 145_224_192)
+
     ///
     /// Stands in for test262's `new Temporal.Instant(ns)`.
     ///
