@@ -46,6 +46,12 @@ pub mod TemporalHelpers {
     ///
     pub def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
 
+    /// Pair of secondsSinceEpoch and nanoseconds of largest instant that can be converted to Int64 nanoseconds
+    pub def largestInstantPairToNanoseconds(): (Int64, Int32) = (9_223_372_036i64, 854_775_807)
+
+    /// Pair of secondsSinceEpoch and nanoseconds of smallest instant that can be converted to Int64 nanoseconds
+    pub def smallestInstantPairToNanoseconds(): (Int64, Int32) = (-9_223_372_037i64, 145_224_192)
+
     ///
     /// Stands in for test262's `new Temporal.Instant(ns)`.
     ///
@@ -138,6 +144,21 @@ pub mod TemporalHelpers {
     /// no counterpart: `since` and `until` return an arbitrary-precision `Duration`.
     ///
     pub def assertNoDuration(actual: Option[Duration], msg: String): Unit \ Assert =
+        Assert.assertEqWithMsg(expected = None, actual, "${msg}: expected None, got ${actual}")
+
+    ///
+    /// test262's `assert.sameValue(instant.epochNanoseconds, ...)`, for the
+    /// `Option[Int64]` that `toEpochNanos` answers with.
+    ///
+    pub def assertSomeNanos(expected: {expected = Int64}, actual: Option[Int64], msg: String): Unit \ Assert =
+        Assert.assertEqWithMsg(expected = Some(expected#expected), actual, "${msg}: expected ${Some(expected#expected)}, got ${actual}")
+
+    ///
+    /// `toEpochNanos` answers `None` for an instant too far from the epoch to count in an
+    /// `Int64`. test262 has no counterpart: `epochNanoseconds` is an arbitrary-precision
+    /// `BigInt`, so it is never out of range.
+    ///
+    pub def assertNoNanos(actual: Option[Int64], msg: String): Unit \ Assert =
         Assert.assertEqWithMsg(expected = None, actual, "${msg}: expected None, got ${actual}")
 
 }
