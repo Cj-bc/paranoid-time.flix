@@ -24,8 +24,10 @@ mod TestTime.Instant.ToEpochNanos {
     use TemporalHelpers.assertSomeNanos
     use TemporalHelpers.epoch
     use TemporalHelpers.instant
+    use TemporalHelpers.largestInstantPairToNanoseconds
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
+    use TemporalHelpers.smallestInstantPairToNanoseconds
     use Time.Instant.fromEpochNanoseconds
     use Time.Instant.toEpochNanos
 
