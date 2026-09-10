@@ -90,11 +90,29 @@ mod TestTime.Instant.ToEpochNanos {
                       "one nanosecond past the smallest count that fits")
 
     ///
+    /// One whole second past either end, which is a different failure from the two above:
+    /// there the sum runs past the ceiling, here `secondsSinceEpoch * nanosPerSecond()`
+    /// overflows before anything is added to it.
+    ///
+    /// Each is the extreme of its second — `nano` at 0 going up, at its ceiling going down —
+    /// so these are the two nearest instants that overflow the multiplication.
+    ///
+    @Test
+    def toEpochNanos06_oneSecondPastEitherEnd_hasNoCount(): Unit \ Assert = {
+        let (largestSeconds, _) = largestInstantPairToNanoseconds();
+        let (smallestSeconds, _) = smallestInstantPairToNanoseconds();
+        assertNoNanos(toEpochNanos(instant(largestSeconds + 1i64, 0)),
+                      "one second past the largest count that fits");
+        assertNoNanos(toEpochNanos(instant(smallestSeconds - 1i64, 999_999_999)),
+                      "one second past the smallest count that fits")
+    }
+
+    ///
     /// The two ends of `Instant` itself are about 9.22e18 *seconds* from the epoch, a
     /// billion times further out than any `Int64` count reaches, so neither has one.
     ///
     @Test
-    def toEpochNanos06_theEndsOfTheInstantRange_haveNoCount(): Unit \ Assert = {
+    def toEpochNanos07_theEndsOfTheInstantRange_haveNoCount(): Unit \ Assert = {
         assertNoNanos(toEpochNanos(maxInstant()), "the latest instant");
         assertNoNanos(toEpochNanos(minInstant()), "the earliest instant")
     }
@@ -107,7 +125,7 @@ mod TestTime.Instant.ToEpochNanos {
     /// at the two ends, where the split borrows a second.
     ///
     @Test
-    def toEpochNanos07_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
+    def toEpochNanos08_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
         List.forEach(ns -> assertSomeNanos(expected = ns, toEpochNanos(fromEpochNanoseconds(ns)),
                                            "the round trip through the two fields"),
                      List#{

@@ -134,21 +134,68 @@ pub mod Time.Instant {
       case Err(v) => v
     }
 
+  ///
+  /// The largest `Instant` that has an `Int64` nanosecond count, as the pair it is stored
+  /// in: `Int64.maxValue()` is 9223372036854775807 ns, which is 9223372036 whole seconds
+  /// plus 854775807 ns.
+  ///
+  def largestCountableInstant(): (Int64, Int64) = (9_223_372_036i64, 854_775_807i64)
+
+  ///
+  /// The smallest one. `Int64.minValue()` is -9223372036854775808 ns, which sits 854775808 ns
+  /// below -9223372036 whole seconds; rounding towards negative infinity puts it at
+  /// -9223372037 seconds plus the remaining 145224192 ns, which keeps `nano` non-negative.
+  ///
+  def smallestCountableInstant(): (Int64, Int64) = (-9_223_372_037i64, 145_224_192i64)
+
+  ///
+  /// Returns the number of nanoseconds between `t` and the epoch, or `None` when `t` is too
+  /// far from it to count in an `Int64`.
+  ///
+  /// An `Int64` of nanoseconds spans a little over +/-9.22e18 ns where `Instant` reaches
+  /// +/-9.22e18 *seconds*, so all but a billionth of the range has no count.
+  ///
   pub def toEpochNanos(t: Instant): Option[Int64] =
     let Instant(v) = t;
-    if (v#secondsSinceEpoch <= 0i64)
-      // won't underflow because v#nano can't be smaller than 0
-      Some(v#secondsSinceEpoch * nanosPerSecond() + Int32.toInt64(v#nano))
-    else
-      if (Int64.maxValue() - v#secondsSinceEpoch < nanosPerSecond())
-        None
-      else
-        Some(v#secondsSinceEpoch * nanosPerSecond() + Int32.toInt64(v#nano))
+    let s = v#secondsSinceEpoch;
+    let n = Int32.toInt64(v#nano);
+    let (maxSeconds, maxNano) = largestCountableInstant();
+    let (minSeconds, minNano) = smallestCountableInstant();
+    if (s < minSeconds or maxSeconds < s) None
+    // At either end `s * nanosPerSecond()` would itself overflow, so the count is reached by
+    // walking in from the end rather than by multiplying out.
+    else if (s == maxSeconds)
+      if (maxNano < n) None else Some(Int64.maxValue() - (maxNano - n))
+    else if (s == minSeconds)
+      if (n < minNano) None else Some(Int64.minValue() + (n - minNano))
+    // In [-9223372036, 9223372035], where `s * nanosPerSecond() + n` stays inside `Int64`.
+    else Some(s * nanosPerSecond() + n)
 
+  ///
   /// Returns the absolute amount of time between `d1` and `d2`,
   /// or None when it is too large to fit in a `Duration`.
+  ///
+  /// The difference is taken field by field rather than as the difference of two
+  /// `toEpochNanos` results: a gap can fit in a `Duration` while neither end of it has an
+  /// `Int64` count from the epoch, and the gap between an instant and itself is zero however
+  /// far out it sits.
+  ///
   pub def between(d1: Instant, d2: Instant): Option[Duration] =
-    use Applicative.<*>;
-    use Functor.<$>;
-    Duration.nanoseconds <$> (Sub.sub <$> toEpochNanos(Order.max(d1, d2)) <*> toEpochNanos(Order.min(d1, d2)))
+    let Instant(earlier) = Order.min(d1, d2);
+    let Instant(later) = Order.max(d1, d2);
+    // The two second counts alone can be further apart than an `Int64` holds, so that has to
+    // be ruled out before the subtraction below is done.
+    if (earlier#secondsSinceEpoch < 0i64 and (Int64.maxValue() + earlier#secondsSinceEpoch) < later#secondsSinceEpoch)
+      None
+    else
+      // In (-1_000_000_000, 1_000_000_000), and negative only when the second count differs.
+      let nanoDiff = Int32.toInt64(later#nano) - Int32.toInt64(earlier#nano);
+      let borrow = if (nanoDiff < 0i64) 1i64 else 0i64;
+      // `later` is at or after `earlier`, so both come out non-negative, with the borrow
+      // leaving `nano` in [0, 999999999] the way an `Instant` itself holds it.
+      let seconds = later#secondsSinceEpoch - earlier#secondsSinceEpoch - borrow;
+      let nano = nanoDiff + borrow * nanosPerSecond();
+      let (maxSeconds, maxNano) = largestCountableInstant();
+      if (maxSeconds < seconds or (seconds == maxSeconds and maxNano < nano)) None
+      else Some(Duration.nanoseconds(seconds * nanosPerSecond() + nano))
 }
