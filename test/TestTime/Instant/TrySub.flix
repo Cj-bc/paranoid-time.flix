@@ -16,6 +16,7 @@ mod TestTime.Instant.TrySub {
     use TemporalHelpers.epoch
     use TemporalHelpers.fromNanos
     use TemporalHelpers.instant
+    use TemporalHelpers.largestInstantPairToNanoseconds
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
     use Time.Duration
@@ -64,10 +65,11 @@ mod TestTime.Instant.TrySub {
     ///
     @Test
     def trySub03_theSmallestDuration_reachesOneNanosecondPastTheLargest(): Unit \ Assert = {
-        assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_807),
+        let (s, nano) = largestInstantPairToNanoseconds();
+        assertSomeInstant(expected = instant(s, nano),
                           tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
                           "adding the largest duration");
-        assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_808),
+        assertSomeInstant(expected = instant(s, nano + 1),
                           trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "subtracting the smallest duration")
     }
