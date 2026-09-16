@@ -148,28 +148,10 @@ pub mod Time.Instant {
   ///
   def smallestCountableInstant(): (Int64, Int64) = (-9_223_372_037i64, 145_224_192i64)
 
-  ///
-  /// Returns the number of nanoseconds between `t` and the epoch, or `None` when `t` is too
-  /// far from it to count in an `Int64`.
-  ///
-  /// An `Int64` of nanoseconds spans a little over +/-9.22e18 ns where `Instant` reaches
-  /// +/-9.22e18 *seconds*, so all but a billionth of the range has no count.
-  ///
-  pub def toEpochNanos(t: Instant): Option[Int64] =
+  /// Returns the number of nanoseconds between `t` and the epoch
+  pub def toEpochNanos(t: Instant): BigInt =
     let Instant(v) = t;
-    let s = v#secondsSinceEpoch;
-    let n = Int32.toInt64(v#nano);
-    let (maxSeconds, maxNano) = largestCountableInstant();
-    let (minSeconds, minNano) = smallestCountableInstant();
-    if (s < minSeconds or maxSeconds < s) None
-    // At either end `s * nanosPerSecond()` would itself overflow, so the count is reached by
-    // walking in from the end rather than by multiplying out.
-    else if (s == maxSeconds)
-      if (maxNano < n) None else Some(Int64.maxValue() - (maxNano - n))
-    else if (s == minSeconds)
-      if (n < minNano) None else Some(Int64.minValue() + (n - minNano))
-    // In [-9223372036, 9223372035], where `s * nanosPerSecond() + n` stays inside `Int64`.
-    else Some(s * nanosPerSecond() + n)
+    Int64.toBigInt(v#secondsSinceEpoch) + Int32.toBigInt(v#nano)
 
   ///
   /// Returns the absolute amount of time between `d1` and `d2`,

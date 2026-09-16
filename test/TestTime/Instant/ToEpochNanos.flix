@@ -21,7 +21,6 @@
 mod TestTime.Instant.ToEpochNanos {
 
     use TemporalHelpers.assertNoNanos
-    use TemporalHelpers.assertSomeNanos
     use TemporalHelpers.epoch
     use TemporalHelpers.instant
     use TemporalHelpers.largestInstantPairToNanoseconds
@@ -40,12 +39,12 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     @Test
     def toEpochNanos01_oneNanosecondEitherSideOfTheEpoch_recombinesTheTwoFields(): Unit \ Assert = {
-        assertSomeNanos(expected = 0i64, toEpochNanos(epoch()), "the epoch itself");
-        assertSomeNanos(expected = 1i64, toEpochNanos(instant(0i64, 1)),
+        Assert.assertEqWithMsg(expected = 0ii, toEpochNanos(epoch()), "the epoch itself");
+        Assert.assertEqWithMsg(expected = 1ii, toEpochNanos(instant(0i64, 1)),
                         "one nanosecond after the epoch");
-        assertSomeNanos(expected = -1i64, toEpochNanos(instant(-1i64, 999_999_999)),
+        Assert.assertEqWithMsg(expected = -1ii, toEpochNanos(instant(-1i64, 999_999_999)),
                         "one nanosecond before the epoch");
-        assertSomeNanos(expected = -1_000_000_000i64, toEpochNanos(instant(-1i64, 0)),
+        Assert.assertEqWithMsg(expected = -1_000_000_000ii, toEpochNanos(instant(-1i64, 0)),
                         "one second before the epoch")
     }
 
@@ -57,8 +56,8 @@ mod TestTime.Instant.ToEpochNanos {
     /// at the two ends, where the split borrows a second.
     ///
     @Test
-    def toEpochNanos08_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
-        List.forEach(ns -> assertSomeNanos(expected = ns, toEpochNanos(fromEpochNanoseconds(ns)),
+    def toEpochNanos03_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
+        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNanos(fromEpochNanoseconds(ns)),
                                            "the round trip through the two fields"),
                      List#{
                        Int64.minValue(),
