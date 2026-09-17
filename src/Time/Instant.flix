@@ -151,7 +151,7 @@ pub mod Time.Instant {
   /// Returns the number of nanoseconds between `t` and the epoch
   pub def toEpochNanos(t: Instant): BigInt =
     let Instant(v) = t;
-    Int64.toBigInt(v#secondsSinceEpoch) + Int32.toBigInt(v#nano)
+    Int64.toBigInt(v#secondsSinceEpoch) * Int64.toBigInt(nanosPerSecond()) + Int32.toBigInt(v#nano)
 
   ///
   /// Returns the absolute amount of time between `d1` and `d2`,
