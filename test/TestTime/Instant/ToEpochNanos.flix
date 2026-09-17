@@ -21,7 +21,6 @@
 mod TestTime.Instant.ToEpochNanos {
 
     use TemporalHelpers.assertNoNanos
-    use TemporalHelpers.assertSomeNanos
     use TemporalHelpers.epoch
     use TemporalHelpers.instant
     use TemporalHelpers.largestInstantPairToNanoseconds
@@ -40,81 +39,13 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     @Test
     def toEpochNanos01_oneNanosecondEitherSideOfTheEpoch_recombinesTheTwoFields(): Unit \ Assert = {
-        assertSomeNanos(expected = 0i64, toEpochNanos(epoch()), "the epoch itself");
-        assertSomeNanos(expected = 1i64, toEpochNanos(instant(0i64, 1)),
+        Assert.assertEqWithMsg(expected = 0ii, toEpochNanos(epoch()), "the epoch itself");
+        Assert.assertEqWithMsg(expected = 1ii, toEpochNanos(instant(0i64, 1)),
                         "one nanosecond after the epoch");
-        assertSomeNanos(expected = -1i64, toEpochNanos(instant(-1i64, 999_999_999)),
+        Assert.assertEqWithMsg(expected = -1ii, toEpochNanos(instant(-1i64, 999_999_999)),
                         "one nanosecond before the epoch");
-        assertSomeNanos(expected = -1_000_000_000i64, toEpochNanos(instant(-1i64, 0)),
+        Assert.assertEqWithMsg(expected = -1_000_000_000ii, toEpochNanos(instant(-1i64, 0)),
                         "one second before the epoch")
-    }
-
-    ///
-    /// The largest count there is: `Int64.maxValue()` is 9223372036854775807 ns, which is
-    /// 9223372036 whole seconds plus 854775807 ns.
-    ///
-    @Test
-    def toEpochNanos02_theLargestCountThatFits_isReported(): Unit \ Assert =
-        assertSomeNanos(expected = Int64.maxValue(),
-                        toEpochNanos(largestInstantPairToNanoseconds() ||> instant),
-                        "the largest count that fits in an Int64")
-
-    /// One nanosecond further and there is no count for it.
-    @Test
-    def toEpochNanos03_oneNanosecondPastTheLargestCount_hasNoCount(): Unit \ Assert =
-        let (s, nano) = largestInstantPairToNanoseconds();
-        assertNoNanos(toEpochNanos(instant(s, nano + 1)),
-                      "one nanosecond past the largest count that fits")
-
-    ///
-    /// The smallest count there is: `Int64.minValue()` is -9223372036854775808 ns, which
-    /// with `nano` non-negative is -9223372037 seconds plus 145224192 ns —
-    /// -9223372037000000000 + 145224192 = -9223372036854775808.
-    ///
-    @Test
-    def toEpochNanos04_theSmallestCountThatFits_isReported(): Unit \ Assert =
-        assertSomeNanos(expected = Int64.minValue(),
-                        toEpochNanos(smallestInstantPairToNanoseconds() ||> instant),
-                        "the smallest count that fits in an Int64")
-
-    ///
-    /// One nanosecond further down and there is no count for it either.
-    ///
-    /// The step is taken in `nano` rather than in the second count, so this is the one
-    /// nanosecond below the floor that a truncating conversion would still let through.
-    ///
-    @Test
-    def toEpochNanos05_oneNanosecondPastTheSmallestCount_hasNoCount(): Unit \ Assert =
-        let (s, nano) = smallestInstantPairToNanoseconds();
-        assertNoNanos(toEpochNanos(instant(s, nano - 1)),
-                      "one nanosecond past the smallest count that fits")
-
-    ///
-    /// One whole second past either end, which is a different failure from the two above:
-    /// there the sum runs past the ceiling, here `secondsSinceEpoch * nanosPerSecond()`
-    /// overflows before anything is added to it.
-    ///
-    /// Each is the extreme of its second — `nano` at 0 going up, at its ceiling going down —
-    /// so these are the two nearest instants that overflow the multiplication.
-    ///
-    @Test
-    def toEpochNanos06_oneSecondPastEitherEnd_hasNoCount(): Unit \ Assert = {
-        let (largestSeconds, _) = largestInstantPairToNanoseconds();
-        let (smallestSeconds, _) = smallestInstantPairToNanoseconds();
-        assertNoNanos(toEpochNanos(instant(largestSeconds + 1i64, 0)),
-                      "one second past the largest count that fits");
-        assertNoNanos(toEpochNanos(instant(smallestSeconds - 1i64, 999_999_999)),
-                      "one second past the smallest count that fits")
-    }
-
-    ///
-    /// The two ends of `Instant` itself are about 9.22e18 *seconds* from the epoch, a
-    /// billion times further out than any `Int64` count reaches, so neither has one.
-    ///
-    @Test
-    def toEpochNanos07_theEndsOfTheInstantRange_haveNoCount(): Unit \ Assert = {
-        assertNoNanos(toEpochNanos(maxInstant()), "the latest instant");
-        assertNoNanos(toEpochNanos(minInstant()), "the earliest instant")
     }
 
     ///
@@ -125,8 +56,8 @@ mod TestTime.Instant.ToEpochNanos {
     /// at the two ends, where the split borrows a second.
     ///
     @Test
-    def toEpochNanos08_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
-        List.forEach(ns -> assertSomeNanos(expected = ns, toEpochNanos(fromEpochNanoseconds(ns)),
+    def toEpochNanos03_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
+        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNanos(fromEpochNanoseconds(ns)),
                                            "the round trip through the two fields"),
                      List#{
                        Int64.minValue(),
