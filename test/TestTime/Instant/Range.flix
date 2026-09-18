@@ -14,14 +14,14 @@
 /// offset would fall in the year -10000, and 9999-12-31T23:59:59Z at any negative one in
 /// the year 10000.
 ///
-/// `fromEpochMilliseconds` is how the cases reach the ends: an `Int64` millisecond count
-/// runs about four orders of magnitude past both of them, so the saturating form answers
-/// the library's own bounds rather than anything restated here. Where exactly those bounds
-/// fall to the millisecond is pinned by the port in
+/// Each end is checked twice over: against `Time.Instant`'s own constant, and against what
+/// `fromEpochMilliseconds` clamps to, since an `Int64` millisecond count runs about four
+/// orders of magnitude past both ends. Where exactly those bounds fall to the millisecond
+/// is pinned by the port in
 /// `test/test262/built-ins/Temporal/Instant/fromEpochMilliseconds/limits.flix`.
 ///
-/// The instant builders and assertions come from the test262 harness rather than being
-/// written out again here.
+/// The day counts, the instant builder and the assertions come from the test262 harness
+/// rather than being written out again here.
 ///
 mod TestTime.Instant.Range {
 
@@ -43,7 +43,7 @@ mod TestTime.Instant.Range {
         assertInstantsEqual(expected = expected, fromEpochMilliseconds(Int64.minValue()),
                             "-9999-01-02T00:00:00Z");
         assertInstantsEqual(expected = expected, minInstant(),
-                            "-9999-01-02T00:00:00Z as the harness names it")
+                            "-9999-01-02T00:00:00Z as Time.Instant names it")
     }
 
     ///
@@ -60,7 +60,7 @@ mod TestTime.Instant.Range {
         assertInstantsEqual(expected = expected, fromEpochMilliseconds(Int64.maxValue()),
                             "9999-12-30T23:59:59.999999999Z");
         assertInstantsEqual(expected = expected, maxInstant(),
-                            "9999-12-30T23:59:59.999999999Z as the harness names it")
+                            "9999-12-30T23:59:59.999999999Z as Time.Instant names it")
     }
 
     ///
