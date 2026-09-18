@@ -73,7 +73,7 @@ pub mod Time.Instant {
   ///
   /// -9999-01-02 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
   ///
-  def minInstant(): Instant =
+  pub def minInstant(): Instant =
     Instant({secondsSinceEpoch = -377_705_116_800i64, nano = 0})
 
   ///
@@ -82,7 +82,7 @@ pub mod Time.Instant {
   /// One nanosecond before 9999-12-31T00:00:00Z, which is 2932896 days after the epoch:
   /// 2932896 * 86400 = 253402214400, one second below which is 253402214399.
   ///
-  def maxInstant(): Instant =
+  pub def maxInstant(): Instant =
     Instant({secondsSinceEpoch = 253_402_214_399i64, nano = 999_999_999})
 
   ///
