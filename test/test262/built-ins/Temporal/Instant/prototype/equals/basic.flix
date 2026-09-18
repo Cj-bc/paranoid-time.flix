@@ -16,8 +16,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Equals.Basic {
 
-    use TemporalHelpers.fromNanos
-    use TemporalHelpers.instant
+    use TemporalHelpers.{fromNanos, instant}
     use Time.Instant.Instant
 
     def inst1(): Instant = fromNanos(1_234_567_890_123_456_789i64)

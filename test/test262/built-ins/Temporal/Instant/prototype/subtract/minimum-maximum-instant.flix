@@ -19,16 +19,9 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
 
-    use TemporalHelpers.assertNoInstant
-    use TemporalHelpers.assertSaturated
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.instant
-    use TemporalHelpers.parts
+    use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant, instant, parts}
     use Time.Duration
-    use Time.Instant.saturatingSub
-    use Time.Instant.trySub
-    use Time.Instant.maxInstant
-    use Time.Instant.minInstant
+    use Time.Instant.{saturatingSub, trySub, maxInstant, minInstant}
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)

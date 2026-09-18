@@ -19,14 +19,9 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
 
-    use TemporalHelpers.assertSomeDuration
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.Instant.between
-    use Time.Instant.tryAdd
-    use Time.Instant.trySub
+    use Time.Instant.{Instant, between, tryAdd, trySub}
 
     /// 1976-11-18T15:23:30.123456789Z.
     def earlier(): Instant = instant(217_178_610i64, 123_456_789)

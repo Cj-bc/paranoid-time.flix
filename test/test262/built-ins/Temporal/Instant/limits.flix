@@ -18,16 +18,9 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Limits {
 
-    use TemporalHelpers.assertNoInstant
-    use TemporalHelpers.assertSaturated
-    use TemporalHelpers.assertSomeInstant
+    use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant}
     use Time.Duration
-    use Time.Instant.saturatingAdd
-    use Time.Instant.saturatingSub
-    use Time.Instant.tryAdd
-    use Time.Instant.trySub
-    use Time.Instant.maxInstant
-    use Time.Instant.minInstant
+    use Time.Instant.{saturatingAdd, saturatingSub, tryAdd, trySub, maxInstant, minInstant}
 
     /// test262: `new Temporal.Instant(limit + 1n)` throws.
     @Test

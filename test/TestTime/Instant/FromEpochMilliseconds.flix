@@ -10,8 +10,7 @@
 ///
 mod TestTime.Instant.FromEpochMilliseconds {
 
-    use TemporalHelpers.assertInstantsEqual
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertInstantsEqual, instant}
     use Time.Instant.fromEpochMilliseconds
 
     /// A whole number of seconds leaves `nano` at zero on both sides of the epoch.

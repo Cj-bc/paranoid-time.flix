@@ -20,9 +20,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Float64RepresentableInteger {
 
-    use TemporalHelpers.assertNoDuration
-    use TemporalHelpers.epoch
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertNoDuration, epoch, instant}
     use Time.Instant.between
 
     ///

@@ -10,9 +10,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.BlankDuration {
 
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.fromNanos
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
     use Time.Instant.trySub
 

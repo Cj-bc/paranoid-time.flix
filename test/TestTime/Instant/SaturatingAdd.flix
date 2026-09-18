@@ -14,13 +14,9 @@
 ///
 mod TestTime.Instant.SaturatingAdd {
 
-    use TemporalHelpers.assertInstantsEqual
-    use TemporalHelpers.fromNanos
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.Instant.saturatingAdd
-    use Time.Instant.maxInstant
+    use Time.Instant.{Instant, saturatingAdd, maxInstant}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/add/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

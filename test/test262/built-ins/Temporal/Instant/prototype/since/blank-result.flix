@@ -10,8 +10,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.BlankResult {
 
-    use TemporalHelpers.assertSomeDuration
-    use TemporalHelpers.fromNanos
+    use TemporalHelpers.{assertSomeDuration, fromNanos}
     use Time.Duration
     use Time.Instant.between
 

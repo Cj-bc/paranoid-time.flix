@@ -15,12 +15,9 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
 
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.fromNanos
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.Instant.trySub
+    use Time.Instant.{Instant, trySub}
 
     /// test262's `new Temporal.Instant(50000n)`: 50000 ns after the epoch.
     def inst(): Instant = fromNanos(50_000i64)

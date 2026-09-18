@@ -14,10 +14,8 @@
 ///
 mod TestTime.Instant.ToEpochNanos {
 
-    use TemporalHelpers.epoch
-    use TemporalHelpers.instant
-    use Time.Instant.fromEpochNanoseconds
-    use Time.Instant.toEpochNanos
+    use TemporalHelpers.{epoch, instant}
+    use Time.Instant.{fromEpochNanoseconds, toEpochNanos}
 
     ///
     /// One nanosecond either side of the epoch, the smallest counts that show the two
