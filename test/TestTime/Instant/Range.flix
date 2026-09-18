@@ -26,13 +26,20 @@
 mod TestTime.Instant.Range {
 
     use TemporalHelpers.assertInstantsEqual
+    use TemporalHelpers.assertNoDuration
+    use TemporalHelpers.assertNoInstant
+    use TemporalHelpers.assertSaturated
     use TemporalHelpers.dayOf9999December31st
     use TemporalHelpers.dayOfMinus9999January1st
     use TemporalHelpers.instant
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
     use TemporalHelpers.secondsPerDay
+    use Time.Duration
+    use Time.Instant.between
     use Time.Instant.fromEpochMilliseconds
+    use Time.Instant.saturatingAdd
+    use Time.Instant.tryAdd
 
     ///
     /// The earliest instant is midnight one day into -9999, not midnight on its first day.
@@ -63,6 +70,29 @@ mod TestTime.Instant.Range {
                             "9999-12-30T23:59:59.999999999Z");
         assertInstantsEqual(expected = expected, maxInstant(),
                             "9999-12-30T23:59:59.999999999Z as the harness names it")
+    }
+
+    ///
+    /// An `Instant` built outside the range is reported as outside it, not wrapped back in.
+    ///
+    /// The record constructor is public, so nothing stops one being built at the far ends of
+    /// `Int64`. Shifting from there is where a range check written only against the result
+    /// would go wrong: the second count overflows first and lands back inside the range, so
+    /// the operation would answer an instant roughly 584 years from the epoch for an argument
+    /// nowhere near it.
+    ///
+    @Test
+    def range03_anInstantBuiltOutsideTheRange_doesNotWrapBackIn(): Unit \ Assert = {
+        let pastTheTop = instant(Int64.maxValue(), 0);
+        let pastTheBottom = instant(Int64.minValue(), 0);
+        assertNoInstant(tryAdd(pastTheTop, Duration.seconds(1)), "one second above the largest Int64 second");
+        assertNoInstant(tryAdd(pastTheBottom, Duration.seconds(-1)), "one second below the smallest Int64 second");
+        assertSaturated(expected = maxInstant(), saturatingAdd(pastTheTop, Duration.seconds(1)),
+                        "one second above the largest Int64 second");
+        assertSaturated(expected = minInstant(), saturatingAdd(pastTheBottom, Duration.seconds(-1)),
+                        "one second below the smallest Int64 second");
+        // `between` subtracts the two second counts, which wraps for the same reason.
+        assertNoDuration(between(pastTheBottom, pastTheTop), "the two ends of the Int64 second line")
     }
 
 }

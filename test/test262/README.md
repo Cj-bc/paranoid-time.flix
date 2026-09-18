@@ -59,7 +59,7 @@ Two Flix rules shape the module declarations:
 | `compare/exhaustive.flix` | `compare/exhaustive.js` | `Order[Instant]` |
 | `compare/cross-epoch.flix` | `compare/cross-epoch.js` | `Order[Instant]` |
 | `fromEpochMilliseconds/basic.flix` | `fromEpochMilliseconds/basic.js` | `fromEpochMilliseconds` |
-| `fromEpochMilliseconds/limits.flix` | `fromEpochMilliseconds/limits.js` | `fromEpochMilliseconds` |
+| `fromEpochMilliseconds/limits.flix` | `fromEpochMilliseconds/limits.js` | `fromEpochMilliseconds`, `tryFromEpochMilliseconds` |
 | `fromEpochNanoseconds/basic.flix` | `fromEpochNanoseconds/basic.js` | `fromEpochNanoseconds` |
 | `fromEpochNanoseconds/limits.flix` | `fromEpochNanoseconds/limits.js` | `fromEpochNanoseconds` |
 | `prototype/add/basic.flix` | `prototype/add/basic.js` | `tryAdd`, `saturatingAdd` |
