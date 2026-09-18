@@ -18,6 +18,7 @@ file per function.
 | `SaturatingSub.flix` | `saturatingSub` |
 | `ToEpochNanos.flix` | `toEpochNanos` |
 | `Between.flix` | `between` |
+| `Range.flix` | the two ends of the representable range |
 
 ## Why these have no counterpart
 
@@ -27,6 +28,13 @@ Three differences account for all of them.
 `[0, 999999999]`, where `Temporal.Instant` is a single signed nanosecond count. So the carry
 and the borrow between the two fields, `nano` staying non-negative on both sides of the
 epoch, and the splits at the two ends of `Int64` are all questions that only arise here.
+
+The range is stated as two calendar instants — -9999-01-02T00:00:00Z to
+9999-12-30T23:59:59.999999999Z — and `Temporal` names its own ends by parsing a string,
+which `Instant` has no form for. So that the second counts everything else is written
+against really are those two dates is a claim only `Range.flix` can make, along with the
+reason the ends sit one day inside the four-digit year range rather than on its edge: a UTC
+offset has to be able to move an instant by up to 18 hours without leaving it.
 
 **`Duration` is one `Int64` of nanoseconds.** Its range — a little over 292 years — is far
 narrower than `Instant`'s, and `Temporal.Duration` has no comparable ceiling. Its two
@@ -43,31 +51,28 @@ For `between` there is a fourth: `since` and `until` are signed, so neither the 
 that the answer is never negative nor the ceiling above which there is no answer exists
 over there.
 
-`toEpochNanos` has one more of its own, and it is that same ceiling seen from the other
-side: `epochNanoseconds` is an arbitrary-precision `BigInt` and always has an answer,
-where an `Int64` count spans a little over +/-9.22e18 *nanoseconds* against an `Instant`
-range of +/-9.22e18 *seconds*. So all but a billionth of that range has no count, and
-where exactly the two ends of it fall — including the `nano` that pays back the borrowed
-second at the bottom — is a question only this form raises.
+`toEpochNanos` has one of its own: it answers a `BigInt`, as `epochNanoseconds` does, so
+the count never runs out of room and the whole question is how the two stored fields are
+put back together — including the `nano` that pays back the borrowed second before the
+epoch, which is a question only this form raises.
 
 ## What the boundary cases pin
 
-`toEpochNanos` and `between` both have to reach the ends of the `Int64` nanosecond line
-without overflowing on the way, and the two functions fail there in three distinguishable
-ways. The cases are laid out to separate them, because a guard that catches one can miss
-the others:
+`between` has to reach the end of the `Int64` nanosecond line without overflowing on the
+way, and it can fail there in three distinguishable ways. Its cases are laid out to
+separate them, because a guard that catches one can miss the others:
 
-| Shape | `toEpochNanos` | `between` |
-| --- | --- | --- |
-| exactly at the end | `02`, `04` | `02` |
-| one nanosecond past — the *sum* runs over | `03`, `05` | `03` |
-| one whole second past — the *multiplication* overflows first | `06` | `04` |
-| far past, at the ends of `Instant` itself | `07` | `05` |
+| Shape | `between` |
+| --- | --- |
+| exactly at the end | `02` |
+| one nanosecond past — the *sum* runs over | `03` |
+| one whole second past — the *multiplication* overflows first | `04` |
+| far past, at the ends of `Instant` itself | `05` |
 
-The third row is the one an implementation is most likely to miss: `secondsSinceEpoch *
+The third row is the one an implementation is most likely to miss: `seconds *
 nanosPerSecond()` overflows before the nanosecond part is added at all, so a guard written
-only against the total never sees it. Both functions handle the two end seconds by walking
-in from `Int64.maxValue()` / `Int64.minValue()` rather than multiplying out.
+only against the total never sees it. The end second is reached by walking in from
+`Int64.maxValue()` rather than multiplying out.
 
 `between` has a fourth shape of its own, `between07`: a gap that fits in a `Duration` while
 *neither end of it* has an `Int64` count from the epoch. It is spread as 9223372037 whole
@@ -101,10 +106,12 @@ built and compared across both trees; `Instant` holds a record, so Flix cannot d
 `ToString` for it and it cannot be handed to `Assert.assertEq` directly.
 
 The two ends of the countable range are named there too, as
-`largestInstantPairToNanoseconds` and `smallestInstantPairToNanoseconds`, rather than
-written out at each call site. Cases a fixed distance from an end derive it — `nano + 1`,
-`seconds + 1` — so that the boundary is stated once and every case that reaches for it says
-which side of it, and how far, it means to be.
+`largestInstantPairToNanoseconds` and `smallestInstantPairToNanoseconds`, as are the two
+ends of `Instant` itself, rather than written out at each call site. Cases a fixed distance
+from an end derive it — `nano + 1`, `seconds + 1`, or `parts(maxInstant())` — so that the
+boundary is stated once and every case that reaches for it says which side of it, and how
+far, it means to be. `Range.flix` is the one place the numbers are spelled out, because
+naming them is what it is for.
 
 `FromEpochNanoseconds.flix` is the exception: its two cases are *about* the offsets
 854775807 and 854775808, which is what the doc comment cross-checks, and both already enter

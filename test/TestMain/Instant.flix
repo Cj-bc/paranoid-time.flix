@@ -15,9 +15,15 @@ mod TestTime.Instant {
 
   def epoch(): Instant = instant(0i64, 0)
 
-  def minInstant(): Instant = instant(Int64.minValue(), 0)
+  /// -9999-01-02T00:00:00Z, the earliest representable `Instant`.
+  def minInstant(): Instant = instant(-377_705_116_800i64, 0)
 
-  def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
+  /// 9999-12-30T23:59:59.999999999Z, the latest one.
+  def maxInstant(): Instant = instant(253_402_214_399i64, 999_999_999)
+
+  /// The two ends as whole millisecond counts, which is all a `Clock` can report.
+  def earliestClockMillis(): Int64 = -377_705_116_800_000i64
+  def latestClockMillis(): Int64 = 253_402_214_399_999i64
 
   def nanosPerSecond(): Int64 = 1_000_000_000i64
 
@@ -88,19 +94,6 @@ mod TestTime.Instant {
   def nowFrozenAt(epochMilli: Int64): (Int64, Int32) =
     withClockFrozenAt(epochMilli, () -> parts(Time.Instant.now()))
 
-  ///
-  /// `Int64.maxValue()` milliseconds is 9_223_372_036_854_775 whole seconds plus 807
-  /// milliseconds, so the split neither overflows nor loses the leftover milliseconds.
-  ///
-  def latestClockInstant(): Instant = instant(9_223_372_036_854_775i64, 807_000_000)
-
-  ///
-  /// `Int64.minValue()` milliseconds is 808 milliseconds short of -9_223_372_036_854_775
-  /// whole seconds. Rounding towards negative infinity puts it one second lower, at
-  /// -9_223_372_036_854_776 seconds plus the remaining 192 milliseconds.
-  ///
-  def earliestClockInstant(): Instant = instant(-9_223_372_036_854_776i64, 192_000_000)
-
   @Test
   def now01_underTheClockHandler_hasWholeMillisecondNano(): Unit \ Assert + IO =
     // `Clock` only offers millisecond resolution, so `nano` is a whole number of milliseconds.
@@ -116,23 +109,36 @@ mod TestTime.Instant {
   def now03_oneMillisecondBeforeTheEpoch_borrowsASecondIntoTheNano(): Unit \ Assert =
     Assert.assertEq(expected = (-1i64, 999_000_000), nowFrozenAt(-1i64))
 
+  /// An `Int64` millisecond count runs far past the range, so the clock extremes clamp.
   @Test
-  def now04_atTheLatestClockValue_splitsItWithoutOverflowing(): Unit \ Assert =
-    Assert.assertEq(expected = parts(latestClockInstant()), nowFrozenAt(Int64.maxValue()))
+  def now04_atTheLatestClockValue_clampsToTheLatestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(maxInstant()), nowFrozenAt(Int64.maxValue()))
 
   @Test
-  def now05_atTheEarliestClockValue_keepsTheNanoNonNegative(): Unit \ Assert =
-    Assert.assertEq(expected = parts(earliestClockInstant()), nowFrozenAt(Int64.minValue()))
+  def now05_atTheEarliestClockValue_clampsToTheEarliestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(minInstant()), nowFrozenAt(Int64.minValue()))
 
-  /// Guards the two hand-computed boundary instants against a slip in their arithmetic.
+  ///
+  /// The two ends of the range are still split rather than clamped.
+  ///
+  /// A millisecond count cannot name the last nanosecond of the latest instant, so the
+  /// latest one a clock can report lands 999 microseconds short of it.
+  ///
   @Test
-  def now06_atEitherClockExtreme_reconstructsTheMillisecondsItWasGiven(): Unit \ Assert =
+  def now06_atEitherEndOfTheRange_splitsTheMillisecondsItWasGiven(): Unit \ Assert = {
+    Assert.assertEq(expected = (253_402_214_399i64, 999_000_000), nowFrozenAt(latestClockMillis()));
+    Assert.assertEq(expected = parts(minInstant()), nowFrozenAt(earliestClockMillis()))
+  }
+
+  /// Guards the two millisecond counts above against a slip in their arithmetic.
+  @Test
+  def now07_theTwoEndsAsMilliseconds_agreeWithTheInstantsTheyName(): Unit \ Assert =
     let asMillis = t -> {
       let (seconds, nano) = parts(t);
       seconds * 1_000i64 + Int32.toInt64(nano) / 1_000_000i64
     };
-    Assert.assertEq(expected = (Int64.maxValue(), Int64.minValue()),
-                    (asMillis(latestClockInstant()), asMillis(earliestClockInstant())))
+    Assert.assertEq(expected = (latestClockMillis(), earliestClockMillis()),
+                    (asMillis(maxInstant()), asMillis(minInstant())))
 
   //
   // tryAdd/saturatingAdd
@@ -165,8 +171,9 @@ mod TestTime.Instant {
 
   @Test
   def tryAdd05_reachingTheLatestSecond_returnsThatInstant(): Unit \ Assert =
-    Assert.assertEq(expected = Some((Int64.maxValue(), 0)),
-                    Time.Instant.tryAdd(instant(Int64.maxValue() - 1i64, 0), Duration.seconds(1))
+    let (latestSecond, _) = parts(maxInstant());
+    Assert.assertEq(expected = Some((latestSecond, 0)),
+                    Time.Instant.tryAdd(instant(latestSecond - 1i64, 0), Duration.seconds(1))
                       |> Option.map(parts))
 
   /// Overflowing `secondsSinceEpoch` gives None.
@@ -178,9 +185,10 @@ mod TestTime.Instant {
   /// A carry alone is enough to overflow.
   @Test
   def tryAdd07_carryPastTheLatestInstant_returnsNone(): Unit \ Assert =
-    // The duration is under a second, so only the carry out of `nano` overflows the seconds.
+    // The duration is under a second, so only the carry out of `nano` leaves the range.
+    let (latestSecond, _) = parts(maxInstant());
     Assert.assertEq(expected = None,
-                    Time.Instant.tryAdd(instant(Int64.maxValue(), 500_000_000), Duration.milliseconds(600))
+                    Time.Instant.tryAdd(instant(latestSecond, 500_000_000), Duration.milliseconds(600))
                       |> Option.map(parts))
 
   @Test

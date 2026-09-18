@@ -6,15 +6,16 @@
 /// `test/built-ins/Temporal/Instant/prototype/add/minimum-maximum-instant.js`
 /// (esid: sec-temporal.instant.prototype.add).
 ///
-/// The two ends are different here — the whole `Int64` second line, with `nano` at 0 at the
-/// bottom and at 999999999 at the top — but the shape of the file carries over: adding zero
-/// leaves an end alone, one nanosecond inwards is fine, and one nanosecond outwards is not.
+/// The two ends are different here — -9999-01-02T00:00:00Z and
+/// 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom and at 999999999 at the
+/// top — but the shape of the file carries over: adding zero leaves an end alone, one
+/// nanosecond inwards is fine, and one nanosecond outwards is not.
 ///
 /// Each `RangeError` becomes two cases: `tryAdd` answers `None`, and `saturatingAdd` answers
 /// the end it ran into.
 ///
 /// Not portable: test262's closing block, which walks from one end of the range to the other
-/// in a single `add`. The gap here is about 1.8e19 seconds and a `Duration` tops out at
+/// in a single `add`. The gap here is about 6.3e11 seconds and a `Duration` tops out at
 /// roughly 9.2e9 seconds, so no single duration spans it.
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
@@ -25,6 +26,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     use TemporalHelpers.instant
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
+    use TemporalHelpers.parts
     use Time.Duration
     use Time.Instant.saturatingAdd
     use Time.Instant.tryAdd
@@ -76,13 +78,15 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     /// test262: "Adding one to the minimum instant" is the minimum instant plus 1n.
     @Test
     def add05_oneNanosecondAtTheEarliestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        assertSomeInstant(expected = instant(Int64.minValue(), 1), tryAdd(minInstant(), one()),
+        let (earliestSecond, _) = parts(minInstant());
+        assertSomeInstant(expected = instant(earliestSecond, 1), tryAdd(minInstant(), one()),
                           "adding one to the minimum instant")
 
     /// test262: "Subtracting one from the maximum instant" is the maximum instant minus 1n.
     @Test
     def add06_minusOneNanosecondAtTheLatestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        assertSomeInstant(expected = instant(Int64.maxValue(), 999_999_998), tryAdd(maxInstant(), minusOne()),
+        let (latestSecond, _) = parts(maxInstant());
+        assertSomeInstant(expected = instant(latestSecond, 999_999_998), tryAdd(maxInstant(), minusOne()),
                           "subtracting one from the maximum instant")
 
 }

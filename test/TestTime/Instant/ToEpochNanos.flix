@@ -1,32 +1,21 @@
 ///
 /// Tests for `toEpochNanos` that test262 has no counterpart for.
 ///
-/// Two differences account for all of them.
-///
 /// `Temporal.Instant` *is* a nanosecond count, so `epochNanoseconds` reads a field where
 /// this has to put two fields back together — the borrowed second before the epoch, and
 /// `nano` staying non-negative on both sides of it, are questions only this form raises.
-///
-/// And that count is a `BigInt` over there, so it is never out of range. Here it is an
-/// `Int64`, whose whole span is a little over +/-9.22e18 nanoseconds — far narrower than
-/// `Instant`, which reaches +/-9.22e18 *seconds*. So most of an `Instant`'s range has no
-/// count at all and `toEpochNanos` answers `None`, which is the claim `Temporal` has no
-/// way to make.
+/// Both counts are arbitrary-precision, so neither can run out of room and that is all
+/// there is between them.
 ///
 /// The instant builders and assertions come from the test262 harness rather than being
-/// written out again here. The round trip in `toEpochNanos07` reuses the two counts of
+/// written out again here. The round trip in `toEpochNanos03` reuses the two counts of
 /// test262's `prototype/epochNanoseconds/basic.js` among its inputs, so that the case is
-/// anchored to numbers pinned elsewhere as well as to the ends of the range.
+/// anchored to numbers pinned elsewhere as well as to the ends of `Int64`.
 ///
 mod TestTime.Instant.ToEpochNanos {
 
-    use TemporalHelpers.assertNoNanos
     use TemporalHelpers.epoch
     use TemporalHelpers.instant
-    use TemporalHelpers.largestInstantPairToNanoseconds
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
-    use TemporalHelpers.smallestInstantPairToNanoseconds
     use Time.Instant.fromEpochNanoseconds
     use Time.Instant.toEpochNanos
 

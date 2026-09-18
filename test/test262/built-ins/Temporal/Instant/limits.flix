@@ -6,13 +6,15 @@
 /// (esid: sec-temporal.instant, "Min/max range").
 ///
 /// test262 pins the range at +/-8.64e21 nanoseconds and checks that one nanosecond
-/// beyond either end throws a `RangeError`. The range here is a different one — the
-/// whole `Int64` second line, with `nano` at 0 at the bottom and at its ceiling at the
-/// top — and there is no validating constructor to make throw, so the ends are pinned
-/// through the arithmetic instead: stepping one nanosecond past either end fails.
+/// beyond either end throws a `RangeError`. The range here is a different one —
+/// -9999-01-02T00:00:00Z to 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the
+/// bottom and at its ceiling at the top — and there is no validating constructor to make
+/// throw, so the ends are pinned through the arithmetic instead: stepping one nanosecond
+/// past either end fails.
 ///
 /// Not portable: the two `Temporal.Instant.from` string comparisons, which name the
-/// limits as calendar dates.
+/// limits as calendar dates. That the second counts used here really are those dates is
+/// checked in `test/TestTime/Instant/Range.flix` instead.
 ///
 mod Test262.BuiltIns.Temporal.Instant.Limits {
 

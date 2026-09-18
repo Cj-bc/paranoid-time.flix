@@ -94,10 +94,16 @@ restated as that pair, with the arithmetic spelled out in the comment. Pre-epoch
 are where the two forms part company: `nano` stays non-negative, so the second count sits
 one below the truncating division.
 
-**The range.** `Temporal.Instant` ends at ±8.64e21 ns. Here it ends at the two ends of the
-`Int64` second line, with `nano` at 0 at the bottom and 999999999 at the top. The range is
-far wider, so cases that walk from one end to the other in a single operation have no
-counterpart; cases that step one nanosecond past an end do.
+**The range.** `Temporal.Instant` ends at ±8.64e21 ns, a round nanosecond count about
+273790 years either side of the epoch. Here it ends at two calendar instants,
+-9999-01-02T00:00:00Z and 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom
+and 999999999 at the top — the four-digit year range pulled in by one day at each end, so
+that every instant in it still names a four-digit year once a UTC offset is applied. That
+is about 27 times narrower than `Temporal`'s, but still about 2000 times more than a
+`Duration` spans, so cases that walk from one end of the range to the other in a single
+operation have no counterpart; cases that step one unit past an end do. That the two ends
+really are those dates is checked in `test/TestTime/Instant/Range.flix`, since `Temporal`
+names them by parsing a string and `Instant` has no string form.
 
 **The duration.** `Temporal.Duration` is a property bag with calendar units;
 `Time.Duration` is one `Int64` nanosecond count. A ten-argument `Temporal.Duration`
@@ -110,10 +116,10 @@ one test262 case usually becomes two: `try*` answers `None`, and `saturating*` a
 end it ran into. The saturating half has no counterpart in test262 at all — `Temporal` has
 only the throwing form — and is marked as such where it appears.
 
-`toEpochNanos` answers an `Option` for a third reason again: `epochNanoseconds` is an
-arbitrary-precision `BigInt` and cannot fail, where the count here is an `Int64` and most
-of an `Instant`'s range has none. Nothing in test262 exercises that, so `basic.js` is all
-that comes over and the range is pinned in `test/TestTime/Instant/ToEpochNanos.flix`.
+`toEpochNanos` answers a `BigInt`, as `epochNanoseconds` does, so it is the one operation
+with nothing extra to say about being out of range. `basic.js` is all that comes over, and
+how the two stored fields are put back together — which `Temporal` has no counterpart for,
+since it holds the count directly — is pinned in `test/TestTime/Instant/ToEpochNanos.flix`.
 
 `since` and `until` are both covered by `between`, which differs from both: it answers the
 *absolute* gap, so the argument order does not matter, and it answers an `Option`, since a

@@ -7,14 +7,14 @@
 /// (esid: sec-temporal.instant.prototype.subtract).
 ///
 /// The mirror image of `add/minimum-maximum-instant.js`. The two ends are different here —
-/// the whole `Int64` second line, with `nano` at 0 at the bottom and at 999999999 at the
-/// top — but the shape of the file carries over.
+/// -9999-01-02T00:00:00Z and 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom
+/// and at 999999999 at the top — but the shape of the file carries over.
 ///
 /// Each `RangeError` becomes two cases: `trySub` answers `None`, and `saturatingSub` answers
 /// the end it ran into.
 ///
 /// Not portable: test262's closing block, which walks from one end of the range to the other
-/// in a single `subtract`. The gap here is about 1.8e19 seconds and a `Duration` tops out at
+/// in a single `subtract`. The gap here is about 6.3e11 seconds and a `Duration` tops out at
 /// roughly 9.2e9 seconds, so no single duration spans it.
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
@@ -25,6 +25,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
     use TemporalHelpers.instant
     use TemporalHelpers.maxInstant
     use TemporalHelpers.minInstant
+    use TemporalHelpers.parts
     use Time.Duration
     use Time.Instant.saturatingSub
     use Time.Instant.trySub
@@ -74,13 +75,15 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
     /// test262: subtracting minus one from the minimum instant is the minimum instant plus 1n.
     @Test
     def subtract05_minusOneNanosecondAtTheEarliestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        assertSomeInstant(expected = instant(Int64.minValue(), 1), trySub(minInstant(), minusOne()),
+        let (earliestSecond, _) = parts(minInstant());
+        assertSomeInstant(expected = instant(earliestSecond, 1), trySub(minInstant(), minusOne()),
                           "subtracting minus one from the minimum instant")
 
     /// test262: subtracting one from the maximum instant is the maximum instant minus 1n.
     @Test
     def subtract06_oneNanosecondAtTheLatestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        assertSomeInstant(expected = instant(Int64.maxValue(), 999_999_998), trySub(maxInstant(), one()),
+        let (latestSecond, _) = parts(maxInstant());
+        assertSomeInstant(expected = instant(latestSecond, 999_999_998), trySub(maxInstant(), one()),
                           "subtracting one from the maximum instant")
 
 }

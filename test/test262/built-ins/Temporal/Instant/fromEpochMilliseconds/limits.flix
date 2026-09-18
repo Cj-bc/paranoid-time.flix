@@ -5,37 +5,67 @@
 /// Ported from test262 `test/built-ins/Temporal/Instant/fromEpochMilliseconds/limits.js`
 /// (esid: sec-temporal.instant.fromepochmilliseconds, "Min/max range").
 ///
-/// test262 expects a `RangeError` one millisecond outside +/-8640000000000000, because
-/// that is where `Temporal.Instant` ends. `fromEpochMilliseconds` here is total: its
-/// argument is an `Int64`, and every `Int64` millisecond count lands inside the far wider
-/// `Instant` range. So what is left to pin is the split at the two ends of `Int64`, which
-/// is where the division is most likely to go wrong.
+/// test262 accepts +/-8640000000000000 ms and expects a `RangeError` one millisecond
+/// outside either of them. The range here is a calendar one — -9999-01-02T00:00:00Z to
+/// 9999-12-30T23:59:59.999999999Z — so the two numbers are different, but the shape of the
+/// case carries over unchanged: the last millisecond inside an end is split as given, and
+/// one further out is not representable.
+///
+/// As everywhere else, out of range is not a throw: `fromEpochMilliseconds` clamps to the
+/// end it ran into.
+///
+/// The top end is the one place the two forms of the limit do not meet: the latest instant
+/// is 999999999 ns into its second and a millisecond count cannot name that, so the last
+/// count inside the range lands 999 microseconds short of it.
 ///
 mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
 
     use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.instant
+    use TemporalHelpers.maxInstant
+    use TemporalHelpers.minInstant
     use Time.Instant.fromEpochMilliseconds
 
-    ///
-    /// `Int64.maxValue()` is 9223372036854775807 ms: 9223372036854775 whole seconds
-    /// plus 807 ms, which is 807000000 ns.
-    ///
+    /// -9999-01-02T00:00:00Z is -377705116800 whole seconds after the epoch.
+    def earliestMillis(): Int64 = -377_705_116_800_000i64
+
+    /// The last whole millisecond of 9999-12-30, 253402214399 s plus 999 ms.
+    def latestMillis(): Int64 = 253_402_214_399_999i64
+
+    /// test262: `Temporal.Instant.fromEpochMilliseconds(+/-8640000000000000)` is fine.
     @Test
-    def fromEpochMilliseconds01_theLargestMillisecondCount_splitsWithoutOverflowing(): Unit \ Assert =
-        assertInstantsEqual(expected = instant(9_223_372_036_854_775i64, 807_000_000),
-                            fromEpochMilliseconds(Int64.maxValue()),
-                            "the largest millisecond count")
+    def fromEpochMilliseconds01_theLastCountInsideEitherEnd_isSplitAsGiven(): Unit \ Assert = {
+        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis()),
+                            "the earliest millisecond count in range");
+        assertInstantsEqual(expected = instant(253_402_214_399i64, 999_000_000),
+                            fromEpochMilliseconds(latestMillis()),
+                            "the latest millisecond count in range")
+    }
 
     ///
-    /// `Int64.minValue()` is -9223372036854775808 ms, which is 808 ms below
-    /// -9223372036854775 whole seconds. Rounding towards negative infinity puts it one
-    /// second lower still, at -9223372036854776 seconds plus the remaining 192 ms.
+    /// test262: one millisecond further out throws; here it clamps to that end instead.
     ///
     @Test
-    def fromEpochMilliseconds02_theSmallestMillisecondCount_keepsNanoNonNegative(): Unit \ Assert =
-        assertInstantsEqual(expected = instant(-9_223_372_036_854_776i64, 192_000_000),
-                            fromEpochMilliseconds(Int64.minValue()),
-                            "the smallest millisecond count")
+    def fromEpochMilliseconds02_oneMillisecondOutsideEitherEnd_clampsToThatEnd(): Unit \ Assert = {
+        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis() - 1i64),
+                            "one millisecond before the earliest instant");
+        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(latestMillis() + 1i64),
+                            "one millisecond after the latest instant")
+    }
+
+    ///
+    /// The same from as far outside as an `Int64` millisecond count reaches, about 9.2e15
+    /// seconds either way against a range of about 3.8e11.
+    ///
+    /// The split still has to be done before the clamp can be decided, so this is also what
+    /// pins that it is done without overflowing.
+    ///
+    @Test
+    def fromEpochMilliseconds03_theTwoEndsOfInt64_clampWithoutOverflowing(): Unit \ Assert = {
+        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(Int64.minValue()),
+                            "the smallest millisecond count");
+        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(Int64.maxValue()),
+                            "the largest millisecond count")
+    }
 
 }

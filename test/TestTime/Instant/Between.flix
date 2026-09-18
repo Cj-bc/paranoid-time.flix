@@ -62,7 +62,8 @@ mod TestTime.Instant.Between {
         assertNoDuration(between(epoch(), instant(s + 1i64, 0)),
                          "one second past the largest gap that fits")
 
-    /// The whole range is far wider than any `Duration`, so its ends have no gap either.
+    /// The whole range is about 2000 times wider than any `Duration`, so its ends have no
+    /// gap either, and neither does either end against the epoch.
     @Test
     def between05_theWholeRange_hasNoDuration(): Unit \ Assert = {
         assertNoDuration(between(minInstant(), maxInstant()), "the earliest against the latest instant");
