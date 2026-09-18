@@ -141,13 +141,6 @@ pub mod Time.Instant {
   ///
   def largestCountableInstant(): (Int64, Int64) = (9_223_372_036i64, 854_775_807i64)
 
-  ///
-  /// The smallest one. `Int64.minValue()` is -9223372036854775808 ns, which sits 854775808 ns
-  /// below -9223372036 whole seconds; rounding towards negative infinity puts it at
-  /// -9223372037 seconds plus the remaining 145224192 ns, which keeps `nano` non-negative.
-  ///
-  def smallestCountableInstant(): (Int64, Int64) = (-9_223_372_037i64, 145_224_192i64)
-
   /// Returns the number of nanoseconds between `t` and the epoch
   pub def toEpochNanos(t: Instant): BigInt =
     let Instant(v) = t;
