@@ -12,17 +12,10 @@
 ///
 mod TestTime.Instant.TrySub {
 
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.epoch
-    use TemporalHelpers.fromNanos
-    use TemporalHelpers.instant
-    use TemporalHelpers.largestInstantPairToNanoseconds
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
+    use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant
+                        , largestInstantPairToNanoseconds}
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.Instant.tryAdd
-    use Time.Instant.trySub
+    use Time.Instant.{Instant, tryAdd, trySub, maxInstant, minInstant}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

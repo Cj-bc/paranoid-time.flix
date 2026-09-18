@@ -17,12 +17,9 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.CrossEpoch {
 
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.Instant.tryAdd
-    use Time.Instant.trySub
+    use Time.Instant.{Instant, tryAdd, trySub}
 
     /// 1969-12-25T12:23:45.678901234Z.
     def inst(): Instant = instant(-560_175i64, 678_901_234)

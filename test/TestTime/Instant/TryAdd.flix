@@ -12,12 +12,9 @@
 ///
 mod TestTime.Instant.TryAdd {
 
-    use TemporalHelpers.assertSomeInstant
-    use TemporalHelpers.instant
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
+    use TemporalHelpers.{assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.tryAdd
+    use Time.Instant.{tryAdd, maxInstant, minInstant}
 
     ///
     /// The zero duration leaves even the two ends of the range unchanged, rather than tipping
@@ -37,14 +34,14 @@ mod TestTime.Instant.TryAdd {
     ///
     @Test
     def tryAdd02_theTwoDurationExtremesFromAFarOffInstant_stayInRange(): Unit \ Assert = {
-        let t = instant(1_000_000_000_000i64, 500_000_000);
-        // 1000000000000 + 9223372036 = 1009223372036 s, and 500000000 + 854775807 carries
+        let t = instant(100_000_000_000i64, 500_000_000);
+        // 100000000000 + 9223372036 = 109223372036 s, and 500000000 + 854775807 carries
         // one second, leaving 354775807 ns.
-        assertSomeInstant(expected = instant(1_009_223_372_037i64, 354_775_807),
+        assertSomeInstant(expected = instant(109_223_372_037i64, 354_775_807),
                           tryAdd(t, Duration.nanoseconds(Int64.maxValue())),
                           "the largest duration from a far off instant");
-        // 1000000000000 - 9223372037 = 990776627963 s, and 500000000 + 145224192 = 645224192 ns.
-        assertSomeInstant(expected = instant(990_776_627_963i64, 645_224_192),
+        // 100000000000 - 9223372037 = 90776627963 s, and 500000000 + 145224192 = 645224192 ns.
+        assertSomeInstant(expected = instant(90_776_627_963i64, 645_224_192),
                           tryAdd(t, Duration.nanoseconds(Int64.minValue())),
                           "the smallest duration from a far off instant")
     }

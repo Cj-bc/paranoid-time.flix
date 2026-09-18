@@ -14,8 +14,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
 
-    use TemporalHelpers.assertInstantsEqual
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertInstantsEqual, instant}
     use Time.Instant.fromEpochNanoseconds
 
     ///

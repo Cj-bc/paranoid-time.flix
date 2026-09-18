@@ -10,8 +10,7 @@
 ///
 mod TestTime.Instant.FromEpochNanoseconds {
 
-    use TemporalHelpers.assertInstantsEqual
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertInstantsEqual, instant}
     use Time.Instant.fromEpochNanoseconds
 
     /// One nanosecond either side of the epoch, the smallest counts that show the rounding.

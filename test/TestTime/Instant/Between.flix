@@ -11,15 +11,10 @@
 ///
 mod TestTime.Instant.Between {
 
-    use TemporalHelpers.assertNoDuration
-    use TemporalHelpers.assertSomeDuration
-    use TemporalHelpers.epoch
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertNoDuration, assertSomeDuration, epoch, instant}
     use TemporalHelpers.largestInstantPairToNanoseconds
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use Time.Duration
-    use Time.Instant.between
+    use Time.Instant.{between, maxInstant, minInstant}
 
     ///
     /// The gap is zero at the two ends of the range as well, rather than overflowing on the way
@@ -62,7 +57,8 @@ mod TestTime.Instant.Between {
         assertNoDuration(between(epoch(), instant(s + 1i64, 0)),
                          "one second past the largest gap that fits")
 
-    /// The whole range is far wider than any `Duration`, so its ends have no gap either.
+    /// The whole range is about 2000 times wider than any `Duration`, so its ends have no
+    /// gap either, and neither does either end against the epoch.
     @Test
     def between05_theWholeRange_hasNoDuration(): Unit \ Assert = {
         assertNoDuration(between(minInstant(), maxInstant()), "the earliest against the latest instant");

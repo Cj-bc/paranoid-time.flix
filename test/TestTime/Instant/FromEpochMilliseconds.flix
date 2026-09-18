@@ -10,8 +10,7 @@
 ///
 mod TestTime.Instant.FromEpochMilliseconds {
 
-    use TemporalHelpers.assertInstantsEqual
-    use TemporalHelpers.instant
+    use TemporalHelpers.{assertInstantsEqual, instant}
     use Time.Instant.fromEpochMilliseconds
 
     /// A whole number of seconds leaves `nano` at zero on both sides of the epoch.
@@ -29,20 +28,23 @@ mod TestTime.Instant.FromEpochMilliseconds {
                             "one millisecond before the epoch")
 
     ///
-    /// Cross-checks the splits at the two ends of `Int64` against the nearest whole second:
-    /// 807 ms below the largest count, and 808 ms above the smallest one.
+    /// The borrow still happens at the far end of the range, where the counts are largest.
     ///
-    /// Reading them back as milliseconds would be the more direct check, but at the smallest
-    /// count that multiplication leaves the `Int64` range.
+    /// One millisecond after the earliest instant is the case: -377705116799999 ms divides
+    /// to -377705116800 whole seconds with 1 ms left over, so the second count is the same
+    /// as the earliest instant's and only `nano` moves. Where those two ends themselves
+    /// fall is pinned by the port in
+    /// `test/test262/built-ins/Temporal/Instant/fromEpochMilliseconds/limits.flix`; counts
+    /// past them no longer split at all, they clamp.
     ///
     @Test
-    def fromEpochMilliseconds03_theNearestWholeSecondToEitherEnd_leavesNanoAtZero(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(9_223_372_036_854_775i64, 0),
-                            fromEpochMilliseconds(Int64.maxValue() - 807i64),
-                            "807 ms below the largest millisecond count");
-        assertInstantsEqual(expected = instant(-9_223_372_036_854_775i64, 0),
-                            fromEpochMilliseconds(Int64.minValue() + 808i64),
-                            "808 ms above the smallest millisecond count")
+    def fromEpochMilliseconds03_atEitherEndOfTheRange_stillBorrows(): Unit \ Assert = {
+        assertInstantsEqual(expected = instant(-377_705_116_800i64, 1_000_000),
+                            fromEpochMilliseconds(-377_705_116_799_999i64),
+                            "one millisecond after the earliest instant");
+        assertInstantsEqual(expected = instant(253_402_214_399i64, 0),
+                            fromEpochMilliseconds(253_402_214_399_000i64),
+                            "the last whole second in range")
     }
 
 }

@@ -32,19 +32,18 @@ pub mod TemporalHelpers {
     pub def epoch(): Instant = instant(0i64, 0)
 
     ///
-    /// The earliest representable `Instant`.
+    /// The first day of -9999 and the last day of 9999, as whole days from the epoch in the
+    /// proleptic Gregorian calendar with astronomical year numbering.
     ///
-    /// `Temporal.Instant` is limited to -8.64e21 nanoseconds; here the limit is
-    /// instead the smallest `Int64` second, with no room left in `nano` below it.
+    /// These are the two dates the `Instant` range is stated against, not its ends: the ends
+    /// sit one day inside them, which is what `Range.flix` checks.
     ///
-    pub def minInstant(): Instant = instant(Int64.minValue(), 0)
+    pub def dayOfMinus9999January1st(): Int64 = -4_371_588i64
+    pub def dayOf9999December31st(): Int64 = 2_932_896i64
 
-    ///
-    /// The latest representable `Instant`.
-    ///
-    /// `nano` is at its ceiling as well, so there is not one nanosecond of room above it.
-    ///
-    pub def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
+    /// The number of seconds in one day. No leap seconds are modelled.
+    pub def secondsPerDay(): Int64 = 86_400i64
+
 
     /// Pair of secondsSinceEpoch and nanoseconds of largest instant that can be converted to Int64 nanoseconds
     pub def largestInstantPairToNanoseconds(): (Int64, Int32) = (9_223_372_036i64, 854_775_807)

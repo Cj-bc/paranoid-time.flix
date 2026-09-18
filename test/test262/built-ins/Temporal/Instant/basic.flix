@@ -15,9 +15,7 @@
 ///
 mod Test262.BuiltIns.Temporal.Instant.Basic {
 
-    use TemporalHelpers.epochMilliseconds
-    use TemporalHelpers.epochNanoseconds
-    use TemporalHelpers.instant
+    use TemporalHelpers.{epochMilliseconds, epochNanoseconds, instant}
 
     ///
     /// test262: `new Temporal.Instant(217175010123456789n).epochNanoseconds` is
