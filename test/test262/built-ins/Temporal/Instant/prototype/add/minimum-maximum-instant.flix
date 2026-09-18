@@ -24,12 +24,12 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     use TemporalHelpers.assertSaturated
     use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.instant
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use TemporalHelpers.parts
     use Time.Duration
     use Time.Instant.saturatingAdd
     use Time.Instant.tryAdd
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)

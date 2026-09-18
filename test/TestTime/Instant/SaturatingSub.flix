@@ -17,10 +17,10 @@ mod TestTime.Instant.SaturatingSub {
     use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.fromNanos
     use TemporalHelpers.instant
-    use TemporalHelpers.minInstant
     use Time.Duration
     use Time.Instant.Instant
     use Time.Instant.saturatingSub
+    use Time.Instant.minInstant
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

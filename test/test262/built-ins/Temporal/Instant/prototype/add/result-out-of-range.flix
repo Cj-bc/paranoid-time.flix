@@ -18,11 +18,11 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
 
     use TemporalHelpers.assertNoInstant
     use TemporalHelpers.assertSaturated
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use Time.Duration
     use Time.Instant.saturatingAdd
     use Time.Instant.tryAdd
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
 
     /// test262's `fields`, as one unit of each.
     def oneOfEachUnit(): List[(String, Duration)] =

@@ -16,10 +16,10 @@ mod TestTime.Instant.Between {
     use TemporalHelpers.epoch
     use TemporalHelpers.instant
     use TemporalHelpers.largestInstantPairToNanoseconds
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use Time.Duration
     use Time.Instant.between
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
 
     ///
     /// The gap is zero at the two ends of the range as well, rather than overflowing on the way

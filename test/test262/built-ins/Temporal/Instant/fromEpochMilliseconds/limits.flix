@@ -24,8 +24,8 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     use TemporalHelpers.assertNoInstant
     use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.instant
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
     use Time.Instant.fromEpochMilliseconds
     use Time.Instant.tryFromEpochMilliseconds
 

@@ -14,10 +14,10 @@ mod TestTime.Instant.TryAdd {
 
     use TemporalHelpers.assertSomeInstant
     use TemporalHelpers.instant
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use Time.Duration
     use Time.Instant.tryAdd
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
 
     ///
     /// The zero duration leaves even the two ends of the range unchanged, rather than tipping

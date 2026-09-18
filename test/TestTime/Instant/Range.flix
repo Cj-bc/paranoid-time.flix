@@ -32,14 +32,14 @@ mod TestTime.Instant.Range {
     use TemporalHelpers.dayOf9999December31st
     use TemporalHelpers.dayOfMinus9999January1st
     use TemporalHelpers.instant
-    use TemporalHelpers.maxInstant
-    use TemporalHelpers.minInstant
     use TemporalHelpers.secondsPerDay
     use Time.Duration
     use Time.Instant.between
     use Time.Instant.fromEpochMilliseconds
     use Time.Instant.saturatingAdd
     use Time.Instant.tryAdd
+    use Time.Instant.maxInstant
+    use Time.Instant.minInstant
 
     ///
     /// The earliest instant is midnight one day into -9999, not midnight on its first day.
