@@ -11,23 +11,23 @@
 /// range, so both ends are reachable from the argument type and each is checked from both
 /// sides: the end second itself, and one second further out.
 ///
-/// The two ends are derived from `maxInstant` and `minInstant` rather than written out, so
+/// The two ends are derived from `max` and `min` rather than written out, so
 /// that the numbers stay stated in the one place `Range.flix` pins them. The instant builder
 /// and the assertions come from the test262 harness.
 ///
 mod TestTime.Instant.OfEpochSecond {
 
     use TemporalHelpers.{assertNoInstant, assertSomeInstant, instant, parts}
-    use Time.Instant.{maxInstant, minInstant, ofEpochSecond}
+    use Time.Instant.{max, min, ofEpochSecond}
 
     /// The latest whole second in range, 253402214399.
     def latestSecond(): Int64 =
-        let (seconds, _) = parts(maxInstant());
+        let (seconds, _) = parts(max());
         seconds
 
     /// The earliest one, -377705116800.
     def earliestSecond(): Int64 =
-        let (seconds, _) = parts(minInstant());
+        let (seconds, _) = parts(min());
         seconds
 
     @Test
@@ -44,7 +44,7 @@ mod TestTime.Instant.OfEpochSecond {
     ///
     @Test
     def ofEpochSecond02_theLastSecondInsideEitherEnd_hasAnInstant(): Unit \ Assert = {
-        assertSomeInstant(expected = minInstant(), ofEpochSecond(earliestSecond()),
+        assertSomeInstant(expected = min(), ofEpochSecond(earliestSecond()),
                           "the earliest second in range");
         assertSomeInstant(expected = instant(latestSecond(), 0), ofEpochSecond(latestSecond()),
                           "the latest second in range")
