@@ -124,7 +124,7 @@ pub mod Time.Instant {
   /// Returns the `Instant` that is `ms` milliseconds after the epoch, clamped to the nearest
   /// end of the range when it lies outside it.
   ///
-  def ofEpochMilliClamped(ms: Int64): Instant =
+  pub def ofEpochMilliClamped(ms: Int64): Instant =
     match splitEpochMilliseconds(ms) |> checkRange {
       case Ok(v)  => v
       case Err(v) => v
