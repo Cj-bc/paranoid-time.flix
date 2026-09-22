@@ -10,12 +10,12 @@ file per function.
 | --- | --- |
 | `Compare.flix` | `Order[Instant]` |
 | `Equals.flix` | `Eq[Instant]` |
-| `FromEpochMilliseconds.flix` | `fromEpochMilliseconds` |
-| `FromEpochNanoseconds.flix` | `fromEpochNanoseconds` |
-| `TryAdd.flix` | `tryAdd` |
-| `SaturatingAdd.flix` | `saturatingAdd` |
-| `TrySub.flix` | `trySub` |
-| `SaturatingSub.flix` | `saturatingSub` |
+| `SaturatingOfEpochMilli.flix` | `saturatingOfEpochMilli` |
+| `OfEpochNanos.flix` | `ofEpochNanos` |
+| `TryPlus.flix` | `tryPlus` |
+| `SaturatingPlus.flix` | `saturatingPlus` |
+| `TryMinus.flix` | `tryMinus` |
+| `SaturatingMinus.flix` | `saturatingMinus` |
 | `ToEpochNanos.flix` | `toEpochNanos` |
 | `Between.flix` | `between` |
 | `Range.flix` | the two ends of the representable range |
@@ -91,8 +91,8 @@ These cases are not derived from test262, so they carry no test262 copyright not
 are under this repository's own licence.
 
 Five of them do reuse expected values worked out by a test262 case, so that the claim is
-checked against numbers pinned elsewhere: `SaturatingAdd.flix` and `SaturatingSub.flix`
-(from `prototype/{add,subtract}/basic.js`), `TrySub.flix` (from both), `Between.flix` (the
+checked against numbers pinned elsewhere: `SaturatingPlus.flix` and `SaturatingMinus.flix`
+(from `prototype/{add,subtract}/basic.js`), `TryMinus.flix` (from both), `Between.flix` (the
 two dated instants of `prototype/since/add-subtract.js`), and `ToEpochNanos.flix` (the two
 counts of `prototype/epochNanoseconds/basic.js`, as round-trip inputs). Each file's doc
 comment says so. test262 is under the BSD 3-clause licence, a copy of which is in
@@ -108,12 +108,12 @@ built and compared across both trees; `Instant` holds a record, so Flix cannot d
 The two ends of the countable range are named there too, as
 `largestInstantPairToNanoseconds` and `smallestInstantPairToNanoseconds`, as are the two
 ends of `Instant` itself, rather than written out at each call site. Cases a fixed distance
-from an end derive it — `nano + 1`, `seconds + 1`, or `parts(maxInstant())` — so that the
+from an end derive it — `nano + 1`, `seconds + 1`, or `parts(max())` — so that the
 boundary is stated once and every case that reaches for it says which side of it, and how
 far, it means to be. `Range.flix` is the one place the numbers are spelled out, because
 naming them is what it is for.
 
-`FromEpochNanoseconds.flix` is the exception: its two cases are *about* the offsets
+`OfEpochNanos.flix` is the exception: its two cases are *about* the offsets
 854775807 and 854775808, which is what the doc comment cross-checks, and both already enter
 through `Int64.maxValue()` / `Int64.minValue()`. Restating them through the pair helpers
 would hide the subject of the case behind the arithmetic.

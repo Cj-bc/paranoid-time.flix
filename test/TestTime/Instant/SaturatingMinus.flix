@@ -1,9 +1,9 @@
 ///
-/// Tests for `saturatingSub` that test262 has no counterpart for.
+/// Tests for `saturatingMinus` that test262 has no counterpart for.
 ///
 /// `Temporal.Instant.prototype.subtract` only offers the throwing form, so the cases where
-/// `saturatingSub` clamps to an end are the counterpart of a `RangeError` and stay under
-/// `test/test262`. What is left here is the other half: what `saturatingSub` does when nothing
+/// `saturatingMinus` clamps to an end are the counterpart of a `RangeError` and stay under
+/// `test/test262`. What is left here is the other half: what `saturatingMinus` does when nothing
 /// goes out of range.
 ///
 /// The starting point and arguments are those of test262's `prototype/subtract/basic.js`, so
@@ -12,11 +12,11 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.SaturatingSub {
+mod TestTime.Instant.SaturatingMinus {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, saturatingSub, minInstant}
+    use Time.Instant.{Instant, saturatingMinus, min}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)
@@ -29,16 +29,16 @@ mod TestTime.Instant.SaturatingSub {
     def negativeSubSeconds(): Duration =
         Duration.milliseconds(-3) + Duration.microseconds(-2) + Duration.nanoseconds(-1i64)
 
-    /// `saturatingSub` answers what `trySub` answers whenever the result is in range.
+    /// `saturatingMinus` answers what `tryMinus` answers whenever the result is in range.
     @Test
-    def saturatingSub01_aResultInRange_isTheSameAsTrySub(): Unit \ Assert = {
+    def saturatingMinus01_aResultInRange_isTheSameAsTryMinus(): Unit \ Assert = {
         assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingSub(inst(),
+                            saturatingMinus(inst(),
                                           Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
                                             + subSeconds()),
                             "subtract positive hours");
         assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingSub(inst(),
+                            saturatingMinus(inst(),
                                           Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                             + negativeSubSeconds()),
                             "subtract negative hours")
@@ -50,8 +50,8 @@ mod TestTime.Instant.SaturatingSub {
     /// on an end.
     ///
     @Test
-    def saturatingSub02_theZeroDurationAtTheEarliestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertInstantsEqual(expected = minInstant(), saturatingSub(minInstant(), Duration.zero()),
+    def saturatingMinus02_theZeroDurationAtTheEarliestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
+        assertInstantsEqual(expected = min(), saturatingMinus(min(), Duration.zero()),
                             "the earliest instant is unchanged")
 
 }

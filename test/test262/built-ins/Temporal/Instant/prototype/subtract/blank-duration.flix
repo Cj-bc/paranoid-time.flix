@@ -12,12 +12,12 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.BlankDuration {
 
     use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.trySub
+    use Time.Instant.tryMinus
 
     /// test262: `new Temporal.Instant(1n).subtract(new Temporal.Duration())` is unchanged.
     @Test
     def subtract01_theZeroDuration_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 1), trySub(fromNanos(1i64), Duration.zero()),
+        assertSomeInstant(expected = instant(0i64, 1), tryMinus(fromNanos(1i64), Duration.zero()),
                           "result is unchanged")
 
 }

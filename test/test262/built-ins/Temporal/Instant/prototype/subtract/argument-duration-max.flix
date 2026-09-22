@@ -20,7 +20,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ArgumentDurationMax {
 
     use TemporalHelpers.{assertSomeInstant, epoch, instant}
     use Time.Duration
-    use Time.Instant.trySub
+    use Time.Instant.tryMinus
 
     ///
     /// The largest `Duration` is 9223372036854775807 ns. Subtracted from the epoch that is
@@ -30,7 +30,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ArgumentDurationMax {
     @Test
     def subtract01_theLargestDuration_isSubtractedExactly(): Unit \ Assert =
         assertSomeInstant(expected = instant(-9_223_372_037i64, 145_224_193),
-                          trySub(epoch(), Duration.nanoseconds(Int64.maxValue())),
+                          tryMinus(epoch(), Duration.nanoseconds(Int64.maxValue())),
                           "the largest duration")
 
     ///
@@ -44,7 +44,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ArgumentDurationMax {
     @Test
     def subtract02_theSmallestDuration_isNegatedPartByPart(): Unit \ Assert =
         assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_808),
-                          trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
+                          tryMinus(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "the smallest duration")
 
 }

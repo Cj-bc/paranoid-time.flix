@@ -58,30 +58,30 @@ Two Flix rules shape the module declarations:
 | `built-ins/Temporal/Instant/limits.flix` | `limits.js` | the ends of the range |
 | `compare/exhaustive.flix` | `compare/exhaustive.js` | `Order[Instant]` |
 | `compare/cross-epoch.flix` | `compare/cross-epoch.js` | `Order[Instant]` |
-| `fromEpochMilliseconds/basic.flix` | `fromEpochMilliseconds/basic.js` | `fromEpochMilliseconds` |
-| `fromEpochMilliseconds/limits.flix` | `fromEpochMilliseconds/limits.js` | `fromEpochMilliseconds`, `tryFromEpochMilliseconds` |
-| `fromEpochNanoseconds/basic.flix` | `fromEpochNanoseconds/basic.js` | `fromEpochNanoseconds` |
-| `fromEpochNanoseconds/limits.flix` | `fromEpochNanoseconds/limits.js` | `fromEpochNanoseconds` |
-| `prototype/add/basic.flix` | `prototype/add/basic.js` | `tryAdd`, `saturatingAdd` |
-| `prototype/add/blank-duration.flix` | `prototype/add/blank-duration.js` | `tryAdd`, `saturatingAdd` |
-| `prototype/add/cross-epoch.flix` | `prototype/add/cross-epoch.js` | `tryAdd`, `trySub` |
-| `prototype/add/minimum-maximum-instant.flix` | `prototype/add/minimum-maximum-instant.js` | `tryAdd`, `saturatingAdd` |
-| `prototype/add/result-out-of-range.flix` | `prototype/add/result-out-of-range.js` | `tryAdd`, `saturatingAdd` |
-| `prototype/add/add-large-subseconds.flix` | `prototype/add/add-large-subseconds.js` | `tryAdd` |
-| `prototype/add/argument-duration-max.flix` | `prototype/add/argument-duration-max.js` | `tryAdd` |
+| `fromEpochMilliseconds/basic.flix` | `fromEpochMilliseconds/basic.js` | `saturatingOfEpochMilli` |
+| `fromEpochMilliseconds/limits.flix` | `fromEpochMilliseconds/limits.js` | `saturatingOfEpochMilli`, `tryOfEpochMilli` |
+| `fromEpochNanoseconds/basic.flix` | `fromEpochNanoseconds/basic.js` | `ofEpochNanos` |
+| `fromEpochNanoseconds/limits.flix` | `fromEpochNanoseconds/limits.js` | `ofEpochNanos` |
+| `prototype/add/basic.flix` | `prototype/add/basic.js` | `tryPlus`, `saturatingPlus` |
+| `prototype/add/blank-duration.flix` | `prototype/add/blank-duration.js` | `tryPlus`, `saturatingPlus` |
+| `prototype/add/cross-epoch.flix` | `prototype/add/cross-epoch.js` | `tryPlus`, `tryMinus` |
+| `prototype/add/minimum-maximum-instant.flix` | `prototype/add/minimum-maximum-instant.js` | `tryPlus`, `saturatingPlus` |
+| `prototype/add/result-out-of-range.flix` | `prototype/add/result-out-of-range.js` | `tryPlus`, `saturatingPlus` |
+| `prototype/add/add-large-subseconds.flix` | `prototype/add/add-large-subseconds.js` | `tryPlus` |
+| `prototype/add/argument-duration-max.flix` | `prototype/add/argument-duration-max.js` | `tryPlus` |
 | `prototype/epochNanoseconds/basic.flix` | `prototype/epochNanoseconds/basic.js` | `toEpochNanos` |
 | `prototype/equals/basic.flix` | `prototype/equals/basic.js` | `Eq[Instant]` |
 | `prototype/equals/cross-epoch.flix` | `prototype/equals/cross-epoch.js` | `Eq[Instant]` |
-| `prototype/since/add-subtract.flix` | `prototype/since/add-subtract.js` | `between`, `tryAdd`, `trySub` |
+| `prototype/since/add-subtract.flix` | `prototype/since/add-subtract.js` | `between`, `tryPlus`, `tryMinus` |
 | `prototype/since/blank-result.flix` | `prototype/since/blank-result.js` | `between` |
 | `prototype/since/subseconds.flix` | `prototype/since/subseconds.js` | `between` |
 | `prototype/since/float64-representable-integer.flix` | `prototype/since/float64-representable-integer.js` | `between` |
-| `prototype/subtract/basic.flix` | `prototype/subtract/basic.js` | `trySub`, `saturatingSub` |
-| `prototype/subtract/blank-duration.flix` | `prototype/subtract/blank-duration.js` | `trySub`, `saturatingSub` |
-| `prototype/subtract/minimum-maximum-instant.flix` | `prototype/subtract/minimum-maximum-instant.js` | `trySub`, `saturatingSub` |
-| `prototype/subtract/result-out-of-range.flix` | `prototype/subtract/result-out-of-range.js` | `trySub`, `saturatingSub` |
-| `prototype/subtract/subtract-large-subseconds.flix` | `prototype/subtract/subtract-large-subseconds.js` | `trySub` |
-| `prototype/subtract/argument-duration-max.flix` | `prototype/subtract/argument-duration-max.js` | `trySub`, `tryAdd` |
+| `prototype/subtract/basic.flix` | `prototype/subtract/basic.js` | `tryMinus`, `saturatingMinus` |
+| `prototype/subtract/blank-duration.flix` | `prototype/subtract/blank-duration.js` | `tryMinus`, `saturatingMinus` |
+| `prototype/subtract/minimum-maximum-instant.flix` | `prototype/subtract/minimum-maximum-instant.js` | `tryMinus`, `saturatingMinus` |
+| `prototype/subtract/result-out-of-range.flix` | `prototype/subtract/result-out-of-range.js` | `tryMinus`, `saturatingMinus` |
+| `prototype/subtract/subtract-large-subseconds.flix` | `prototype/subtract/subtract-large-subseconds.js` | `tryMinus` |
+| `prototype/subtract/argument-duration-max.flix` | `prototype/subtract/argument-duration-max.js` | `tryMinus`, `tryPlus` |
 
 ## How the cases were translated
 

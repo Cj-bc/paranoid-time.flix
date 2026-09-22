@@ -11,12 +11,12 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.BlankDuration {
 
     use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.tryAdd
+    use Time.Instant.tryPlus
 
     /// test262: `new Temporal.Instant(1n).add(new Temporal.Duration())` is unchanged.
     @Test
     def add01_theZeroDuration_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 1), tryAdd(fromNanos(1i64), Duration.zero()),
+        assertSomeInstant(expected = instant(0i64, 1), tryPlus(fromNanos(1i64), Duration.zero()),
                           "result is unchanged")
 
 }

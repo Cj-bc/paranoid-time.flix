@@ -19,7 +19,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.CrossEpoch {
 
     use TemporalHelpers.{assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, tryAdd, trySub}
+    use Time.Instant.{Instant, tryPlus, tryMinus}
 
     /// 1969-12-25T12:23:45.678901234Z.
     def inst(): Instant = instant(-560_175i64, 678_901_234)
@@ -44,7 +44,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.CrossEpoch {
     ///
     @Test
     def add01_subtractingTheShift_movesBackBeforeTheEpoch(): Unit \ Assert =
-        assertSomeInstant(expected = one(), trySub(inst(), shift()),
+        assertSomeInstant(expected = one(), tryMinus(inst(), shift()),
                           "inst.subtract({ hours: 240, nanoseconds: 800 })")
 
     ///
@@ -56,19 +56,19 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.CrossEpoch {
     ///
     @Test
     def add02_addingTheShift_crossesTheEpochForwards(): Unit \ Assert =
-        assertSomeInstant(expected = two(), tryAdd(inst(), shift()),
+        assertSomeInstant(expected = two(), tryPlus(inst(), shift()),
                           "inst.add({ hours: 240, nanoseconds: 800 })")
 
     /// test262: `two.subtract({ hours: 480, nanoseconds: 1600 })` is `one`.
     @Test
     def add03_subtractingTwiceTheShiftFromTheLater_crossesTheEpochBackwards(): Unit \ Assert =
-        assertSomeInstant(expected = one(), trySub(two(), doubleShift()),
+        assertSomeInstant(expected = one(), tryMinus(two(), doubleShift()),
                           "two.subtract({ hours: 480, nanoseconds: 1600 })")
 
     /// test262: `one.add({ hours: 480, nanoseconds: 1600 })` is `two`.
     @Test
     def add04_addingTwiceTheShiftToTheEarlier_crossesTheEpochForwards(): Unit \ Assert =
-        assertSomeInstant(expected = two(), tryAdd(one(), doubleShift()),
+        assertSomeInstant(expected = two(), tryPlus(one(), doubleShift()),
                           "one.add({ hours: 480, nanoseconds: 1600 })")
 
 }

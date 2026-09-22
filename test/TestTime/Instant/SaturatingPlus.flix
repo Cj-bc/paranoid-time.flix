@@ -1,9 +1,9 @@
 ///
-/// Tests for `saturatingAdd` that test262 has no counterpart for.
+/// Tests for `saturatingPlus` that test262 has no counterpart for.
 ///
 /// `Temporal.Instant.prototype.add` only offers the throwing form, so the cases where
-/// `saturatingAdd` clamps to an end are the counterpart of a `RangeError` and stay under
-/// `test/test262`. What is left here is the other half: what `saturatingAdd` does when nothing
+/// `saturatingPlus` clamps to an end are the counterpart of a `RangeError` and stay under
+/// `test/test262`. What is left here is the other half: what `saturatingPlus` does when nothing
 /// goes out of range, which is a claim `Temporal` has no way to make.
 ///
 /// The starting point and arguments are those of test262's `prototype/add/basic.js`, so that
@@ -12,11 +12,11 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.SaturatingAdd {
+mod TestTime.Instant.SaturatingPlus {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, saturatingAdd, maxInstant}
+    use Time.Instant.{Instant, saturatingPlus, max}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/add/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)
@@ -29,16 +29,16 @@ mod TestTime.Instant.SaturatingAdd {
     def negativeSubSeconds(): Duration =
         Duration.milliseconds(-3) + Duration.microseconds(-2) + Duration.nanoseconds(-1i64)
 
-    /// `saturatingAdd` answers what `tryAdd` answers whenever the result is in range.
+    /// `saturatingPlus` answers what `tryPlus` answers whenever the result is in range.
     @Test
-    def saturatingAdd01_aResultInRange_isTheSameAsTryAdd(): Unit \ Assert = {
+    def saturatingPlus01_aResultInRange_isTheSameAsTryPlus(): Unit \ Assert = {
         assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingAdd(inst(),
+                            saturatingPlus(inst(),
                                           Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
                                             + subSeconds()),
                             "add positive hours");
         assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingAdd(inst(),
+                            saturatingPlus(inst(),
                                           Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                             + negativeSubSeconds()),
                             "add negative hours")
@@ -50,8 +50,8 @@ mod TestTime.Instant.SaturatingAdd {
     /// on an end.
     ///
     @Test
-    def saturatingAdd02_theZeroDurationAtTheLatestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertInstantsEqual(expected = maxInstant(), saturatingAdd(maxInstant(), Duration.zero()),
+    def saturatingPlus02_theZeroDurationAtTheLatestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
+        assertInstantsEqual(expected = max(), saturatingPlus(max(), Duration.zero()),
                             "the latest instant is unchanged")
 
 }
