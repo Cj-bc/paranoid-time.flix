@@ -15,7 +15,7 @@
 mod TestTime.Instant.ToEpochNanos {
 
     use TemporalHelpers.{epoch, instant}
-    use Time.Instant.{fromEpochNanoseconds, toEpochNanos}
+    use Time.Instant.{ofEpochNanos, toEpochNanos}
 
     ///
     /// One nanosecond either side of the epoch, the smallest counts that show the two
@@ -38,13 +38,13 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     /// Every count an `Int64` can hold survives the round trip through the two fields.
     ///
-    /// `fromEpochNanoseconds` is total, so this pairs the two directions against each
+    /// `ofEpochNanos` is total, so this pairs the two directions against each
     /// other: whatever split it chooses, `toEpochNanos` has to undo it exactly, including
     /// at the two ends, where the split borrows a second.
     ///
     @Test
     def toEpochNanos03_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
-        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNanos(fromEpochNanoseconds(ns)),
+        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNanos(ofEpochNanos(ns)),
                                            "the round trip through the two fields"),
                      List#{
                        Int64.minValue(),

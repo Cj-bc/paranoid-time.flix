@@ -19,7 +19,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
 
     use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, between, tryAdd}
+    use Time.Instant.{Instant, between, tryPlus}
 
     /// 2020-02-01T00:00:00Z.
     def feb20(): Instant = instant(1_580_515_200i64, 0)
@@ -40,7 +40,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
     /// Pins the starting point of the three readings below, which test262 builds with `add`.
     @Test
     def since01_theShift_reachesLatersub(): Unit \ Assert =
-        assertSomeInstant(expected = latersub(), tryAdd(feb20(), shift()),
+        assertSomeInstant(expected = latersub(), tryPlus(feb20(), shift()),
                           "feb20.add({ hours: 24, milliseconds: 250, microseconds: 250, nanoseconds: 250 })")
 
     ///

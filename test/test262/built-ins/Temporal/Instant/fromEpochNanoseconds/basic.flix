@@ -12,7 +12,7 @@
 mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.fromEpochNanoseconds
+    use Time.Instant.ofEpochNanos
 
     ///
     /// test262: `fromEpochNanoseconds(217175010_123_456_789n).epochNanoseconds` is
@@ -21,8 +21,8 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
     @Test
     def fromEpochNanoseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_456_789),
-                            fromEpochNanoseconds(217_175_010_123_456_789i64),
-                            "fromEpochNanoseconds post epoch")
+                            ofEpochNanos(217_175_010_123_456_789i64),
+                            "ofEpochNanos post epoch")
 
     ///
     /// test262: `fromEpochNanoseconds(-217175010_876_543_211n).epochNanoseconds` is
@@ -34,7 +34,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
     @Test
     def fromEpochNanoseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 123_456_789),
-                            fromEpochNanoseconds(-217_175_010_876_543_211i64),
-                            "fromEpochNanoseconds pre epoch")
+                            ofEpochNanos(-217_175_010_876_543_211i64),
+                            "ofEpochNanos pre epoch")
 
 }

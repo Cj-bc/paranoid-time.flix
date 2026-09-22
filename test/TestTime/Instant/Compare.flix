@@ -11,7 +11,7 @@
 mod TestTime.Instant.Compare {
 
     use TemporalHelpers.{instant, parts}
-    use Time.Instant.{maxInstant, minInstant}
+    use Time.Instant.{max, min}
 
     /// The seconds decide first, and a larger `nano` never makes up for a smaller second.
     @Test
@@ -36,12 +36,12 @@ mod TestTime.Instant.Compare {
     ///
     @Test
     def compare03_everyInstant_sortsBetweenTheTwoEnds(): Unit \ Assert = {
-        let (earliestSecond, _) = parts(minInstant());
-        let (latestSecond, _) = parts(maxInstant());
-        Assert.assertTrue(minInstant() < instant(0i64, 0));
-        Assert.assertTrue(instant(0i64, 0) < maxInstant());
-        Assert.assertTrue(minInstant() < instant(earliestSecond, 1));
-        Assert.assertTrue(instant(latestSecond, 999_999_998) < maxInstant())
+        let (earliestSecond, _) = parts(min());
+        let (latestSecond, _) = parts(max());
+        Assert.assertTrue(min() < instant(0i64, 0));
+        Assert.assertTrue(instant(0i64, 0) < max());
+        Assert.assertTrue(min() < instant(earliestSecond, 1));
+        Assert.assertTrue(instant(latestSecond, 999_999_998) < max())
     }
 
 }

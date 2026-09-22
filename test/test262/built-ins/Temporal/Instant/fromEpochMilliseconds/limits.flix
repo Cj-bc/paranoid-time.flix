@@ -12,7 +12,7 @@
 /// one further out is not representable.
 ///
 /// As everywhere else, out of range is not a throw but two operations: the `try` form
-/// answers `None`, and `fromEpochMilliseconds` clamps to the end it ran into.
+/// answers `None`, and `saturatingOfEpochMilli` clamps to the end it ran into.
 ///
 /// The top end is the one place the two forms of the limit do not meet: the latest instant
 /// is 999999999 ns into its second and a millisecond count cannot name that, so the last
@@ -21,7 +21,7 @@
 mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
 
     use TemporalHelpers.{assertInstantsEqual, assertNoInstant, assertSomeInstant, instant}
-    use Time.Instant.{maxInstant, minInstant, fromEpochMilliseconds, tryFromEpochMilliseconds}
+    use Time.Instant.{max, min, saturatingOfEpochMilli, tryOfEpochMilli}
 
     /// -9999-01-02T00:00:00Z is -377705116800 whole seconds after the epoch.
     def earliestMillis(): Int64 = -377_705_116_800_000i64
@@ -32,33 +32,33 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     /// test262: `Temporal.Instant.fromEpochMilliseconds(+/-8640000000000000)` is fine.
     @Test
     def fromEpochMilliseconds01_theLastCountInsideEitherEnd_isSplitAsGiven(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis()),
+        assertInstantsEqual(expected = min(), saturatingOfEpochMilli(earliestMillis()),
                             "the earliest millisecond count in range");
         assertInstantsEqual(expected = instant(253_402_214_399i64, 999_000_000),
-                            fromEpochMilliseconds(latestMillis()),
+                            saturatingOfEpochMilli(latestMillis()),
                             "the latest millisecond count in range")
     }
 
     /// The `try` half of the case above.
     @Test
     def fromEpochMilliseconds02_theLastCountInsideEitherEnd_hasAnInstant(): Unit \ Assert = {
-        assertSomeInstant(expected = minInstant(), tryFromEpochMilliseconds(earliestMillis()),
+        assertSomeInstant(expected = min(), tryOfEpochMilli(earliestMillis()),
                           "the earliest millisecond count in range");
         assertSomeInstant(expected = instant(253_402_214_399i64, 999_000_000),
-                          tryFromEpochMilliseconds(latestMillis()),
+                          tryOfEpochMilli(latestMillis()),
                           "the latest millisecond count in range")
     }
 
     /// test262: one millisecond further out throws; here the `try` form answers `None`.
     @Test
     def fromEpochMilliseconds03_oneMillisecondOutsideEitherEnd_hasNoInstant(): Unit \ Assert = {
-        assertNoInstant(tryFromEpochMilliseconds(earliestMillis() - 1i64),
+        assertNoInstant(tryOfEpochMilli(earliestMillis() - 1i64),
                         "one millisecond before the earliest instant");
-        assertNoInstant(tryFromEpochMilliseconds(latestMillis() + 1i64),
+        assertNoInstant(tryOfEpochMilli(latestMillis() + 1i64),
                         "one millisecond after the latest instant");
-        assertNoInstant(tryFromEpochMilliseconds(Int64.minValue()),
+        assertNoInstant(tryOfEpochMilli(Int64.minValue()),
                         "the smallest millisecond count");
-        assertNoInstant(tryFromEpochMilliseconds(Int64.maxValue()),
+        assertNoInstant(tryOfEpochMilli(Int64.maxValue()),
                         "the largest millisecond count")
     }
 
@@ -68,9 +68,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     ///
     @Test
     def fromEpochMilliseconds04_oneMillisecondOutsideEitherEnd_clampsToThatEnd(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis() - 1i64),
+        assertInstantsEqual(expected = min(), saturatingOfEpochMilli(earliestMillis() - 1i64),
                             "one millisecond before the earliest instant");
-        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(latestMillis() + 1i64),
+        assertInstantsEqual(expected = max(), saturatingOfEpochMilli(latestMillis() + 1i64),
                             "one millisecond after the latest instant")
     }
 
@@ -83,9 +83,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     ///
     @Test
     def fromEpochMilliseconds05_theTwoEndsOfInt64_clampWithoutOverflowing(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(Int64.minValue()),
+        assertInstantsEqual(expected = min(), saturatingOfEpochMilli(Int64.minValue()),
                             "the smallest millisecond count");
-        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(Int64.maxValue()),
+        assertInstantsEqual(expected = max(), saturatingOfEpochMilli(Int64.maxValue()),
                             "the largest millisecond count")
     }
 

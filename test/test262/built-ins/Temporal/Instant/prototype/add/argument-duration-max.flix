@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
 
     use TemporalHelpers.{assertSomeInstant, epoch, instant}
     use Time.Duration
-    use Time.Instant.tryAdd
+    use Time.Instant.tryPlus
 
     ///
     /// The largest `Duration`, 9223372036854775807 ns, is 9223372036 s plus 854775807 ns.
@@ -29,7 +29,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
     @Test
     def add01_theLargestDuration_isAddedExactly(): Unit \ Assert =
         assertSomeInstant(expected = instant(9_223_372_036i64, 854_775_807),
-                          tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
+                          tryPlus(epoch(), Duration.nanoseconds(Int64.maxValue())),
                           "the largest duration")
 
     ///
@@ -39,7 +39,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
     @Test
     def add02_theSmallestDuration_isAddedExactly(): Unit \ Assert =
         assertSomeInstant(expected = instant(-9_223_372_037i64, 145_224_192),
-                          tryAdd(epoch(), Duration.nanoseconds(Int64.minValue())),
+                          tryPlus(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "the smallest duration")
 
 }

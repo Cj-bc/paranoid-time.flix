@@ -11,7 +11,7 @@
 /// top — but the shape of the file carries over: adding zero leaves an end alone, one
 /// nanosecond inwards is fine, and one nanosecond outwards is not.
 ///
-/// Each `RangeError` becomes two cases: `tryAdd` answers `None`, and `saturatingAdd` answers
+/// Each `RangeError` becomes two cases: `tryPlus` answers `None`, and `saturatingPlus` answers
 /// the end it ran into.
 ///
 /// Not portable: test262's closing block, which walks from one end of the range to the other
@@ -22,7 +22,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant, instant, parts}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, tryAdd, maxInstant, minInstant}
+    use Time.Instant.{saturatingPlus, tryPlus, max, min}
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)
@@ -33,13 +33,13 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     /// test262: "Adding zero to the minimum instant".
     @Test
     def add01_zeroAtTheEarliestInstant_leavesItThere(): Unit \ Assert =
-        assertSomeInstant(expected = minInstant(), tryAdd(minInstant(), Duration.zero()),
+        assertSomeInstant(expected = min(), tryPlus(min(), Duration.zero()),
                           "adding zero to the minimum instant")
 
     /// test262: "Adding zero to the maximum instant".
     @Test
     def add02_zeroAtTheLatestInstant_leavesItThere(): Unit \ Assert =
-        assertSomeInstant(expected = maxInstant(), tryAdd(maxInstant(), Duration.zero()),
+        assertSomeInstant(expected = max(), tryPlus(max(), Duration.zero()),
                           "adding zero to the maximum instant")
 
     ///
@@ -50,8 +50,8 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     ///
     @Test
     def add03_minusOneNanosecondAtTheEarliestInstant_isOutOfRange(): Unit \ Assert = {
-        assertNoInstant(tryAdd(minInstant(), minusOne()), "subtracting one from the minimum instant");
-        assertSaturated(expected = minInstant(), saturatingAdd(minInstant(), minusOne()),
+        assertNoInstant(tryPlus(min(), minusOne()), "subtracting one from the minimum instant");
+        assertSaturated(expected = min(), saturatingPlus(min(), minusOne()),
                         "subtracting one from the minimum instant")
     }
 
@@ -63,23 +63,23 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
     ///
     @Test
     def add04_oneNanosecondAtTheLatestInstant_isOutOfRange(): Unit \ Assert = {
-        assertNoInstant(tryAdd(maxInstant(), one()), "adding one to the maximum instant");
-        assertSaturated(expected = maxInstant(), saturatingAdd(maxInstant(), one()),
+        assertNoInstant(tryPlus(max(), one()), "adding one to the maximum instant");
+        assertSaturated(expected = max(), saturatingPlus(max(), one()),
                         "adding one to the maximum instant")
     }
 
     /// test262: "Adding one to the minimum instant" is the minimum instant plus 1n.
     @Test
     def add05_oneNanosecondAtTheEarliestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        let (earliestSecond, _) = parts(minInstant());
-        assertSomeInstant(expected = instant(earliestSecond, 1), tryAdd(minInstant(), one()),
+        let (earliestSecond, _) = parts(min());
+        assertSomeInstant(expected = instant(earliestSecond, 1), tryPlus(min(), one()),
                           "adding one to the minimum instant")
 
     /// test262: "Subtracting one from the maximum instant" is the maximum instant minus 1n.
     @Test
     def add06_minusOneNanosecondAtTheLatestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        let (latestSecond, _) = parts(maxInstant());
-        assertSomeInstant(expected = instant(latestSecond, 999_999_998), tryAdd(maxInstant(), minusOne()),
+        let (latestSecond, _) = parts(max());
+        assertSomeInstant(expected = instant(latestSecond, 999_999_998), tryPlus(max(), minusOne()),
                           "subtracting one from the maximum instant")
 
 }

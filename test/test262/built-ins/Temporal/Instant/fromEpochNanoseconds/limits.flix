@@ -8,14 +8,14 @@
 ///
 /// test262 expects a `RangeError` one nanosecond outside +/-8.64e21. That bound has no
 /// counterpart here: the argument is an `Int64`, whose whole range is a little over
-/// +/-9.22e18 nanoseconds and therefore lands well inside `Instant`. `fromEpochNanoseconds`
+/// +/-9.22e18 nanoseconds and therefore lands well inside `Instant`. `ofEpochNanos`
 /// is total, so what the two ends of `Int64` pin instead is the split — the negative end in
 /// particular, which is where `Int64.minValue()` has no positive counterpart to divide by.
 ///
 mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.fromEpochNanoseconds
+    use Time.Instant.ofEpochNanos
 
     ///
     /// `Int64.maxValue()` is 9223372036854775807 ns: 9223372036 whole seconds plus
@@ -24,7 +24,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
     @Test
     def fromEpochNanoseconds01_theLargestNanosecondCount_splitsWithoutOverflowing(): Unit \ Assert =
         assertInstantsEqual(expected = instant(9_223_372_036i64, 854_775_807),
-                            fromEpochNanoseconds(Int64.maxValue()),
+                            ofEpochNanos(Int64.maxValue()),
                             "the largest nanosecond count")
 
     ///
@@ -35,7 +35,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
     @Test
     def fromEpochNanoseconds02_theSmallestNanosecondCount_keepsNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-9_223_372_037i64, 145_224_192),
-                            fromEpochNanoseconds(Int64.minValue()),
+                            ofEpochNanos(Int64.minValue()),
                             "the smallest nanosecond count")
 
 }

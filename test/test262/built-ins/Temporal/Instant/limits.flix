@@ -20,18 +20,18 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, saturatingSub, tryAdd, trySub, maxInstant, minInstant}
+    use Time.Instant.{saturatingPlus, saturatingMinus, tryPlus, tryMinus, max, min}
 
     /// test262: `new Temporal.Instant(limit + 1n)` throws.
     @Test
     def limits01_oneNanosecondAboveTheLatestInstant_isNotRepresentable(): Unit \ Assert =
-        assertNoInstant(tryAdd(maxInstant(), Duration.nanoseconds(1i64)),
+        assertNoInstant(tryPlus(max(), Duration.nanoseconds(1i64)),
                         "one nanosecond above the latest instant")
 
     /// test262: `new Temporal.Instant(-limit - 1n)` throws.
     @Test
     def limits02_oneNanosecondBelowTheEarliestInstant_isNotRepresentable(): Unit \ Assert =
-        assertNoInstant(trySub(minInstant(), Duration.nanoseconds(1i64)),
+        assertNoInstant(tryMinus(min(), Duration.nanoseconds(1i64)),
                         "one nanosecond below the earliest instant")
 
     ///
@@ -40,18 +40,18 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
     ///
     @Test
     def limits03_pastEitherEnd_saturatesToThatEnd(): Unit \ Assert = {
-        assertSaturated(expected = maxInstant(), saturatingAdd(maxInstant(), Duration.nanoseconds(1i64)),
+        assertSaturated(expected = max(), saturatingPlus(max(), Duration.nanoseconds(1i64)),
                         "one nanosecond above the latest instant");
-        assertSaturated(expected = minInstant(), saturatingSub(minInstant(), Duration.nanoseconds(1i64)),
+        assertSaturated(expected = min(), saturatingMinus(min(), Duration.nanoseconds(1i64)),
                         "one nanosecond below the earliest instant")
     }
 
     /// test262: `new Temporal.Instant(limit)` and `new Temporal.Instant(-limit)` are fine.
     @Test
     def limits04_theEndsThemselves_areRepresentable(): Unit \ Assert = {
-        assertSomeInstant(expected = maxInstant(), tryAdd(maxInstant(), Duration.zero()),
+        assertSomeInstant(expected = max(), tryPlus(max(), Duration.zero()),
                           "the latest instant");
-        assertSomeInstant(expected = minInstant(), tryAdd(minInstant(), Duration.zero()),
+        assertSomeInstant(expected = min(), tryPlus(min(), Duration.zero()),
                           "the earliest instant")
     }
 

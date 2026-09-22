@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
 
     use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, between, tryAdd, trySub}
+    use Time.Instant.{Instant, between, tryPlus, tryMinus}
 
     /// 1976-11-18T15:23:30.123456789Z.
     def earlier(): Instant = instant(217_178_610i64, 123_456_789)
@@ -51,11 +51,11 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     /// test262: `earlier.add(diff)` is `later`.
     @Test
     def since03_addingTheGapToTheEarlier_reachesTheLater(): Unit \ Assert =
-        assertSomeInstant(expected = later(), tryAdd(earlier(), diff()), "earlier.add(diff)")
+        assertSomeInstant(expected = later(), tryPlus(earlier(), diff()), "earlier.add(diff)")
 
     /// test262: `later.subtract(diff)` is `earlier`.
     @Test
     def since04_subtractingTheGapFromTheLater_reachesTheEarlier(): Unit \ Assert =
-        assertSomeInstant(expected = earlier(), trySub(later(), diff()), "later.subtract(diff)")
+        assertSomeInstant(expected = earlier(), tryMinus(later(), diff()), "later.subtract(diff)")
 
 }

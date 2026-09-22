@@ -54,8 +54,8 @@ pub mod TemporalHelpers {
     ///
     /// Stands in for test262's `new Temporal.Instant(ns)`.
     ///
-    /// The split is done here rather than through `Time.Instant.fromEpochNanoseconds`
-    /// so that a case about `tryAdd` (say) does not silently depend on that function
+    /// The split is done here rather than through `Time.Instant.ofEpochNanos`
+    /// so that a case about `tryPlus` (say) does not silently depend on that function
     /// being correct. `ns` is divided towards negative infinity, which keeps the
     /// remainder — and therefore `nano` — non-negative.
     ///

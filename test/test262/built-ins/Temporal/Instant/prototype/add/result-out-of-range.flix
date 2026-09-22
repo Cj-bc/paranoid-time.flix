@@ -8,7 +8,7 @@
 ///
 /// test262 walks the six sub-day units and expects a `RangeError` for each of them, once
 /// upwards from the latest instant and once downwards from the earliest one. Each of those
-/// becomes two checks here: `tryAdd` answers `None`, and `saturatingAdd` answers the end it
+/// becomes two checks here: `tryPlus` answers `None`, and `saturatingPlus` answers the end it
 /// ran into.
 ///
 /// One unit of any size is enough to tip either end over, because neither end has room in
@@ -18,7 +18,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, tryAdd, maxInstant, minInstant}
+    use Time.Instant.{saturatingPlus, tryPlus, max, min}
 
     /// test262's `fields`, as one unit of each.
     def oneOfEachUnit(): List[(String, Duration)] =
@@ -45,7 +45,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
     def add01_oneOfAnyUnitAtTheLatestInstant_isOutOfRange(): Unit \ Assert =
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertNoInstant(tryAdd(maxInstant(), d), "adding ${name} with result out of range (positive)")
+            assertNoInstant(tryPlus(max(), d), "adding ${name} with result out of range (positive)")
         }, oneOfEachUnit())
 
     /// test262: `earliest.add({ [field]: -1 })` throws for each field.
@@ -53,7 +53,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
     def add02_minusOneOfAnyUnitAtTheEarliestInstant_isOutOfRange(): Unit \ Assert =
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertNoInstant(tryAdd(minInstant(), d), "adding ${name} with result out of range (negative)")
+            assertNoInstant(tryPlus(min(), d), "adding ${name} with result out of range (negative)")
         }, minusOneOfEachUnit())
 
     ///
@@ -63,12 +63,12 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
     def add03_pastEitherEnd_saturatesToThatEnd(): Unit \ Assert = {
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertSaturated(expected = maxInstant(), saturatingAdd(maxInstant(), d),
+            assertSaturated(expected = max(), saturatingPlus(max(), d),
                             "adding ${name} past the latest instant")
         }, oneOfEachUnit());
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertSaturated(expected = minInstant(), saturatingAdd(minInstant(), d),
+            assertSaturated(expected = min(), saturatingPlus(min(), d),
                             "adding ${name} past the earliest instant")
         }, minusOneOfEachUnit())
     }

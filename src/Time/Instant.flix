@@ -15,8 +15,8 @@ pub mod Time.Instant {
   /// representation and structural equality coincides with equality in time.
   ///
   /// Not every pair of field values is a valid `Instant`. The representable range runs from
-  /// -9999-01-02T00:00:00Z to 9999-12-30T23:59:59.999999999Z; see `minInstant` and
-  /// `maxInstant` for what puts it one day inside the four-digit year range at each end.
+  /// -9999-01-02T00:00:00Z to 9999-12-30T23:59:59.999999999Z; see `min` and
+  /// `max` for what puts it one day inside the four-digit year range at each end.
   /// Every operation here either stays inside it or reports that it could not.
   ///
   pub enum Instant({
@@ -73,7 +73,7 @@ pub mod Time.Instant {
   ///
   /// -9999-01-02 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
   ///
-  pub def minInstant(): Instant =
+  pub def min(): Instant =
     Instant({secondsSinceEpoch = -377_705_116_800i64, nano = 0})
 
   ///
@@ -82,7 +82,7 @@ pub mod Time.Instant {
   /// One nanosecond before 9999-12-31T00:00:00Z, which is 2932896 days after the epoch:
   /// 2932896 * 86400 = 253402214400, one second below which is 253402214399.
   ///
-  pub def maxInstant(): Instant =
+  pub def max(): Instant =
     Instant({secondsSinceEpoch = 253_402_214_399i64, nano = 999_999_999})
 
   ///
@@ -90,8 +90,8 @@ pub mod Time.Instant {
   /// lies outside of.
   ///
   def checkRange(t: Instant): Result[Instant, Instant] =
-    if (maxInstant() < t) Err(maxInstant())
-    else if (t < minInstant()) Err(minInstant())
+    if (max() < t) Err(max())
+    else if (t < min()) Err(min())
     else Ok(t)
 
   /// Returns `x / n` rounded towards negative infinity. `n` must be positive.
@@ -117,14 +117,14 @@ pub mod Time.Instant {
   /// An `Int64` millisecond count reaches about four orders of magnitude further than either
   /// end of the range, so this is the one constructor whose whole argument type does not fit.
   ///
-  pub def tryFromEpochMilliseconds(ms: Int64): Option[Instant] =
+  pub def tryOfEpochMilli(ms: Int64): Option[Instant] =
     splitEpochMilliseconds(ms) |> checkRange |> Result.toOption
 
   ///
   /// Returns the `Instant` that is `ms` milliseconds after the epoch, clamped to the nearest
   /// end of the range when it lies outside it.
   ///
-  pub def fromEpochMilliseconds(ms: Int64): Instant =
+  pub def saturatingOfEpochMilli(ms: Int64): Instant =
     match splitEpochMilliseconds(ms) |> checkRange {
       case Ok(v)  => v
       case Err(v) => v
@@ -136,19 +136,19 @@ pub mod Time.Instant {
   /// No range check is needed and no `try` form exists: an `Int64` nanosecond count spans a
   /// little over +/-292 years, which is well inside the range at either end.
   ///
-  pub def fromEpochNanoseconds(ns: Int64): Instant =
+  pub def ofEpochNanos(ns: Int64): Instant =
     Instant({secondsSinceEpoch = floorDiv(ns, nanosPerSecond()),
              nano = Int64.truncateToInt32(Int64.modulo(ns, nanosPerSecond()))})
 
   ///
   /// Returns the current `Instant`.
   ///
-  /// A `Clock` reports a millisecond count, so this clamps the way `fromEpochMilliseconds`
+  /// A `Clock` reports a millisecond count, so this clamps the way `saturatingOfEpochMilli`
   /// does. A real clock is nowhere near either end of the range; a frozen or mocked one can
   /// be.
   ///
   pub def now(): Instant \ Clock =
-    fromEpochMilliseconds(Clock.currentTime(TimeUnit.Milliseconds))
+    saturatingOfEpochMilli(Clock.currentTime(TimeUnit.Milliseconds))
 
   ///
   /// Returns the `Instant` that is `seconds` seconds and `nanos` nanoseconds after `t`.
@@ -170,36 +170,36 @@ pub mod Time.Instant {
     // is within +/-3.8e11 and `s` within +/-9.3e9 -- but the record constructor is public, so
     // `t` need not be in range and the sum has to be ruled out before it is taken. Otherwise
     // an argument far outside the range would wrap round and land back inside it.
-    if (0i64 < s and (Int64.maxValue() - s) < i#secondsSinceEpoch) Err(maxInstant())
-    else if (s < 0i64 and i#secondsSinceEpoch < (Int64.minValue() - s)) Err(minInstant())
+    if (0i64 < s and (Int64.maxValue() - s) < i#secondsSinceEpoch) Err(max())
+    else if (s < 0i64 and i#secondsSinceEpoch < (Int64.minValue() - s)) Err(min())
     else checkRange(Instant({secondsSinceEpoch = i#secondsSinceEpoch + s, nano = nano}))
 
   /// Returns Ok() when calculated Instant is in valid range, otherwise return the largest/smallest value.
-  def internalTryAdd(t: Instant, d: Duration): Result[Instant, Instant] =
+  def internalTryPlus(t: Instant, d: Duration): Result[Instant, Instant] =
     let dns = Duration.toNanos(d);
     internalShift(t, floorDiv(dns, nanosPerSecond()), Int64.modulo(dns, nanosPerSecond()))
 
-  pub def tryAdd(t: Instant, d: Duration): Option[Instant] =
-    internalTryAdd(t, d) |> Result.toOption
+  pub def tryPlus(t: Instant, d: Duration): Option[Instant] =
+    internalTryPlus(t, d) |> Result.toOption
 
-  pub def saturatingAdd(t: Instant, d: Duration): Instant =
-    match internalTryAdd(t, d) {
+  pub def saturatingPlus(t: Instant, d: Duration): Instant =
+    match internalTryPlus(t, d) {
       case Ok(v)  => v
       case Err(v) => v
     }
 
   /// Returns Ok() when calculated Instant is in valid range, otherwise return the largest/smallest value.
-  def internalTrySub(t: Instant, d: Duration): Result[Instant, Instant] =
+  def internalTryMinus(t: Instant, d: Duration): Result[Instant, Instant] =
     let dns = Duration.toNanos(d);
     // The duration is negated part by part: `Int64.minValue()` has no positive
     // counterpart, but neither the second- nor the nano-part of the split has that problem.
     internalShift(t, -floorDiv(dns, nanosPerSecond()), -Int64.modulo(dns, nanosPerSecond()))
 
-  pub def trySub(date: Instant, d: Duration): Option[Instant] =
-    internalTrySub(date, d) |> Result.toOption
+  pub def tryMinus(date: Instant, d: Duration): Option[Instant] =
+    internalTryMinus(date, d) |> Result.toOption
 
-  pub def saturatingSub(t: Instant, d: Duration): Instant =
-    match internalTrySub(t, d) {
+  pub def saturatingMinus(t: Instant, d: Duration): Instant =
+    match internalTryMinus(t, d) {
       case Ok(v)  => v
       case Err(v) => v
     }

@@ -14,7 +14,7 @@ mod TestTime.Instant.Between {
     use TemporalHelpers.{assertNoDuration, assertSomeDuration, epoch, instant}
     use TemporalHelpers.largestInstantPairToNanoseconds
     use Time.Duration
-    use Time.Instant.{between, maxInstant, minInstant}
+    use Time.Instant.{between, max, min}
 
     ///
     /// The gap is zero at the two ends of the range as well, rather than overflowing on the way
@@ -22,9 +22,9 @@ mod TestTime.Instant.Between {
     ///
     @Test
     def between01_eitherEndAgainstItself_yieldsTheZeroDuration(): Unit \ Assert = {
-        assertSomeDuration(expected = Duration.zero(), between(minInstant(), minInstant()),
+        assertSomeDuration(expected = Duration.zero(), between(min(), min()),
                            "the earliest instant against itself");
-        assertSomeDuration(expected = Duration.zero(), between(maxInstant(), maxInstant()),
+        assertSomeDuration(expected = Duration.zero(), between(max(), max()),
                            "the latest instant against itself");
         assertSomeDuration(expected = Duration.zero(), between(epoch(), epoch()), "the epoch against itself")
     }
@@ -61,9 +61,9 @@ mod TestTime.Instant.Between {
     /// gap either, and neither does either end against the epoch.
     @Test
     def between05_theWholeRange_hasNoDuration(): Unit \ Assert = {
-        assertNoDuration(between(minInstant(), maxInstant()), "the earliest against the latest instant");
-        assertNoDuration(between(minInstant(), epoch()), "the earliest instant against the epoch");
-        assertNoDuration(between(epoch(), maxInstant()), "the epoch against the latest instant")
+        assertNoDuration(between(min(), max()), "the earliest against the latest instant");
+        assertNoDuration(between(min(), epoch()), "the earliest instant against the epoch");
+        assertNoDuration(between(epoch(), max()), "the epoch against the latest instant")
     }
 
     ///
@@ -81,9 +81,9 @@ mod TestTime.Instant.Between {
         let pairs =
             (earlier, later) ::
             (later, earlier) ::
-            (minInstant(), epoch()) ::
-            (epoch(), minInstant()) ::
-            (maxInstant(), epoch()) ::
+            (min(), epoch()) ::
+            (epoch(), min()) ::
+            (max(), epoch()) ::
             (instant(-1i64, 999_999_999), instant(0i64, 0)) ::
             (instant(0i64, 0), instant(-1i64, 999_999_999)) ::
             Nil;

@@ -20,7 +20,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
 
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, tryAdd}
+    use Time.Instant.{Instant, tryPlus}
 
     /// test262's `i1`: 1582966647747612578 ns, which is 1582966647 s plus 747612578 ns.
     def i1(): Instant = fromNanos(1_582_966_647_747_612_578i64)
@@ -40,7 +40,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add01_theLargestSafeNanosecondCount_carriesIntoTheSeconds(): Unit \ Assert =
         assertSomeInstant(expected = instant(1_591_973_847i64, 2_353_569),
-                          tryAdd(i1(), Duration.nanoseconds(maxSafeInteger())),
+                          tryPlus(i1(), Duration.nanoseconds(maxSafeInteger())),
                           "nanoseconds: Number.MAX_SAFE_INTEGER")
 
     ///
@@ -52,7 +52,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add02_theSmallestSafeNanosecondCount_borrowsFromTheSeconds(): Unit \ Assert =
         assertSomeInstant(expected = instant(1_573_959_448i64, 492_871_587),
-                          tryAdd(i1(), Duration.nanoseconds(-maxSafeInteger())),
+                          tryPlus(i1(), Duration.nanoseconds(-maxSafeInteger())),
                           "nanoseconds: Number.MIN_SAFE_INTEGER")
 
     ///
@@ -66,7 +66,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add03_theLargestSafeMicrosecondCount_carriesPastTheNanosecondRange(): Unit \ Assert =
         assertSomeInstant(expected = instant(10_590_165_902i64, 488_603_578),
-                          tryAdd(i1(), Duration.nanoseconds(9_007_199_254_740_991_000i64)),
+                          tryPlus(i1(), Duration.nanoseconds(9_007_199_254_740_991_000i64)),
                           "microseconds: Number.MAX_SAFE_INTEGER")
 
     ///
@@ -78,7 +78,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add04_theSmallestSafeMicrosecondCount_borrowsPastTheEpoch(): Unit \ Assert =
         assertSomeInstant(expected = instant(-7_424_232_607i64, 6_621_578),
-                          tryAdd(i1(), Duration.nanoseconds(-9_007_199_254_740_991_000i64)),
+                          tryPlus(i1(), Duration.nanoseconds(-9_007_199_254_740_991_000i64)),
                           "microseconds: Number.MIN_SAFE_INTEGER")
 
     ///
@@ -93,10 +93,10 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add05_bigNumberNanosecondsEitherWay_movesTheSecondsByOverNineBillion(): Unit \ Assert = {
         assertSomeInstant(expected = instant(10_590_165_902i64, 488_603_554),
-                          tryAdd(i1(), Duration.nanoseconds(bigNumber())),
+                          tryPlus(i1(), Duration.nanoseconds(bigNumber())),
                           "nanoseconds: bigNumber");
         assertSomeInstant(expected = instant(-7_424_232_607i64, 6_621_602),
-                          tryAdd(i1(), Duration.nanoseconds(-bigNumber())),
+                          tryPlus(i1(), Duration.nanoseconds(-bigNumber())),
                           "nanoseconds: -bigNumber")
     }
 
@@ -110,10 +110,10 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.AddLargeSubseconds {
     @Test
     def add06_bigNumberNanosecondsFromTheEpoch_landsSymmetricallyEitherSide(): Unit \ Assert = {
         assertSomeInstant(expected = instant(9_007_199_254i64, 740_990_976),
-                          tryAdd(epoch(), Duration.nanoseconds(bigNumber())),
+                          tryPlus(epoch(), Duration.nanoseconds(bigNumber())),
                           "nanoseconds: bigNumber from the epoch");
         assertSomeInstant(expected = instant(-9_007_199_255i64, 259_009_024),
-                          tryAdd(epoch(), Duration.nanoseconds(-bigNumber())),
+                          tryPlus(epoch(), Duration.nanoseconds(-bigNumber())),
                           "nanoseconds: -bigNumber from the epoch")
     }
 

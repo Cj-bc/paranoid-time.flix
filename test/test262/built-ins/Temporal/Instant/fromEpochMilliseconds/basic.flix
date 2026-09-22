@@ -14,7 +14,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
 
     use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.instant
-    use Time.Instant.fromEpochMilliseconds
+    use Time.Instant.saturatingOfEpochMilli
 
     ///
     /// test262: `fromEpochMilliseconds(217175010_123).epochNanoseconds` is
@@ -25,8 +25,8 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     @Test
     def fromEpochMilliseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_000_000),
-                            fromEpochMilliseconds(217_175_010_123i64),
-                            "fromEpochMilliseconds post epoch")
+                            saturatingOfEpochMilli(217_175_010_123i64),
+                            "saturatingOfEpochMilli post epoch")
 
     ///
     /// test262: `fromEpochMilliseconds(-217175010_876).epochNanoseconds` is
@@ -39,7 +39,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     @Test
     def fromEpochMilliseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 124_000_000),
-                            fromEpochMilliseconds(-217_175_010_876i64),
-                            "fromEpochMilliseconds pre epoch")
+                            saturatingOfEpochMilli(-217_175_010_876i64),
+                            "saturatingOfEpochMilli pre epoch")
 
 }
