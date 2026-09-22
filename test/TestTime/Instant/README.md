@@ -12,6 +12,7 @@ file per function.
 | `Equals.flix` | `Eq[Instant]` |
 | `SaturatingOfEpochMilli.flix` | `saturatingOfEpochMilli` |
 | `OfEpochNanos.flix` | `ofEpochNanos` |
+| `OfEpochSecond.flix` | `ofEpochSecond` |
 | `TryPlus.flix` | `tryPlus` |
 | `SaturatingPlus.flix` | `saturatingPlus` |
 | `TryMinus.flix` | `tryMinus` |
@@ -50,6 +51,14 @@ claim `Temporal` has no way to make.
 For `between` there is a fourth: `since` and `until` are signed, so neither the invariant
 that the answer is never negative nor the ceiling above which there is no answer exists
 over there.
+
+`ofEpochSecond` has one of its own, and it is the whole of it: `Temporal.Instant` is built
+from a millisecond or a nanosecond count and has no second-count constructor at all, so
+there is nothing over there to port. Its cases are the two ends and the epoch, because a
+whole second count goes into `secondsSinceEpoch` as given — there is no split and no carry
+to get wrong — and the range check is the only thing left that can fail. An `Int64` second
+count overshoots both ends by about seven orders of magnitude, so both are reachable from
+the argument type and each is checked from both sides.
 
 `toEpochNanos` has one of its own: it answers a `BigInt`, as `epochNanoseconds` does, so
 the count never runs out of room and the whole question is how the two stored fields are
