@@ -135,6 +135,27 @@ mod TestTime.Instant {
                     (asMillis(latestClockInstant()), asMillis(earliestClockInstant())))
 
   //
+  // ofEpochSecond
+  //
+
+  @Test
+  def ofEpochSecond01_atTheEpoch_returnsBothFieldsZero(): Unit \ Assert =
+    Assert.assertEq(expected = Some(parts(epoch())),
+                    Time.Instant.ofEpochSecond(0i64) |> Option.map(parts))
+
+  /// The upper bound of `Int64` is representable, since `secondsSinceEpoch` is itself an `Int64`.
+  @Test
+  def ofEpochSecond02_atTheUpperBound_returnsTheLargestSecondsSinceEpoch(): Unit \ Assert =
+    Assert.assertEq(expected = Some((Int64.maxValue(), 0)),
+                    Time.Instant.ofEpochSecond(Int64.maxValue()) |> Option.map(parts))
+
+  /// The lower bound of `Int64` is representable, since `secondsSinceEpoch` is itself an `Int64`.
+  @Test
+  def ofEpochSecond03_atTheLowerBound_returnsTheSmallestSecondsSinceEpoch(): Unit \ Assert =
+    Assert.assertEq(expected = Some((Int64.minValue(), 0)),
+                    Time.Instant.ofEpochSecond(Int64.minValue()) |> Option.map(parts))
+
+  //
   // tryAdd/saturatingAdd
   //
 
