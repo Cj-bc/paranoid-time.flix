@@ -7,7 +7,7 @@
 ///
 /// test262 asks for the same gap three times over, with `largestUnit` set to milliseconds,
 /// microseconds and nanoseconds, and checks how it is spread across the duration's fields.
-/// `between` has no `largestUnit`: it answers one `Duration`, which is a nanosecond count.
+/// `until` has no `largestUnit`: it answers one `Duration`, which is a nanosecond count.
 /// The three readings become `Duration.toMillis`, `toMicros` and `toNanos` of that one
 /// answer, which truncate towards zero and so reproduce test262's three largest fields.
 ///
@@ -19,7 +19,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
 
     use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, between, tryAdd}
+    use Time.Instant.{Instant, until, plus}
 
     /// 2020-02-01T00:00:00Z.
     def feb20(): Instant = instant(1_580_515_200i64, 0)

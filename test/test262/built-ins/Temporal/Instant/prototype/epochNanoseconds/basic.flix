@@ -10,7 +10,7 @@
 /// the two fields have to be recombined, so both of test262's values are restated as a
 /// (second, nanosecond-of-second) pair on the way in.
 ///
-/// The count is a `BigInt` in test262 and an `Int64` here, so `toEpochNanos` answers an
+/// The count is a `BigInt` in test262 and an `Int64` here, so `toEpochNano` answers an
 /// `Option` where the property cannot fail. Both values below are far inside the `Int64`
 /// range and answer `Some`; the range itself is `test/TestTime/Instant/ToEpochNanos.flix`.
 ///
@@ -20,7 +20,7 @@
 mod Test262.BuiltIns.Temporal.Instant.Prototype.EpochNanoseconds.Basic {
 
     use TemporalHelpers.instant
-    use Time.Instant.toEpochNanos
+    use Time.Instant.toEpochNano
 
     ///
     /// test262: `new Temporal.Instant(217175010_123_456_789n).epochNanoseconds` is
@@ -29,7 +29,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.EpochNanoseconds.Basic {
     /// 217175010123456789 ns is 217175010 whole seconds plus 123456789 ns.
     ///
     @Test
-    def toEpochNanos01_afterTheEpoch_recombinesTheTwoFields(): Unit \ Assert =
+    def toEpochNano01_afterTheEpoch_recombinesTheTwoFields(): Unit \ Assert =
         Assert.assertEq(expected = 217_175_010_123_456_789ii,
                         toEpochNano(instant(217_175_010i64, 123_456_789)))
 
@@ -42,7 +42,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.EpochNanoseconds.Basic {
     /// -217175011000000000 + 123456789 = -217175010876543211.
     ///
     @Test
-    def toEpochNanos02_beforeTheEpoch_carriesTheBorrowedSecondBack(): Unit \ Assert =
+    def toEpochNano02_beforeTheEpoch_carriesTheBorrowedSecondBack(): Unit \ Assert =
         Assert.assertEq(expected = -217_175_010_876_543_211ii,
                         toEpochNano(instant(-217_175_011i64, 123_456_789)))
 

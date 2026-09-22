@@ -10,7 +10,7 @@
 /// -9999-01-02T00:00:00Z and 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom
 /// and at 999999999 at the top — but the shape of the file carries over.
 ///
-/// Each `RangeError` becomes two cases: `trySub` answers `None`, and `saturatingSub` answers
+/// Each `RangeError` becomes two cases: `minus` answers `None`, and `minusSaturated` answers
 /// the end it ran into.
 ///
 /// Not portable: test262's closing block, which walks from one end of the range to the other
@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant, instant, parts}
     use Time.Duration
-    use Time.Instant.{saturatingSub, trySub, maxInstant, minInstant}
+    use Time.Instant.{minusSaturated, minus, max, min}
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)

@@ -20,7 +20,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ArgumentDurationMax {
 
     use TemporalHelpers.{assertSomeInstant, epoch, instant}
     use Time.Duration
-    use Time.Instant.trySub
+    use Time.Instant.minus
 
     ///
     /// The largest `Duration` is 9223372036854775807 ns. Subtracted from the epoch that is

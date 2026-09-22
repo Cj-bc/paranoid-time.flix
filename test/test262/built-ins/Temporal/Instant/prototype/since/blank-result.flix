@@ -12,7 +12,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.BlankResult {
 
     use TemporalHelpers.{assertSomeDuration, fromNanos}
     use Time.Duration
-    use Time.Instant.between
+    use Time.Instant.until
 
     /// test262: `new Temporal.Instant(1n).since(new Temporal.Instant(1n))` is blank.
     @Test

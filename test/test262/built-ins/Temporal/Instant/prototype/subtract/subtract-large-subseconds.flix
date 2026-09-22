@@ -19,7 +19,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
 
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, trySub}
+    use Time.Instant.{Instant, minus}
 
     /// test262's `i1`: 1582966647747612578 ns, which is 1582966647 s plus 747612578 ns.
     def i1(): Instant = fromNanos(1_582_966_647_747_612_578i64)

@@ -54,8 +54,8 @@ pub mod TemporalHelpers {
     ///
     /// Stands in for test262's `new Temporal.Instant(ns)`.
     ///
-    /// The split is done here rather than through `Time.Instant.fromEpochNanoseconds`
-    /// so that a case about `tryAdd` (say) does not silently depend on that function
+    /// The split is done here rather than through `Time.Instant.ofEpochNano`
+    /// so that a case about `plus` (say) does not silently depend on that function
     /// being correct. `ns` is divided towards negative infinity, which keeps the
     /// remainder — and therefore `nano` — non-negative.
     ///
@@ -133,13 +133,13 @@ pub mod TemporalHelpers {
 
     ///
     /// test262's `TemporalHelpers.assertDurationsEqual`, for the `Option[Duration]`
-    /// that `between` answers with.
+    /// that `until` answers with.
     ///
     pub def assertSomeDuration(expected: {expected = Duration}, actual: Option[Duration], msg: String): Unit \ Assert =
         Assert.assertEqWithMsg(expected = Some(expected#expected), actual, "${msg}: expected ${Some(expected#expected)}, got ${actual}")
 
     ///
-    /// `between` answers `None` for a gap too wide to fit in a `Duration`. test262 has
+    /// `until` answers `None` for a gap too wide to fit in a `Duration`. test262 has
     /// no counterpart: `since` and `until` return an arbitrary-precision `Duration`.
     ///
     pub def assertNoDuration(actual: Option[Duration], msg: String): Unit \ Assert =
@@ -147,13 +147,13 @@ pub mod TemporalHelpers {
 
     ///
     /// test262's `assert.sameValue(instant.epochNanoseconds, ...)`, for the
-    /// `Option[Int64]` that `toEpochNanos` answers with.
+    /// `Option[Int64]` that `toEpochNano` answers with.
     ///
     pub def assertSomeNanos(expected: {expected = Int64}, actual: Option[Int64], msg: String): Unit \ Assert =
         Assert.assertEqWithMsg(expected = Some(expected#expected), actual, "${msg}: expected ${Some(expected#expected)}, got ${actual}")
 
     ///
-    /// `toEpochNanos` answers `None` for an instant too far from the epoch to count in an
+    /// `toEpochNano` answers `None` for an instant too far from the epoch to count in an
     /// `Int64`. test262 has no counterpart: `epochNanoseconds` is an arbitrary-precision
     /// `BigInt`, so it is never out of range.
     ///

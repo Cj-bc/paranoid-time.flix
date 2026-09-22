@@ -5,7 +5,7 @@
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/since/add-subtract.js`
 /// (esid: sec-temporal.instant.prototype.since).
 ///
-/// The counterpart of `since` and `until` is `between`, which differs from both in two ways:
+/// The counterpart of `since` and `until` is `until`, which differs from both in two ways:
 /// it answers the *absolute* gap, so the two arguments can be given in either order, and it
 /// answers an `Option`, since a gap too wide for a `Duration` has no answer at all.
 ///
@@ -14,14 +14,14 @@
 ///   1976-11-18T15:23:30.123456789Z -> ( 217178610, 123456789)
 ///   2019-10-29T10:46:38.271986102Z -> (1572345998, 271986102)
 ///
-/// The gap between them is 1572345998 - 217178610 = 1355167388 seconds plus
+/// The gap until them is 1572345998 - 217178610 = 1355167388 seconds plus
 /// 271986102 - 123456789 = 148529313 nanoseconds, which is 1355167388148529313 ns.
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
 
     use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, between, tryAdd, trySub}
+    use Time.Instant.{Instant, until, plus, minus}
 
     /// 1976-11-18T15:23:30.123456789Z.
     def earlier(): Instant = instant(217_178_610i64, 123_456_789)
@@ -29,7 +29,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     /// 2019-10-29T10:46:38.271986102Z.
     def later(): Instant = instant(1_572_345_998i64, 271_986_102)
 
-    /// test262's `diff`, the gap between the two.
+    /// test262's `diff`, the gap until the two.
     def diff(): Duration = Duration.nanoseconds(1_355_167_388_148_529_313i64)
 
     /// test262: `later.since(earlier)` is `diff`.
@@ -41,7 +41,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     /// test262: `earlier.since(later)` is `diff.negated()`, and `earlier.until(later)` is
     /// `diff`.
     ///
-    /// `between` is unsigned, so swapping the arguments answers the same duration rather
+    /// `until` is unsigned, so swapping the arguments answers the same duration rather
     /// than the negated one. That is the property it has in place of test262's pair.
     ///
     @Test

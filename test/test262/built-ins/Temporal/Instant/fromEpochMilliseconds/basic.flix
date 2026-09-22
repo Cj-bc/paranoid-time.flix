@@ -2,7 +2,7 @@
 // This code is governed by the BSD license found in test/test262/LICENSE.
 // Adapted for Time.Instant; the module doc comment says what changed.
 ///
-/// Ported from test262 `test/built-ins/Temporal/Instant/fromEpochMilliseconds/basic.js`
+/// Ported from test262 `test/built-ins/Temporal/Instant/ofEpochMilliClamped/basic.js`
 /// (esid: sec-temporal.instant.fromepochmilliseconds).
 ///
 /// test262 checks the resulting `epochNanoseconds`; here the result is checked as the
@@ -14,7 +14,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
 
     use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.instant
-    use Time.Instant.fromEpochMilliseconds
+    use Time.Instant.ofEpochMilliClamped
 
     ///
     /// test262: `ofEpochMilliClamped(217175010_123).epochNanoseconds` is
@@ -23,10 +23,10 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     /// 217175010123 ms is 217175010 whole seconds plus 123 ms, and 123 ms is 123000000 ns.
     ///
     @Test
-    def fromEpochMilliseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
+    def ofEpochMilliClamped01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_000_000),
                             ofEpochMilliClamped(217_175_010_123i64),
-                            "fromEpochMilliseconds post epoch")
+                            "ofEpochMilliClamped post epoch")
 
     ///
     /// test262: `ofEpochMilliClamped(-217175010_876).epochNanoseconds` is
@@ -37,9 +37,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     /// 124 ms, and -217175011000000000 + 124000000 = -217175010876000000 ns.
     ///
     @Test
-    def fromEpochMilliseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
+    def ofEpochMilliClamped02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 124_000_000),
                             ofEpochMilliClamped(-217_175_010_876i64),
-                            "fromEpochMilliseconds pre epoch")
+                            "ofEpochMilliClamped pre epoch")
 
 }

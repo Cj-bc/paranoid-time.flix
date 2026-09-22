@@ -11,7 +11,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.BlankDuration {
 
     use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.tryAdd
+    use Time.Instant.plus
 
     /// test262: `new Temporal.Instant(1n).add(new Temporal.Duration())` is unchanged.
     @Test

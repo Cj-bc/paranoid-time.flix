@@ -10,7 +10,7 @@
 /// checks that `since` reports it with the precision the spec prescribes rather than with
 /// whatever the implementation happens to hold internally.
 ///
-/// The limit here is a different one, and harder: `between` answers a `Time.Duration`, which
+/// The limit here is a different one, and harder: `until` answers a `Time.Duration`, which
 /// is an `Int64` nanosecond count, so a gap it cannot name is not reported imprecisely but
 /// not reported at all — `None`. test262's gap is well past that ceiling, so the case carries
 /// over as it stands. Where exactly the ceiling falls is a question `Temporal` cannot ask, and
@@ -21,7 +21,7 @@
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Float64RepresentableInteger {
 
     use TemporalHelpers.{assertNoDuration, epoch, instant}
-    use Time.Instant.between
+    use Time.Instant.until
 
     ///
     /// test262's `i1.since(i2)` over a gap of 2^64 nanoseconds.

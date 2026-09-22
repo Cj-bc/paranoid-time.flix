@@ -2,7 +2,7 @@
 // This code is governed by the BSD license found in test/test262/LICENSE.
 // Adapted for Time.Instant; the module doc comment says what changed.
 ///
-/// Ported from test262 `test/built-ins/Temporal/Instant/fromEpochNanoseconds/basic.js`
+/// Ported from test262 `test/built-ins/Temporal/Instant/ofEpochNano/basic.js`
 /// (esid: sec-temporal.instant.fromepochnanoseconds).
 ///
 /// test262 reads the result back as `epochNanoseconds`, where the round trip is the
@@ -12,17 +12,17 @@
 mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.fromEpochNanoseconds
+    use Time.Instant.ofEpochNano
 
     ///
     /// test262: `ofEpochNano(217175010_123_456_789n).epochNanoseconds` is
     /// `217175010_123_456_789n`.
     ///
     @Test
-    def fromEpochNanoseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
+    def ofEpochNano01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_456_789),
                             ofEpochNano(217_175_010_123_456_789i64),
-                            "fromEpochNanoseconds post epoch")
+                            "ofEpochNano post epoch")
 
     ///
     /// test262: `ofEpochNano(-217175010_876_543_211n).epochNanoseconds` is
@@ -32,9 +32,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
     /// left over is 123456789 ns: -217175011000000000 + 123456789 = -217175010876543211.
     ///
     @Test
-    def fromEpochNanoseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
+    def ofEpochNano02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 123_456_789),
                             ofEpochNano(-217_175_010_876_543_211i64),
-                            "fromEpochNanoseconds pre epoch")
+                            "ofEpochNano pre epoch")
 
 }

@@ -20,7 +20,7 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, saturatingSub, tryAdd, trySub, maxInstant, minInstant}
+    use Time.Instant.{plusSaturated, minusSaturated, plus, minus, max, min}
 
     /// test262: `new Temporal.Instant(limit + 1n)` throws.
     @Test

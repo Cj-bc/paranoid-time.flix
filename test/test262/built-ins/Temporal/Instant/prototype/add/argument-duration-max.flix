@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
 
     use TemporalHelpers.{assertSomeInstant, epoch, instant}
     use Time.Duration
-    use Time.Instant.tryAdd
+    use Time.Instant.plus
 
     ///
     /// The largest `Duration`, 9223372036854775807 ns, is 9223372036 s plus 854775807 ns.

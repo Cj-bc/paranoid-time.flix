@@ -8,7 +8,7 @@
 ///
 /// test262 walks the six sub-day units and expects a `RangeError` for each of them, once
 /// upwards from the latest instant and once downwards from the earliest one. Each of those
-/// becomes two checks here: `tryAdd` answers `None`, and `saturatingAdd` answers the end it
+/// becomes two checks here: `plus` answers `None`, and `plusSaturated` answers the end it
 /// ran into.
 ///
 /// One unit of any size is enough to tip either end over, because neither end has room in
@@ -18,7 +18,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ResultOutOfRange {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, tryAdd, maxInstant, minInstant}
+    use Time.Instant.{plusSaturated, plus, max, min}
 
     /// test262's `fields`, as one unit of each.
     def oneOfEachUnit(): List[(String, Duration)] =

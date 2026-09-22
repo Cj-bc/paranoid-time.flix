@@ -10,14 +10,14 @@
 /// nanosecond count, so the same argument is written as a sum of the per-unit constructors,
 /// and each expected count is restated as the (second, nanosecond-of-second) pair.
 ///
-/// `add` throws on a result out of range; `tryAdd` answers `None` instead. Every case here
-/// is well inside the range, so `tryAdd` answers `Some`.
+/// `add` throws on a result out of range; `plus` answers `None` instead. Every case here
+/// is well inside the range, so `plus` answers `Some`.
 ///
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
 
     use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, tryAdd}
+    use Time.Instant.{Instant, plus}
 
     /// test262's `new Temporal.Instant(50000n)`: 50000 ns after the epoch.
     def inst(): Instant = fromNanos(50_000i64)

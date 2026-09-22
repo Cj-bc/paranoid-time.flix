@@ -11,7 +11,7 @@
 /// top — but the shape of the file carries over: adding zero leaves an end alone, one
 /// nanosecond inwards is fine, and one nanosecond outwards is not.
 ///
-/// Each `RangeError` becomes two cases: `tryAdd` answers `None`, and `saturatingAdd` answers
+/// Each `RangeError` becomes two cases: `plus` answers `None`, and `plusSaturated` answers
 /// the end it ran into.
 ///
 /// Not portable: test262's closing block, which walks from one end of the range to the other
@@ -22,7 +22,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant, instant, parts}
     use Time.Duration
-    use Time.Instant.{saturatingAdd, tryAdd, maxInstant, minInstant}
+    use Time.Instant.{plusSaturated, plus, max, min}
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)
