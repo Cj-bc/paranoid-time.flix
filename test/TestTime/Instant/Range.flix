@@ -15,10 +15,10 @@
 /// the year 10000.
 ///
 /// Each end is checked twice over: against `Time.Instant`'s own constant, and against what
-/// `fromEpochMilliseconds` clamps to, since an `Int64` millisecond count runs about four
+/// `ofEpochMilliClamped` clamps to, since an `Int64` millisecond count runs about four
 /// orders of magnitude past both ends. Where exactly those bounds fall to the millisecond
 /// is pinned by the port in
-/// `test/test262/built-ins/Temporal/Instant/fromEpochMilliseconds/limits.flix`.
+/// `test/test262/built-ins/Temporal/Instant/ofEpochMilli/limits.flix`.
 ///
 /// The day counts, the instant builder and the assertions come from the test262 harness
 /// rather than being written out again here.
@@ -40,9 +40,9 @@ mod TestTime.Instant.Range {
     @Test
     def range01_theEarliestInstant_isMidnightOneDayIntoTheFirstYear(): Unit \ Assert = {
         let expected = instant((dayOfMinus9999January1st() + 1i64) * secondsPerDay(), 0);
-        assertInstantsEqual(expected = expected, fromEpochMilliseconds(Int64.minValue()),
+        assertInstantsEqual(expected = expected, ofEpochMilliClamped(Int64.minValue()),
                             "-9999-01-02T00:00:00Z");
-        assertInstantsEqual(expected = expected, minInstant(),
+        assertInstantsEqual(expected = expected, min(),
                             "-9999-01-02T00:00:00Z as Time.Instant names it")
     }
 
@@ -57,9 +57,9 @@ mod TestTime.Instant.Range {
     @Test
     def range02_theLatestInstant_isTheLastNanosecondOfTheDayBeforeTheLastDay(): Unit \ Assert = {
         let expected = instant(dayOf9999December31st() * secondsPerDay() - 1i64, 999_999_999);
-        assertInstantsEqual(expected = expected, fromEpochMilliseconds(Int64.maxValue()),
+        assertInstantsEqual(expected = expected, ofEpochMilliClamped(Int64.maxValue()),
                             "9999-12-30T23:59:59.999999999Z");
-        assertInstantsEqual(expected = expected, maxInstant(),
+        assertInstantsEqual(expected = expected, max(),
                             "9999-12-30T23:59:59.999999999Z as Time.Instant names it")
     }
 
@@ -76,14 +76,14 @@ mod TestTime.Instant.Range {
     def range03_anInstantBuiltOutsideTheRange_doesNotWrapBackIn(): Unit \ Assert = {
         let pastTheTop = instant(Int64.maxValue(), 0);
         let pastTheBottom = instant(Int64.minValue(), 0);
-        assertNoInstant(tryAdd(pastTheTop, Duration.seconds(1)), "one second above the largest Int64 second");
-        assertNoInstant(tryAdd(pastTheBottom, Duration.seconds(-1)), "one second below the smallest Int64 second");
-        assertSaturated(expected = maxInstant(), saturatingAdd(pastTheTop, Duration.seconds(1)),
+        assertNoInstant(plus(pastTheTop, Duration.seconds(1)), "one second above the largest Int64 second");
+        assertNoInstant(plus(pastTheBottom, Duration.seconds(-1)), "one second below the smallest Int64 second");
+        assertSaturated(expected = max(), plusSaturated(pastTheTop, Duration.seconds(1)),
                         "one second above the largest Int64 second");
-        assertSaturated(expected = minInstant(), saturatingAdd(pastTheBottom, Duration.seconds(-1)),
+        assertSaturated(expected = min(), plusSaturated(pastTheBottom, Duration.seconds(-1)),
                         "one second below the smallest Int64 second");
         // `between` subtracts the two second counts, which wraps for the same reason.
-        assertNoDuration(between(pastTheBottom, pastTheTop), "the two ends of the Int64 second line")
+        assertNoDuration(until(pastTheBottom, pastTheTop), "the two ends of the Int64 second line")
     }
 
 }

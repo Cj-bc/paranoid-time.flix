@@ -10,7 +10,7 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.TrySub {
+mod TestTime.Instant.Minus {
 
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant
                         , largestInstantPairToNanoseconds}
@@ -30,9 +30,9 @@ mod TestTime.Instant.TrySub {
     ///
     @Test
     def trySub01_theZeroDurationAtEitherEnd_leavesTheInstantUnchanged(): Unit \ Assert = {
-        assertSomeInstant(expected = minInstant(), trySub(minInstant(), Duration.zero()),
+        assertSomeInstant(expected = min(), minus(min(), Duration.zero()),
                           "the earliest instant is unchanged");
-        assertSomeInstant(expected = maxInstant(), trySub(maxInstant(), Duration.zero()),
+        assertSomeInstant(expected = max(), minus(max(), Duration.zero()),
                           "the latest instant is unchanged")
     }
 
@@ -44,9 +44,9 @@ mod TestTime.Instant.TrySub {
     ///
     @Test
     def trySub02_aNonZeroDuration_isNotAdded(): Unit \ Assert = {
-        assertSomeInstant(expected = instant(-1i64, 997_047_999), trySub(inst(), subSeconds()),
+        assertSomeInstant(expected = instant(-1i64, 997_047_999), minus(inst(), subSeconds()),
                           "trySub moves backwards");
-        assertSomeInstant(expected = instant(0i64, 3_052_001), tryAdd(inst(), subSeconds()),
+        assertSomeInstant(expected = instant(0i64, 3_052_001), plus(inst(), subSeconds()),
                           "tryAdd moves forwards")
     }
 
@@ -60,10 +60,10 @@ mod TestTime.Instant.TrySub {
     def trySub03_theSmallestDuration_reachesOneNanosecondPastTheLargest(): Unit \ Assert = {
         let (s, nano) = largestInstantPairToNanoseconds();
         assertSomeInstant(expected = instant(s, nano),
-                          tryAdd(epoch(), Duration.nanoseconds(Int64.maxValue())),
+                          plus(epoch(), Duration.nanoseconds(Int64.maxValue())),
                           "adding the largest duration");
         assertSomeInstant(expected = instant(s, nano + 1),
-                          trySub(epoch(), Duration.nanoseconds(Int64.minValue())),
+                          minus(epoch(), Duration.nanoseconds(Int64.minValue())),
                           "subtracting the smallest duration")
     }
 

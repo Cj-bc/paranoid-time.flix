@@ -16,7 +16,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.BlankDuration {
     /// test262: `new Temporal.Instant(1n).add(new Temporal.Duration())` is unchanged.
     @Test
     def add01_theZeroDuration_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 1), tryAdd(fromNanos(1i64), Duration.zero()),
+        assertSomeInstant(expected = instant(0i64, 1), plus(fromNanos(1i64), Duration.zero()),
                           "result is unchanged")
 
 }

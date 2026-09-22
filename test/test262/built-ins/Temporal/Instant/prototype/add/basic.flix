@@ -37,7 +37,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     ///
     @Test
     def add01_positiveSubSeconds_addsThem(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 3_052_001), tryAdd(inst(), subSeconds()),
+        assertSomeInstant(expected = instant(0i64, 3_052_001), plus(inst(), subSeconds()),
                           "add positive sub-seconds")
 
     ///
@@ -46,7 +46,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add02_positiveSeconds_addsThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(4i64, 3_052_001),
-                          tryAdd(inst(), Duration.seconds(4) + subSeconds()),
+                          plus(inst(), Duration.seconds(4) + subSeconds()),
                           "add positive seconds")
 
     ///
@@ -57,7 +57,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add03_positiveMinutes_addsThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(304i64, 3_052_001),
-                          tryAdd(inst(), Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
+                          plus(inst(), Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
                           "add positive minutes")
 
     ///
@@ -68,7 +68,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add04_positiveHours_addsThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(21_904i64, 3_052_001),
-                          tryAdd(inst(),
+                          plus(inst(),
                                  Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
                           "add positive hours")
 
@@ -80,7 +80,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     ///
     @Test
     def add05_negativeSubSeconds_borrowsASecondAcrossTheEpoch(): Unit \ Assert =
-        assertSomeInstant(expected = instant(-1i64, 997_047_999), tryAdd(inst(), negativeSubSeconds()),
+        assertSomeInstant(expected = instant(-1i64, 997_047_999), plus(inst(), negativeSubSeconds()),
                           "add negative sub-seconds")
 
     ///
@@ -91,7 +91,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add06_negativeSeconds_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-5i64, 997_047_999),
-                          tryAdd(inst(), Duration.seconds(-4) + negativeSubSeconds()),
+                          plus(inst(), Duration.seconds(-4) + negativeSubSeconds()),
                           "add negative seconds")
 
     ///
@@ -102,7 +102,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add07_negativeMinutes_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-305i64, 997_047_999),
-                          tryAdd(inst(), Duration.minutes(-5) + Duration.seconds(-4) + negativeSubSeconds()),
+                          plus(inst(), Duration.minutes(-5) + Duration.seconds(-4) + negativeSubSeconds()),
                           "add negative minutes")
 
     ///
@@ -113,7 +113,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.Basic {
     @Test
     def add08_negativeHours_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-21_905i64, 997_047_999),
-                          tryAdd(inst(),
+                          plus(inst(),
                                  Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                    + negativeSubSeconds()),
                           "add negative hours")

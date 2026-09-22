@@ -17,7 +17,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.BlankDuration {
     /// test262: `new Temporal.Instant(1n).subtract(new Temporal.Duration())` is unchanged.
     @Test
     def subtract01_theZeroDuration_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 1), trySub(fromNanos(1i64), Duration.zero()),
+        assertSomeInstant(expected = instant(0i64, 1), minus(fromNanos(1i64), Duration.zero()),
                           "result is unchanged")
 
 }

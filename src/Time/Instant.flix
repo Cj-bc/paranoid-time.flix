@@ -73,7 +73,7 @@ pub mod Time.Instant {
   ///
   /// -9999-01-02 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
   ///
-  pub def minInstant(): Instant =
+  pub def min(): Instant =
     Instant({secondsSinceEpoch = -377_705_116_800i64, nano = 0})
 
   ///
@@ -82,7 +82,7 @@ pub mod Time.Instant {
   /// One nanosecond before 9999-12-31T00:00:00Z, which is 2932896 days after the epoch:
   /// 2932896 * 86400 = 253402214400, one second below which is 253402214399.
   ///
-  pub def maxInstant(): Instant =
+  pub def max(): Instant =
     Instant({secondsSinceEpoch = 253_402_214_399i64, nano = 999_999_999})
 
   ///
@@ -90,8 +90,8 @@ pub mod Time.Instant {
   /// lies outside of.
   ///
   def checkRange(t: Instant): Result[Instant, Instant] =
-    if (maxInstant() < t) Err(maxInstant())
-    else if (t < minInstant()) Err(minInstant())
+    if (max() < t) Err(max())
+    else if (t < min()) Err(min())
     else Ok(t)
 
   /// Returns `x / n` rounded towards negative infinity. `n` must be positive.
@@ -117,14 +117,14 @@ pub mod Time.Instant {
   /// An `Int64` millisecond count reaches about four orders of magnitude further than either
   /// end of the range, so this is the one constructor whose whole argument type does not fit.
   ///
-  pub def tryFromEpochMilliseconds(ms: Int64): Option[Instant] =
+  pub def ofEpochMilli(ms: Int64): Option[Instant] =
     splitEpochMilliseconds(ms) |> checkRange |> Result.toOption
 
   ///
   /// Returns the `Instant` that is `ms` milliseconds after the epoch, clamped to the nearest
   /// end of the range when it lies outside it.
   ///
-  pub def fromEpochMilliseconds(ms: Int64): Instant =
+  def ofEpochMilliClamped(ms: Int64): Instant =
     match splitEpochMilliseconds(ms) |> checkRange {
       case Ok(v)  => v
       case Err(v) => v
@@ -136,19 +136,19 @@ pub mod Time.Instant {
   /// No range check is needed and no `try` form exists: an `Int64` nanosecond count spans a
   /// little over +/-292 years, which is well inside the range at either end.
   ///
-  pub def fromEpochNanoseconds(ns: Int64): Instant =
+  pub def ofEpochNano(ns: Int64): Instant =
     Instant({secondsSinceEpoch = floorDiv(ns, nanosPerSecond()),
              nano = Int64.truncateToInt32(Int64.modulo(ns, nanosPerSecond()))})
 
   ///
   /// Returns the current `Instant`.
   ///
-  /// A `Clock` reports a millisecond count, so this clamps the way `fromEpochMilliseconds`
+  /// A `Clock` reports a millisecond count, so this clamps the way `ofEpochMilliClamped`
   /// does. A real clock is nowhere near either end of the range; a frozen or mocked one can
   /// be.
   ///
   pub def now(): Instant \ Clock =
-    fromEpochMilliseconds(Clock.currentTime(TimeUnit.Milliseconds))
+    ofEpochMilliClamped(Clock.currentTime(TimeUnit.Milliseconds))
 
   ///
   /// Returns the `Instant` that is `seconds` seconds and `nanos` nanoseconds after `t`.
@@ -170,8 +170,8 @@ pub mod Time.Instant {
     // is within +/-3.8e11 and `s` within +/-9.3e9 -- but the record constructor is public, so
     // `t` need not be in range and the sum has to be ruled out before it is taken. Otherwise
     // an argument far outside the range would wrap round and land back inside it.
-    if (0i64 < s and (Int64.maxValue() - s) < i#secondsSinceEpoch) Err(maxInstant())
-    else if (s < 0i64 and i#secondsSinceEpoch < (Int64.minValue() - s)) Err(minInstant())
+    if (0i64 < s and (Int64.maxValue() - s) < i#secondsSinceEpoch) Err(max())
+    else if (s < 0i64 and i#secondsSinceEpoch < (Int64.minValue() - s)) Err(min())
     else checkRange(Instant({secondsSinceEpoch = i#secondsSinceEpoch + s, nano = nano}))
 
   /// Returns Ok() when calculated Instant is in valid range, otherwise return the largest/smallest value.
@@ -179,10 +179,10 @@ pub mod Time.Instant {
     let dns = Duration.toNanos(d);
     internalShift(t, floorDiv(dns, nanosPerSecond()), Int64.modulo(dns, nanosPerSecond()))
 
-  pub def tryAdd(t: Instant, d: Duration): Option[Instant] =
+  pub def plus(t: Instant, d: Duration): Option[Instant] =
     internalTryAdd(t, d) |> Result.toOption
 
-  pub def saturatingAdd(t: Instant, d: Duration): Instant =
+  pub def plusSaturated(t: Instant, d: Duration): Instant =
     match internalTryAdd(t, d) {
       case Ok(v)  => v
       case Err(v) => v
@@ -195,10 +195,10 @@ pub mod Time.Instant {
     // counterpart, but neither the second- nor the nano-part of the split has that problem.
     internalShift(t, -floorDiv(dns, nanosPerSecond()), -Int64.modulo(dns, nanosPerSecond()))
 
-  pub def trySub(date: Instant, d: Duration): Option[Instant] =
+  pub def minus(date: Instant, d: Duration): Option[Instant] =
     internalTrySub(date, d) |> Result.toOption
 
-  pub def saturatingSub(t: Instant, d: Duration): Instant =
+  pub def minusSaturated(t: Instant, d: Duration): Instant =
     match internalTrySub(t, d) {
       case Ok(v)  => v
       case Err(v) => v
@@ -212,20 +212,35 @@ pub mod Time.Instant {
   def largestCountableInstant(): (Int64, Int64) = (9_223_372_036i64, 854_775_807i64)
 
   /// Returns the number of nanoseconds between `t` and the epoch
-  pub def toEpochNanos(t: Instant): BigInt =
+  pub def toEpochNano(t: Instant): BigInt =
     let Instant(v) = t;
     Int64.toBigInt(v#secondsSinceEpoch) * Int64.toBigInt(nanosPerSecond()) + Int32.toBigInt(v#nano)
+
+  /// Returns the number of milliseconds between `t` and the epoch
+  pub def toEpochMilli(t: Instant): Int64 =
+    let Instant(v) = t;
+    v#secondsSinceEpoch * millisPerSecond() + Int32.toInt64(v#nano) / nanosPerMilli()
+
+  /// Returns the seconds part of the instant (seconds since epoch)
+  pub def getEpochSecond(t: Instant): Int64 =
+    let Instant(v) = t;
+    v#secondsSinceEpoch
+
+  /// Returns the nanoseconds part of the second
+  pub def getNano(t: Instant): Int32 =
+    let Instant(v) = t;
+    v#nano
 
   ///
   /// Returns the absolute amount of time between `d1` and `d2`,
   /// or None when it is too large to fit in a `Duration`.
   ///
   /// The difference is taken field by field rather than as the difference of two
-  /// `toEpochNanos` results: a gap can fit in a `Duration` while neither end of it has an
+  /// `toEpochNano` results: a gap can fit in a `Duration` while neither end of it has an
   /// `Int64` count from the epoch, and the gap between an instant and itself is zero however
   /// far out it sits.
   ///
-  pub def between(d1: Instant, d2: Instant): Option[Duration] =
+  pub def until(d1: Instant, d2: Instant): Option[Duration] =
     let Instant(earlier) = Order.min(d1, d2);
     let Instant(later) = Order.max(d1, d2);
     // Two `Instant`s in range are at most 6.4e11 seconds apart, but the record constructor is

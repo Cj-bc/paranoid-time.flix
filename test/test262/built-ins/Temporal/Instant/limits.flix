@@ -25,13 +25,13 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
     /// test262: `new Temporal.Instant(limit + 1n)` throws.
     @Test
     def limits01_oneNanosecondAboveTheLatestInstant_isNotRepresentable(): Unit \ Assert =
-        assertNoInstant(tryAdd(maxInstant(), Duration.nanoseconds(1i64)),
+        assertNoInstant(plus(max(), Duration.nanoseconds(1i64)),
                         "one nanosecond above the latest instant")
 
     /// test262: `new Temporal.Instant(-limit - 1n)` throws.
     @Test
     def limits02_oneNanosecondBelowTheEarliestInstant_isNotRepresentable(): Unit \ Assert =
-        assertNoInstant(trySub(minInstant(), Duration.nanoseconds(1i64)),
+        assertNoInstant(minus(min(), Duration.nanoseconds(1i64)),
                         "one nanosecond below the earliest instant")
 
     ///
@@ -40,18 +40,18 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
     ///
     @Test
     def limits03_pastEitherEnd_saturatesToThatEnd(): Unit \ Assert = {
-        assertSaturated(expected = maxInstant(), saturatingAdd(maxInstant(), Duration.nanoseconds(1i64)),
+        assertSaturated(expected = max(), plusSaturated(max(), Duration.nanoseconds(1i64)),
                         "one nanosecond above the latest instant");
-        assertSaturated(expected = minInstant(), saturatingSub(minInstant(), Duration.nanoseconds(1i64)),
+        assertSaturated(expected = min(), minusSaturated(min(), Duration.nanoseconds(1i64)),
                         "one nanosecond below the earliest instant")
     }
 
     /// test262: `new Temporal.Instant(limit)` and `new Temporal.Instant(-limit)` are fine.
     @Test
     def limits04_theEndsThemselves_areRepresentable(): Unit \ Assert = {
-        assertSomeInstant(expected = maxInstant(), tryAdd(maxInstant(), Duration.zero()),
+        assertSomeInstant(expected = max(), plus(max(), Duration.zero()),
                           "the latest instant");
-        assertSomeInstant(expected = minInstant(), tryAdd(minInstant(), Duration.zero()),
+        assertSomeInstant(expected = min(), plus(min(), Duration.zero()),
                           "the earliest instant")
     }
 

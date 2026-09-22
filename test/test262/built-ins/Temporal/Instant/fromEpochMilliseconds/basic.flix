@@ -17,7 +17,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     use Time.Instant.fromEpochMilliseconds
 
     ///
-    /// test262: `fromEpochMilliseconds(217175010_123).epochNanoseconds` is
+    /// test262: `ofEpochMilliClamped(217175010_123).epochNanoseconds` is
     /// `217175010_123_000_000n`.
     ///
     /// 217175010123 ms is 217175010 whole seconds plus 123 ms, and 123 ms is 123000000 ns.
@@ -25,11 +25,11 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     @Test
     def fromEpochMilliseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_000_000),
-                            fromEpochMilliseconds(217_175_010_123i64),
+                            ofEpochMilliClamped(217_175_010_123i64),
                             "fromEpochMilliseconds post epoch")
 
     ///
-    /// test262: `fromEpochMilliseconds(-217175010_876).epochNanoseconds` is
+    /// test262: `ofEpochMilliClamped(-217175010_876).epochNanoseconds` is
     /// `-217175010_876_000_000n`.
     ///
     /// Truncating would give -217175010 seconds and a negative remainder. Rounding towards
@@ -39,7 +39,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
     @Test
     def fromEpochMilliseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 124_000_000),
-                            fromEpochMilliseconds(-217_175_010_876i64),
+                            ofEpochMilliClamped(-217_175_010_876i64),
                             "fromEpochMilliseconds pre epoch")
 
 }

@@ -30,7 +30,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Float64RepresentableIntege
     ///
     @Test
     def since01_aGapOfTwoToTheSixtyFourNanoseconds_hasNoDuration(): Unit \ Assert =
-        assertNoDuration(between(epoch(), instant(18_446_744_073i64, 709_551_616)),
+        assertNoDuration(until(epoch(), instant(18_446_744_073i64, 709_551_616)),
                          "a gap of 2^64 nanoseconds")
 
 }

@@ -15,17 +15,17 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
     use Time.Instant.fromEpochNanoseconds
 
     ///
-    /// test262: `fromEpochNanoseconds(217175010_123_456_789n).epochNanoseconds` is
+    /// test262: `ofEpochNano(217175010_123_456_789n).epochNanoseconds` is
     /// `217175010_123_456_789n`.
     ///
     @Test
     def fromEpochNanoseconds01_afterTheEpoch_splitsIntoSecondsAndNanos(): Unit \ Assert =
         assertInstantsEqual(expected = instant(217_175_010i64, 123_456_789),
-                            fromEpochNanoseconds(217_175_010_123_456_789i64),
+                            ofEpochNano(217_175_010_123_456_789i64),
                             "fromEpochNanoseconds post epoch")
 
     ///
-    /// test262: `fromEpochNanoseconds(-217175010_876_543_211n).epochNanoseconds` is
+    /// test262: `ofEpochNano(-217175010_876_543_211n).epochNanoseconds` is
     /// `-217175010_876_543_211n`.
     ///
     /// Rounding towards negative infinity gives -217175011 seconds, and the remainder
@@ -34,7 +34,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Basic {
     @Test
     def fromEpochNanoseconds02_beforeTheEpoch_borrowsASecondToKeepNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-217_175_011i64, 123_456_789),
-                            fromEpochNanoseconds(-217_175_010_876_543_211i64),
+                            ofEpochNano(-217_175_010_876_543_211i64),
                             "fromEpochNanoseconds pre epoch")
 
 }

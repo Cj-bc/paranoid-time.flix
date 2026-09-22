@@ -9,7 +9,7 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.Between {
+mod TestTime.Instant.Until {
 
     use TemporalHelpers.{assertNoDuration, assertSomeDuration, epoch, instant}
     use TemporalHelpers.largestInstantPairToNanoseconds
@@ -22,11 +22,11 @@ mod TestTime.Instant.Between {
     ///
     @Test
     def between01_eitherEndAgainstItself_yieldsTheZeroDuration(): Unit \ Assert = {
-        assertSomeDuration(expected = Duration.zero(), between(minInstant(), minInstant()),
+        assertSomeDuration(expected = Duration.zero(), until(min(), min()),
                            "the earliest instant against itself");
-        assertSomeDuration(expected = Duration.zero(), between(maxInstant(), maxInstant()),
+        assertSomeDuration(expected = Duration.zero(), until(max(), max()),
                            "the latest instant against itself");
-        assertSomeDuration(expected = Duration.zero(), between(epoch(), epoch()), "the epoch against itself")
+        assertSomeDuration(expected = Duration.zero(), until(epoch(), epoch()), "the epoch against itself")
     }
 
     ///
@@ -36,14 +36,14 @@ mod TestTime.Instant.Between {
     @Test
     def between02_theLargestGapThatFits_isReported(): Unit \ Assert =
         assertSomeDuration(expected = Duration.nanoseconds(Int64.maxValue()),
-                           between(epoch(), largestInstantPairToNanoseconds() ||> instant),
+                           until(epoch(), largestInstantPairToNanoseconds() ||> instant),
                            "the largest gap that fits in a Duration")
 
     /// One nanosecond further and there is no `Duration` for it.
     @Test
     def between03_oneNanosecondPastTheLargestGap_hasNoDuration(): Unit \ Assert =
         let (s, nano) = largestInstantPairToNanoseconds();
-        assertNoDuration(between(epoch(), instant(s, nano + 1)),
+        assertNoDuration(until(epoch(), instant(s, nano + 1)),
                          "one nanosecond past the largest gap that fits")
 
     ///
@@ -54,16 +54,16 @@ mod TestTime.Instant.Between {
     @Test
     def between04_oneSecondPastTheLargestGap_hasNoDuration(): Unit \ Assert =
         let (s, _) = largestInstantPairToNanoseconds();
-        assertNoDuration(between(epoch(), instant(s + 1i64, 0)),
+        assertNoDuration(until(epoch(), instant(s + 1i64, 0)),
                          "one second past the largest gap that fits")
 
     /// The whole range is about 2000 times wider than any `Duration`, so its ends have no
     /// gap either, and neither does either end against the epoch.
     @Test
     def between05_theWholeRange_hasNoDuration(): Unit \ Assert = {
-        assertNoDuration(between(minInstant(), maxInstant()), "the earliest against the latest instant");
-        assertNoDuration(between(minInstant(), epoch()), "the earliest instant against the epoch");
-        assertNoDuration(between(epoch(), maxInstant()), "the epoch against the latest instant")
+        assertNoDuration(until(min(), max()), "the earliest against the latest instant");
+        assertNoDuration(until(min(), epoch()), "the earliest instant against the epoch");
+        assertNoDuration(until(epoch(), max()), "the epoch against the latest instant")
     }
 
     ///
@@ -81,15 +81,15 @@ mod TestTime.Instant.Between {
         let pairs =
             (earlier, later) ::
             (later, earlier) ::
-            (minInstant(), epoch()) ::
-            (epoch(), minInstant()) ::
-            (maxInstant(), epoch()) ::
+            (min(), epoch()) ::
+            (epoch(), min()) ::
+            (max(), epoch()) ::
             (instant(-1i64, 999_999_999), instant(0i64, 0)) ::
             (instant(0i64, 0), instant(-1i64, 999_999_999)) ::
             Nil;
         List.forEach(pair -> {
             let (a, b) = pair;
-            match between(a, b) {
+            match until(a, b) {
                 case None    => ()
                 case Some(d) => Assert.assertFalseWithMsg(Duration.isNegative(d),
                                                           "between answered the negative duration ${d}")
@@ -112,7 +112,7 @@ mod TestTime.Instant.Between {
     def between07_aGapJustUnderTheCeilingSpreadOverAnExtraSecond_isReported(): Unit \ Assert =
         let (s, _) = largestInstantPairToNanoseconds();
         assertSomeDuration(expected = Duration.nanoseconds(9_223_372_036_000_000_001i64),
-                           between(instant(0i64, 999_999_999), instant(s + 1i64, 0)),
+                           until(instant(0i64, 999_999_999), instant(s + 1i64, 0)),
                            "a gap of 9223372036000000001 nanoseconds")
 
 }

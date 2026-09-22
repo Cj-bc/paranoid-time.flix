@@ -24,7 +24,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
     @Test
     def fromEpochNanoseconds01_theLargestNanosecondCount_splitsWithoutOverflowing(): Unit \ Assert =
         assertInstantsEqual(expected = instant(9_223_372_036i64, 854_775_807),
-                            fromEpochNanoseconds(Int64.maxValue()),
+                            ofEpochNano(Int64.maxValue()),
                             "the largest nanosecond count")
 
     ///
@@ -35,7 +35,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochNanoseconds.Limits {
     @Test
     def fromEpochNanoseconds02_theSmallestNanosecondCount_keepsNanoNonNegative(): Unit \ Assert =
         assertInstantsEqual(expected = instant(-9_223_372_037i64, 145_224_192),
-                            fromEpochNanoseconds(Int64.minValue()),
+                            ofEpochNano(Int64.minValue()),
                             "the smallest nanosecond count")
 
 }

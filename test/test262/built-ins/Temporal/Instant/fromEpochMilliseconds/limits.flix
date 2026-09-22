@@ -29,36 +29,36 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     /// The last whole millisecond of 9999-12-30, 253402214399 s plus 999 ms.
     def latestMillis(): Int64 = 253_402_214_399_999i64
 
-    /// test262: `Temporal.Instant.fromEpochMilliseconds(+/-8640000000000000)` is fine.
+    /// test262: `Temporal.Instant.ofEpochMilliClamped(+/-8640000000000000)` is fine.
     @Test
     def fromEpochMilliseconds01_theLastCountInsideEitherEnd_isSplitAsGiven(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis()),
+        assertInstantsEqual(expected = min(), ofEpochMilliClamped(earliestMillis()),
                             "the earliest millisecond count in range");
         assertInstantsEqual(expected = instant(253_402_214_399i64, 999_000_000),
-                            fromEpochMilliseconds(latestMillis()),
+                            ofEpochMilliClamped(latestMillis()),
                             "the latest millisecond count in range")
     }
 
     /// The `try` half of the case above.
     @Test
     def fromEpochMilliseconds02_theLastCountInsideEitherEnd_hasAnInstant(): Unit \ Assert = {
-        assertSomeInstant(expected = minInstant(), tryFromEpochMilliseconds(earliestMillis()),
+        assertSomeInstant(expected = min(), ofEpochMilli(earliestMillis()),
                           "the earliest millisecond count in range");
         assertSomeInstant(expected = instant(253_402_214_399i64, 999_000_000),
-                          tryFromEpochMilliseconds(latestMillis()),
+                          ofEpochMilli(latestMillis()),
                           "the latest millisecond count in range")
     }
 
     /// test262: one millisecond further out throws; here the `try` form answers `None`.
     @Test
     def fromEpochMilliseconds03_oneMillisecondOutsideEitherEnd_hasNoInstant(): Unit \ Assert = {
-        assertNoInstant(tryFromEpochMilliseconds(earliestMillis() - 1i64),
+        assertNoInstant(ofEpochMilli(earliestMillis() - 1i64),
                         "one millisecond before the earliest instant");
-        assertNoInstant(tryFromEpochMilliseconds(latestMillis() + 1i64),
+        assertNoInstant(ofEpochMilli(latestMillis() + 1i64),
                         "one millisecond after the latest instant");
-        assertNoInstant(tryFromEpochMilliseconds(Int64.minValue()),
+        assertNoInstant(ofEpochMilli(Int64.minValue()),
                         "the smallest millisecond count");
-        assertNoInstant(tryFromEpochMilliseconds(Int64.maxValue()),
+        assertNoInstant(ofEpochMilli(Int64.maxValue()),
                         "the largest millisecond count")
     }
 
@@ -68,9 +68,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     ///
     @Test
     def fromEpochMilliseconds04_oneMillisecondOutsideEitherEnd_clampsToThatEnd(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(earliestMillis() - 1i64),
+        assertInstantsEqual(expected = min(), ofEpochMilliClamped(earliestMillis() - 1i64),
                             "one millisecond before the earliest instant");
-        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(latestMillis() + 1i64),
+        assertInstantsEqual(expected = max(), ofEpochMilliClamped(latestMillis() + 1i64),
                             "one millisecond after the latest instant")
     }
 
@@ -83,9 +83,9 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     ///
     @Test
     def fromEpochMilliseconds05_theTwoEndsOfInt64_clampWithoutOverflowing(): Unit \ Assert = {
-        assertInstantsEqual(expected = minInstant(), fromEpochMilliseconds(Int64.minValue()),
+        assertInstantsEqual(expected = min(), ofEpochMilliClamped(Int64.minValue()),
                             "the smallest millisecond count");
-        assertInstantsEqual(expected = maxInstant(), fromEpochMilliseconds(Int64.maxValue()),
+        assertInstantsEqual(expected = max(), ofEpochMilliClamped(Int64.maxValue()),
                             "the largest millisecond count")
     }
 

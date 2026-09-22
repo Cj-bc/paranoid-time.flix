@@ -31,7 +31,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.EpochNanoseconds.Basic {
     @Test
     def toEpochNanos01_afterTheEpoch_recombinesTheTwoFields(): Unit \ Assert =
         Assert.assertEq(expected = 217_175_010_123_456_789ii,
-                        toEpochNanos(instant(217_175_010i64, 123_456_789)))
+                        toEpochNano(instant(217_175_010i64, 123_456_789)))
 
     ///
     /// test262: `new Temporal.Instant(-217175010_876_543_211n).epochNanoseconds` is
@@ -44,6 +44,6 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.EpochNanoseconds.Basic {
     @Test
     def toEpochNanos02_beforeTheEpoch_carriesTheBorrowedSecondBack(): Unit \ Assert =
         Assert.assertEq(expected = -217_175_010_876_543_211ii,
-                        toEpochNanos(instant(-217_175_011i64, 123_456_789)))
+                        toEpochNano(instant(-217_175_011i64, 123_456_789)))
 
 }

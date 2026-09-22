@@ -12,7 +12,7 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.SaturatingSub {
+mod TestTime.Instant.MinusSaturated {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
@@ -33,12 +33,12 @@ mod TestTime.Instant.SaturatingSub {
     @Test
     def saturatingSub01_aResultInRange_isTheSameAsTrySub(): Unit \ Assert = {
         assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingSub(inst(),
+                            minusSaturated(inst(),
                                           Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
                                             + subSeconds()),
                             "subtract positive hours");
         assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingSub(inst(),
+                            minusSaturated(inst(),
                                           Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                             + negativeSubSeconds()),
                             "subtract negative hours")
@@ -51,7 +51,7 @@ mod TestTime.Instant.SaturatingSub {
     ///
     @Test
     def saturatingSub02_theZeroDurationAtTheEarliestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertInstantsEqual(expected = minInstant(), saturatingSub(minInstant(), Duration.zero()),
+        assertInstantsEqual(expected = min(), minusSaturated(min(), Duration.zero()),
                             "the earliest instant is unchanged")
 
 }

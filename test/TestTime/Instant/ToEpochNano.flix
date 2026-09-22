@@ -12,7 +12,7 @@
 /// test262's `prototype/epochNanoseconds/basic.js` among its inputs, so that the case is
 /// anchored to numbers pinned elsewhere as well as to the ends of `Int64`.
 ///
-mod TestTime.Instant.ToEpochNanos {
+mod TestTime.Instant.ToEpochNano {
 
     use TemporalHelpers.{epoch, instant}
     use Time.Instant.{fromEpochNanoseconds, toEpochNanos}
@@ -26,12 +26,12 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     @Test
     def toEpochNanos01_oneNanosecondEitherSideOfTheEpoch_recombinesTheTwoFields(): Unit \ Assert = {
-        Assert.assertEqWithMsg(expected = 0ii, toEpochNanos(epoch()), "the epoch itself");
-        Assert.assertEqWithMsg(expected = 1ii, toEpochNanos(instant(0i64, 1)),
+        Assert.assertEqWithMsg(expected = 0ii, toEpochNano(epoch()), "the epoch itself");
+        Assert.assertEqWithMsg(expected = 1ii, toEpochNano(instant(0i64, 1)),
                         "one nanosecond after the epoch");
-        Assert.assertEqWithMsg(expected = -1ii, toEpochNanos(instant(-1i64, 999_999_999)),
+        Assert.assertEqWithMsg(expected = -1ii, toEpochNano(instant(-1i64, 999_999_999)),
                         "one nanosecond before the epoch");
-        Assert.assertEqWithMsg(expected = -1_000_000_000ii, toEpochNanos(instant(-1i64, 0)),
+        Assert.assertEqWithMsg(expected = -1_000_000_000ii, toEpochNano(instant(-1i64, 0)),
                         "one second before the epoch")
     }
 
@@ -44,7 +44,7 @@ mod TestTime.Instant.ToEpochNanos {
     ///
     @Test
     def toEpochNanos03_aCountSplitAndRecombined_isUnchanged(): Unit \ Assert =
-        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNanos(fromEpochNanoseconds(ns)),
+        List.forEach(ns -> Assert.assertEqWithMsg(expected = Int64.toBigInt(ns), toEpochNano(ofEpochNano(ns)),
                                            "the round trip through the two fields"),
                      List#{
                        Int64.minValue(),

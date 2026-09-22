@@ -38,7 +38,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
     ///
     @Test
     def subtract01_positiveSubSeconds_borrowsASecondAcrossTheEpoch(): Unit \ Assert =
-        assertSomeInstant(expected = instant(-1i64, 997_047_999), trySub(inst(), subSeconds()),
+        assertSomeInstant(expected = instant(-1i64, 997_047_999), minus(inst(), subSeconds()),
                           "subtract positive sub-seconds")
 
     ///
@@ -49,7 +49,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
     @Test
     def subtract02_positiveSeconds_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-5i64, 997_047_999),
-                          trySub(inst(), Duration.seconds(4) + subSeconds()),
+                          minus(inst(), Duration.seconds(4) + subSeconds()),
                           "subtract positive seconds")
 
     ///
@@ -61,7 +61,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
     @Test
     def subtract03_positiveMinutes_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-305i64, 997_047_999),
-                          trySub(inst(), Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
+                          minus(inst(), Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
                           "subtract positive minutes")
 
     ///
@@ -73,7 +73,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
     @Test
     def subtract04_positiveHours_subtractThemFromTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(-21_905i64, 997_047_999),
-                          trySub(inst(),
+                          minus(inst(),
                                  Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4) + subSeconds()),
                           "subtract positive hours")
 
@@ -84,28 +84,28 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.Basic {
     ///
     @Test
     def subtract05_negativeSubSeconds_addsThem(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 3_052_001), trySub(inst(), negativeSubSeconds()),
+        assertSomeInstant(expected = instant(0i64, 3_052_001), minus(inst(), negativeSubSeconds()),
                           "subtract negative sub-seconds")
 
     /// test262: "subtract negative seconds" is 4e9 + 3052001n.
     @Test
     def subtract06_negativeSeconds_addThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(4i64, 3_052_001),
-                          trySub(inst(), Duration.seconds(-4) + negativeSubSeconds()),
+                          minus(inst(), Duration.seconds(-4) + negativeSubSeconds()),
                           "subtract negative seconds")
 
     /// test262: "subtract negative minutes" is (5 * 60 + 4) * 1e9 + 3052001n.
     @Test
     def subtract07_negativeMinutes_addThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(304i64, 3_052_001),
-                          trySub(inst(), Duration.minutes(-5) + Duration.seconds(-4) + negativeSubSeconds()),
+                          minus(inst(), Duration.minutes(-5) + Duration.seconds(-4) + negativeSubSeconds()),
                           "subtract negative minutes")
 
     /// test262: "subtract negative hours" is (6 * 3600 + 5 * 60 + 4) * 1e9 + 3052001n.
     @Test
     def subtract08_negativeHours_addThemToTheSecondCount(): Unit \ Assert =
         assertSomeInstant(expected = instant(21_904i64, 3_052_001),
-                          trySub(inst(),
+                          minus(inst(),
                                  Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                    + negativeSubSeconds()),
                           "subtract negative hours")

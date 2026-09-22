@@ -12,7 +12,7 @@
 /// The instant builders and assertions come from the test262 harness rather than being
 /// written out again here.
 ///
-mod TestTime.Instant.SaturatingAdd {
+mod TestTime.Instant.PlusSaturated {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
@@ -33,12 +33,12 @@ mod TestTime.Instant.SaturatingAdd {
     @Test
     def saturatingAdd01_aResultInRange_isTheSameAsTryAdd(): Unit \ Assert = {
         assertInstantsEqual(expected = instant(21_904i64, 3_052_001),
-                            saturatingAdd(inst(),
+                            plusSaturated(inst(),
                                           Duration.hours(6) + Duration.minutes(5) + Duration.seconds(4)
                                             + subSeconds()),
                             "add positive hours");
         assertInstantsEqual(expected = instant(-21_905i64, 997_047_999),
-                            saturatingAdd(inst(),
+                            plusSaturated(inst(),
                                           Duration.hours(-6) + Duration.minutes(-5) + Duration.seconds(-4)
                                             + negativeSubSeconds()),
                             "add negative hours")
@@ -51,7 +51,7 @@ mod TestTime.Instant.SaturatingAdd {
     ///
     @Test
     def saturatingAdd02_theZeroDurationAtTheLatestInstant_leavesTheInstantUnchanged(): Unit \ Assert =
-        assertInstantsEqual(expected = maxInstant(), saturatingAdd(maxInstant(), Duration.zero()),
+        assertInstantsEqual(expected = max(), plusSaturated(max(), Duration.zero()),
                             "the latest instant is unchanged")
 
 }

@@ -17,7 +17,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.BlankResult {
     /// test262: `new Temporal.Instant(1n).since(new Temporal.Instant(1n))` is blank.
     @Test
     def since01_twoEqualInstants_yieldTheZeroDuration(): Unit \ Assert =
-        assertSomeDuration(expected = Duration.zero(), between(fromNanos(1i64), fromNanos(1i64)),
+        assertSomeDuration(expected = Duration.zero(), until(fromNanos(1i64), fromNanos(1i64)),
                            "blank result")
 
 }

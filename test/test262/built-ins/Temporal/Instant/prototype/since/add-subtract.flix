@@ -35,7 +35,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     /// test262: `later.since(earlier)` is `diff`.
     @Test
     def since01_theLaterInstantFirst_isTheGapBetweenThem(): Unit \ Assert =
-        assertSomeDuration(expected = diff(), between(later(), earlier()), "later.since(earlier)")
+        assertSomeDuration(expected = diff(), until(later(), earlier()), "later.since(earlier)")
 
     ///
     /// test262: `earlier.since(later)` is `diff.negated()`, and `earlier.until(later)` is
@@ -46,16 +46,16 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
     ///
     @Test
     def since02_theEarlierInstantFirst_isTheSameGap(): Unit \ Assert =
-        assertSomeDuration(expected = diff(), between(earlier(), later()), "earlier.since(later)")
+        assertSomeDuration(expected = diff(), until(earlier(), later()), "earlier.since(later)")
 
     /// test262: `earlier.add(diff)` is `later`.
     @Test
     def since03_addingTheGapToTheEarlier_reachesTheLater(): Unit \ Assert =
-        assertSomeInstant(expected = later(), tryAdd(earlier(), diff()), "earlier.add(diff)")
+        assertSomeInstant(expected = later(), plus(earlier(), diff()), "earlier.add(diff)")
 
     /// test262: `later.subtract(diff)` is `earlier`.
     @Test
     def since04_subtractingTheGapFromTheLater_reachesTheEarlier(): Unit \ Assert =
-        assertSomeInstant(expected = earlier(), trySub(later(), diff()), "later.subtract(diff)")
+        assertSomeInstant(expected = earlier(), minus(later(), diff()), "later.subtract(diff)")
 
 }

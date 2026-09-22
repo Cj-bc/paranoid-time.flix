@@ -40,7 +40,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
     /// Pins the starting point of the three readings below, which test262 builds with `add`.
     @Test
     def since01_theShift_reachesLatersub(): Unit \ Assert =
-        assertSomeInstant(expected = latersub(), tryAdd(feb20(), shift()),
+        assertSomeInstant(expected = latersub(), plus(feb20(), shift()),
                           "feb20.add({ hours: 24, milliseconds: 250, microseconds: 250, nanoseconds: 250 })")
 
     ///
@@ -51,7 +51,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
     @Test
     def since02_theGap_isThatManyNanoseconds(): Unit \ Assert =
         assertSomeDuration(expected = Duration.nanoseconds(86_400_250_250_250i64),
-                           between(latersub(), feb20()), "largestUnit: nanoseconds")
+                           until(latersub(), feb20()), "largestUnit: nanoseconds")
 
     ///
     /// test262 with `largestUnit: "microseconds"`: 86400250250 microseconds and 250
@@ -60,7 +60,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
     @Test
     def since03_theGap_isThatManyWholeMicroseconds(): Unit \ Assert =
         Assert.assertEq(expected = Some(86_400_250_250i64),
-                        between(latersub(), feb20()) |> Option.map(Duration.toMicros))
+                        until(latersub(), feb20()) |> Option.map(Duration.toMicros))
 
     ///
     /// test262 with `largestUnit: "milliseconds"`: 86400250 milliseconds, 250 microseconds
@@ -69,6 +69,6 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Subseconds {
     @Test
     def since04_theGap_isThatManyWholeMilliseconds(): Unit \ Assert =
         Assert.assertEq(expected = Some(86_400_250i64),
-                        between(latersub(), feb20()) |> Option.map(Duration.toMillis))
+                        until(latersub(), feb20()) |> Option.map(Duration.toMillis))
 
 }

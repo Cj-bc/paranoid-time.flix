@@ -42,7 +42,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ResultOutOfRange {
     def subtract01_oneOfAnyUnitAtTheEarliestInstant_isOutOfRange(): Unit \ Assert =
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertNoInstant(trySub(minInstant(), d), "subtracting ${name} with result out of range (negative)")
+            assertNoInstant(minus(min(), d), "subtracting ${name} with result out of range (negative)")
         }, oneOfEachUnit())
 
     /// test262: `latest.subtract({ [field]: -1 })` throws for each field.
@@ -50,7 +50,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ResultOutOfRange {
     def subtract02_minusOneOfAnyUnitAtTheLatestInstant_isOutOfRange(): Unit \ Assert =
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertNoInstant(trySub(maxInstant(), d), "subtracting ${name} with result out of range (positive)")
+            assertNoInstant(minus(max(), d), "subtracting ${name} with result out of range (positive)")
         }, minusOneOfEachUnit())
 
     ///
@@ -60,12 +60,12 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ResultOutOfRange {
     def subtract03_pastEitherEnd_saturatesToThatEnd(): Unit \ Assert = {
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertSaturated(expected = minInstant(), saturatingSub(minInstant(), d),
+            assertSaturated(expected = min(), minusSaturated(min(), d),
                             "subtracting ${name} past the earliest instant")
         }, oneOfEachUnit());
         List.forEach(unit -> {
             let (name, d) = unit;
-            assertSaturated(expected = maxInstant(), saturatingSub(maxInstant(), d),
+            assertSaturated(expected = max(), minusSaturated(max(), d),
                             "subtracting ${name} past the latest instant")
         }, minusOneOfEachUnit())
     }

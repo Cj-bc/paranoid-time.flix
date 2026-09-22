@@ -32,13 +32,13 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
     /// test262: subtracting zero from the minimum instant leaves it there.
     @Test
     def subtract01_zeroAtTheEarliestInstant_leavesItThere(): Unit \ Assert =
-        assertSomeInstant(expected = minInstant(), trySub(minInstant(), Duration.zero()),
+        assertSomeInstant(expected = min(), minus(min(), Duration.zero()),
                           "subtracting zero from the minimum instant")
 
     /// test262: subtracting zero from the maximum instant leaves it there.
     @Test
     def subtract02_zeroAtTheLatestInstant_leavesItThere(): Unit \ Assert =
-        assertSomeInstant(expected = maxInstant(), trySub(maxInstant(), Duration.zero()),
+        assertSomeInstant(expected = max(), minus(max(), Duration.zero()),
                           "subtracting zero from the maximum instant")
 
     ///
@@ -49,8 +49,8 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
     ///
     @Test
     def subtract03_oneNanosecondAtTheEarliestInstant_isOutOfRange(): Unit \ Assert = {
-        assertNoInstant(trySub(minInstant(), one()), "subtracting one from the minimum instant");
-        assertSaturated(expected = minInstant(), saturatingSub(minInstant(), one()),
+        assertNoInstant(minus(min(), one()), "subtracting one from the minimum instant");
+        assertSaturated(expected = min(), minusSaturated(min(), one()),
                         "subtracting one from the minimum instant")
     }
 
@@ -60,23 +60,23 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.MinimumMaximumInstant {
     ///
     @Test
     def subtract04_minusOneNanosecondAtTheLatestInstant_isOutOfRange(): Unit \ Assert = {
-        assertNoInstant(trySub(maxInstant(), minusOne()), "subtracting minus one from the maximum instant");
-        assertSaturated(expected = maxInstant(), saturatingSub(maxInstant(), minusOne()),
+        assertNoInstant(minus(max(), minusOne()), "subtracting minus one from the maximum instant");
+        assertSaturated(expected = max(), minusSaturated(max(), minusOne()),
                         "subtracting minus one from the maximum instant")
     }
 
     /// test262: subtracting minus one from the minimum instant is the minimum instant plus 1n.
     @Test
     def subtract05_minusOneNanosecondAtTheEarliestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        let (earliestSecond, _) = parts(minInstant());
-        assertSomeInstant(expected = instant(earliestSecond, 1), trySub(minInstant(), minusOne()),
+        let (earliestSecond, _) = parts(min());
+        assertSomeInstant(expected = instant(earliestSecond, 1), minus(min(), minusOne()),
                           "subtracting minus one from the minimum instant")
 
     /// test262: subtracting one from the maximum instant is the maximum instant minus 1n.
     @Test
     def subtract06_oneNanosecondAtTheLatestInstant_movesOneNanosecondIn(): Unit \ Assert =
-        let (latestSecond, _) = parts(maxInstant());
-        assertSomeInstant(expected = instant(latestSecond, 999_999_998), trySub(maxInstant(), one()),
+        let (latestSecond, _) = parts(max());
+        assertSomeInstant(expected = instant(latestSecond, 999_999_998), minus(max(), one()),
                           "subtracting one from the maximum instant")
 
 }

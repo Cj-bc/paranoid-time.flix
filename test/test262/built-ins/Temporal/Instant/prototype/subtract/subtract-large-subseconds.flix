@@ -39,7 +39,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract01_theLargestSafeNanosecondCount_borrowsFromTheSeconds(): Unit \ Assert =
         assertSomeInstant(expected = instant(1_573_959_448i64, 492_871_587),
-                          trySub(i1(), Duration.nanoseconds(maxSafeInteger())),
+                          minus(i1(), Duration.nanoseconds(maxSafeInteger())),
                           "nanoseconds: Number.MAX_SAFE_INTEGER")
 
     ///
@@ -51,7 +51,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract02_theSmallestSafeNanosecondCount_carriesIntoTheSeconds(): Unit \ Assert =
         assertSomeInstant(expected = instant(1_591_973_847i64, 2_353_569),
-                          trySub(i1(), Duration.nanoseconds(-maxSafeInteger())),
+                          minus(i1(), Duration.nanoseconds(-maxSafeInteger())),
                           "nanoseconds: Number.MIN_SAFE_INTEGER")
 
     ///
@@ -64,7 +64,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract03_theLargestSafeMicrosecondCount_borrowsPastTheEpoch(): Unit \ Assert =
         assertSomeInstant(expected = instant(-7_424_232_607i64, 6_621_578),
-                          trySub(i1(), Duration.nanoseconds(9_007_199_254_740_991_000i64)),
+                          minus(i1(), Duration.nanoseconds(9_007_199_254_740_991_000i64)),
                           "microseconds: Number.MAX_SAFE_INTEGER")
 
     ///
@@ -77,7 +77,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract04_theSmallestSafeMicrosecondCount_carriesPastTheNanosecondRange(): Unit \ Assert =
         assertSomeInstant(expected = instant(10_590_165_902i64, 488_603_578),
-                          trySub(i1(), Duration.nanoseconds(-9_007_199_254_740_991_000i64)),
+                          minus(i1(), Duration.nanoseconds(-9_007_199_254_740_991_000i64)),
                           "microseconds: Number.MIN_SAFE_INTEGER")
 
     ///
@@ -92,10 +92,10 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract05_bigNumberNanosecondsEitherWay_movesTheSecondsByOverNineBillion(): Unit \ Assert = {
         assertSomeInstant(expected = instant(-7_424_232_607i64, 6_621_602),
-                          trySub(i1(), Duration.nanoseconds(bigNumber())),
+                          minus(i1(), Duration.nanoseconds(bigNumber())),
                           "nanoseconds: bigNumber");
         assertSomeInstant(expected = instant(10_590_165_902i64, 488_603_554),
-                          trySub(i1(), Duration.nanoseconds(-bigNumber())),
+                          minus(i1(), Duration.nanoseconds(-bigNumber())),
                           "nanoseconds: -bigNumber")
     }
 
@@ -106,10 +106,10 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
     @Test
     def subtract06_bigNumberNanosecondsFromTheEpoch_landsSymmetricallyEitherSide(): Unit \ Assert = {
         assertSomeInstant(expected = instant(-9_007_199_255i64, 259_009_024),
-                          trySub(epoch(), Duration.nanoseconds(bigNumber())),
+                          minus(epoch(), Duration.nanoseconds(bigNumber())),
                           "nanoseconds: bigNumber from the epoch");
         assertSomeInstant(expected = instant(9_007_199_254i64, 740_990_976),
-                          trySub(epoch(), Duration.nanoseconds(-bigNumber())),
+                          minus(epoch(), Duration.nanoseconds(-bigNumber())),
                           "nanoseconds: -bigNumber from the epoch")
     }
 
