@@ -1,5 +1,5 @@
 ///
-/// Tests for `fromEpochMilliseconds` that test262 has no counterpart for.
+/// Tests for `ofEpochMilli` that test262 has no counterpart for.
 ///
 /// They are all about the split into a second count and a non-negative nanosecond-of-second,
 /// which does not exist over there: `Temporal.Instant` holds one nanosecond count, so it has
@@ -11,7 +11,7 @@
 mod TestTime.Instant.OfEpochMilli {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.fromEpochMilliseconds
+    use Time.Instant.ofEpochMilliClamped
 
     /// A whole number of seconds leaves `nano` at zero on both sides of the epoch.
     @Test

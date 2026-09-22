@@ -29,8 +29,8 @@ mod TestTime.Instant.Range {
                         , assertSaturated, dayOf9999December31st
                         , dayOfMinus9999January1st, instant, secondsPerDay}
     use Time.Duration
-    use Time.Instant.{between, fromEpochMilliseconds
-                     , saturatingAdd, tryAdd, maxInstant, minInstant}
+    use Time.Instant.{until, ofEpochMilliClamped
+                     , plusSaturated, plus, max, min}
 
     ///
     /// The earliest instant is midnight one day into -9999, not midnight on its first day.

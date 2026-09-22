@@ -1,8 +1,8 @@
 ///
-/// Tests for `between` that test262 has no counterpart for.
+/// Tests for `until` that test262 has no counterpart for.
 ///
 /// `since` and `until` are signed and answer an arbitrary-precision `Temporal.Duration`;
-/// `between` answers the *absolute* gap as an `Option[Duration]`, where `Duration` is an
+/// `until` answers the *absolute* gap as an `Option[Duration]`, where `Duration` is an
 /// `Int64` nanosecond count. Two properties follow that `Temporal` cannot state: the answer is
 /// never negative, and there is a ceiling above which there is no answer at all.
 ///
@@ -14,7 +14,7 @@ mod TestTime.Instant.Until {
     use TemporalHelpers.{assertNoDuration, assertSomeDuration, epoch, instant}
     use TemporalHelpers.largestInstantPairToNanoseconds
     use Time.Duration
-    use Time.Instant.{between, maxInstant, minInstant}
+    use Time.Instant.{until, max, min}
 
     ///
     /// The gap is zero at the two ends of the range as well, rather than overflowing on the way

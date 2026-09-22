@@ -1,9 +1,9 @@
 ///
-/// Tests for `saturatingAdd` that test262 has no counterpart for.
+/// Tests for `plusSaturated` that test262 has no counterpart for.
 ///
 /// `Temporal.Instant.prototype.add` only offers the throwing form, so the cases where
-/// `saturatingAdd` clamps to an end are the counterpart of a `RangeError` and stay under
-/// `test/test262`. What is left here is the other half: what `saturatingAdd` does when nothing
+/// `plusSaturated` clamps to an end are the counterpart of a `RangeError` and stay under
+/// `test/test262`. What is left here is the other half: what `plusSaturated` does when nothing
 /// goes out of range, which is a claim `Temporal` has no way to make.
 ///
 /// The starting point and arguments are those of test262's `prototype/add/basic.js`, so that
@@ -16,7 +16,7 @@ mod TestTime.Instant.PlusSaturated {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, saturatingAdd, maxInstant}
+    use Time.Instant.{Instant, plusSaturated, max}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/add/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

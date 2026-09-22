@@ -1,5 +1,5 @@
 ///
-/// Tests for `fromEpochNanoseconds` that test262 has no counterpart for.
+/// Tests for `ofEpochNano` that test262 has no counterpart for.
 ///
 /// They are all about the split into a second count and a non-negative nanosecond-of-second,
 /// which does not exist over there: `Temporal.Instant` holds one nanosecond count, so the
@@ -11,7 +11,7 @@
 mod TestTime.Instant.OfEpochNano {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.fromEpochNanoseconds
+    use Time.Instant.ofEpochNano
 
     /// One nanosecond either side of the epoch, the smallest counts that show the rounding.
     @Test

@@ -1,5 +1,5 @@
 ///
-/// Tests for `toEpochNanos` that test262 has no counterpart for.
+/// Tests for `toEpochNano` that test262 has no counterpart for.
 ///
 /// `Temporal.Instant` *is* a nanosecond count, so `epochNanoseconds` reads a field where
 /// this has to put two fields back together — the borrowed second before the epoch, and
@@ -8,14 +8,14 @@
 /// there is between them.
 ///
 /// The instant builders and assertions come from the test262 harness rather than being
-/// written out again here. The round trip in `toEpochNanos03` reuses the two counts of
+/// written out again here. The round trip in `toEpochNano03` reuses the two counts of
 /// test262's `prototype/epochNanoseconds/basic.js` among its inputs, so that the case is
 /// anchored to numbers pinned elsewhere as well as to the ends of `Int64`.
 ///
 mod TestTime.Instant.ToEpochNano {
 
     use TemporalHelpers.{epoch, instant}
-    use Time.Instant.{fromEpochNanoseconds, toEpochNanos}
+    use Time.Instant.{ofEpochNano, toEpochNano}
 
     ///
     /// One nanosecond either side of the epoch, the smallest counts that show the two
