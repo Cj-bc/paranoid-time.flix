@@ -111,6 +111,10 @@ pub mod Time.Instant {
   pub def tryOfEpochSecond(epochSecond: Int64): Option[Instant] =
     Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange |> Result.toOption
 
+  ///
+  /// Returns the `Instant` at `epochSecond` whole seconds after the epoch, clamped to the
+  /// nearest end of the range when it lies outside it.
+  ///
   pub def saturatingOfEpochSecond(epochSecond: Int64): Instant =
     match (Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange) {
       case Ok(v) => v
