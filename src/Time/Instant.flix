@@ -111,6 +111,12 @@ pub mod Time.Instant {
   pub def tryOfEpochSecond(epochSecond: Int64): Option[Instant] =
     Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange |> Result.toOption
 
+  pub def saturatingOfEpochSecond(epochSecond: Int64): Instant =
+    match (Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange) {
+      case Ok(v) => v
+      case Err(v) => v
+    }
+
   ///
   /// Splits `ms` into the two fields an `Instant` is stored in, without regard for the
   /// representable range.
