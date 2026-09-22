@@ -1,9 +1,9 @@
 ///
-/// Tests for `saturatingSub` that test262 has no counterpart for.
+/// Tests for `minusSaturated` that test262 has no counterpart for.
 ///
 /// `Temporal.Instant.prototype.subtract` only offers the throwing form, so the cases where
-/// `saturatingSub` clamps to an end are the counterpart of a `RangeError` and stay under
-/// `test/test262`. What is left here is the other half: what `saturatingSub` does when nothing
+/// `minusSaturated` clamps to an end are the counterpart of a `RangeError` and stay under
+/// `test/test262`. What is left here is the other half: what `minusSaturated` does when nothing
 /// goes out of range.
 ///
 /// The starting point and arguments are those of test262's `prototype/subtract/basic.js`, so
@@ -16,7 +16,7 @@ mod TestTime.Instant.MinusSaturated {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, saturatingSub, minInstant}
+    use Time.Instant.{Instant, minusSaturated, min}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

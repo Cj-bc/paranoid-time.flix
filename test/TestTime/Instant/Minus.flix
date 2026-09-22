@@ -1,10 +1,10 @@
 ///
-/// Tests for `trySub` that test262 has no counterpart for.
+/// Tests for `minus` that test262 has no counterpart for.
 ///
-/// `Temporal.Instant.prototype.subtract` throws where `trySub` answers `None`, and the cases
+/// `Temporal.Instant.prototype.subtract` throws where `minus` answers `None`, and the cases
 /// that exercise that are ports and stay under `test/test262`. What is left here is what
 /// follows from this library's own shapes: the borrow out of a two-field instant, the ends of
-/// the `Int64` nanosecond count a `Duration` holds, and the fact that `trySub` and `tryAdd` are
+/// the `Int64` nanosecond count a `Duration` holds, and the fact that `minus` and `plus` are
 /// written in terms of the same internal shift with only the sign between them.
 ///
 /// The instant builders and assertions come from the test262 harness rather than being
@@ -15,7 +15,7 @@ mod TestTime.Instant.Minus {
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant
                         , largestInstantPairToNanoseconds}
     use Time.Duration
-    use Time.Instant.{Instant, tryAdd, trySub, maxInstant, minInstant}
+    use Time.Instant.{Instant, plus, minus, max, min}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)
