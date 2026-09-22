@@ -12,7 +12,7 @@ file per function.
 | `Equals.flix` | `Eq[Instant]` |
 | `SaturatingOfEpochMilli.flix` | `saturatingOfEpochMilli` |
 | `OfEpochNanos.flix` | `ofEpochNanos` |
-| `OfEpochSecond.flix` | `ofEpochSecond` |
+| `TryOfEpochSecond.flix` | `tryOfEpochSecond` |
 | `TryPlus.flix` | `tryPlus` |
 | `SaturatingPlus.flix` | `saturatingPlus` |
 | `TryMinus.flix` | `tryMinus` |
@@ -52,7 +52,7 @@ For `between` there is a fourth: `since` and `until` are signed, so neither the 
 that the answer is never negative nor the ceiling above which there is no answer exists
 over there.
 
-`ofEpochSecond` has one of its own, and it is the whole of it: `Temporal.Instant` is built
+`tryOfEpochSecond` has one of its own, and it is the whole of it: `Temporal.Instant` is built
 from a millisecond or a nanosecond count and has no second-count constructor at all, so
 there is nothing over there to port. Its cases are the two ends and the epoch, because a
 whole second count goes into `secondsSinceEpoch` as given — there is no split and no carry

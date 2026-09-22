@@ -15,7 +15,7 @@
 /// that the numbers stay stated in the one place `Range.flix` pins them. The instant builder
 /// and the assertions come from the test262 harness.
 ///
-mod TestTime.Instant.OfEpochSecond {
+mod TestTime.Instant.TryOfEpochSecond {
 
     use TemporalHelpers.{assertNoInstant, assertSomeInstant, instant, parts}
     use Time.Instant.{max, min, tryOfEpochSecond}
