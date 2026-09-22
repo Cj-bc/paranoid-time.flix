@@ -108,7 +108,7 @@ pub mod Time.Instant {
   /// range check is the only thing that can fail. An `Int64` second count reaches about seven
   /// orders of magnitude further than either end of the range, so it often does.
   ///
-  pub def ofEpochSecond(epochSecond: Int64): Option[Instant] =
+  pub def tryOfEpochSecond(epochSecond: Int64): Option[Instant] =
     Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange |> Result.toOption
 
   ///
@@ -127,7 +127,7 @@ pub mod Time.Instant {
   /// outside the representable range.
   ///
   /// An `Int64` millisecond count reaches about four orders of magnitude further than either
-  /// end of the range, so, as with `ofEpochSecond`, not every count it can hold has an
+  /// end of the range, so, as with `tryOfEpochSecond`, not every count it can hold has an
   /// `Instant`.
   ///
   pub def tryOfEpochMilli(ms: Int64): Option[Instant] =

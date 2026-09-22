@@ -1,5 +1,5 @@
 ///
-/// Tests for `ofEpochSecond`, which test262 has no counterpart for.
+/// Tests for `tryOfEpochSecond`, which test262 has no counterpart for.
 ///
 /// `Temporal.Instant` exposes no second-count constructor at all — it is built from a
 /// millisecond or a nanosecond count — so there is nothing over there to port. What is
@@ -18,7 +18,7 @@
 mod TestTime.Instant.OfEpochSecond {
 
     use TemporalHelpers.{assertNoInstant, assertSomeInstant, instant, parts}
-    use Time.Instant.{max, min, ofEpochSecond}
+    use Time.Instant.{max, min, tryOfEpochSecond}
 
     /// The latest whole second in range, 253402214399.
     def latestSecond(): Int64 =
@@ -31,8 +31,8 @@ mod TestTime.Instant.OfEpochSecond {
         seconds
 
     @Test
-    def ofEpochSecond01_theEpoch_returnsBothFieldsZero(): Unit \ Assert =
-        assertSomeInstant(expected = instant(0i64, 0), ofEpochSecond(0i64), "the epoch")
+    def tryOfEpochSecond01_theEpoch_returnsBothFieldsZero(): Unit \ Assert =
+        assertSomeInstant(expected = instant(0i64, 0), tryOfEpochSecond(0i64), "the epoch")
 
     ///
     /// The last second inside either end has an `Instant`.
@@ -43,19 +43,19 @@ mod TestTime.Instant.OfEpochSecond {
     /// the range ends in.
     ///
     @Test
-    def ofEpochSecond02_theLastSecondInsideEitherEnd_hasAnInstant(): Unit \ Assert = {
-        assertSomeInstant(expected = min(), ofEpochSecond(earliestSecond()),
+    def tryOfEpochSecond02_theLastSecondInsideEitherEnd_hasAnInstant(): Unit \ Assert = {
+        assertSomeInstant(expected = min(), tryOfEpochSecond(earliestSecond()),
                           "the earliest second in range");
-        assertSomeInstant(expected = instant(latestSecond(), 0), ofEpochSecond(latestSecond()),
+        assertSomeInstant(expected = instant(latestSecond(), 0), tryOfEpochSecond(latestSecond()),
                           "the latest second in range")
     }
 
     /// One second further out than either end has none.
     @Test
-    def ofEpochSecond03_oneSecondOutsideEitherEnd_returnsNone(): Unit \ Assert = {
-        assertNoInstant(ofEpochSecond(earliestSecond() - 1i64),
+    def tryOfEpochSecond03_oneSecondOutsideEitherEnd_returnsNone(): Unit \ Assert = {
+        assertNoInstant(tryOfEpochSecond(earliestSecond() - 1i64),
                         "one second before the earliest instant");
-        assertNoInstant(ofEpochSecond(latestSecond() + 1i64),
+        assertNoInstant(tryOfEpochSecond(latestSecond() + 1i64),
                         "one second after the latest instant")
     }
 
@@ -67,9 +67,9 @@ mod TestTime.Instant.OfEpochSecond {
     /// written against the wrong field or the wrong end would let them through.
     ///
     @Test
-    def ofEpochSecond04_theTwoEndsOfInt64_returnNone(): Unit \ Assert = {
-        assertNoInstant(ofEpochSecond(Int64.minValue()), "the smallest second count");
-        assertNoInstant(ofEpochSecond(Int64.maxValue()), "the largest second count")
+    def tryOfEpochSecond04_theTwoEndsOfInt64_returnNone(): Unit \ Assert = {
+        assertNoInstant(tryOfEpochSecond(Int64.minValue()), "the smallest second count");
+        assertNoInstant(tryOfEpochSecond(Int64.maxValue()), "the largest second count")
     }
 
 }
