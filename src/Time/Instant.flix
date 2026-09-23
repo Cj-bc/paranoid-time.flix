@@ -100,6 +100,28 @@ pub mod Time.Instant {
     if (Int64.remainder(x, n) < 0i64) q - 1i64 else q
 
   ///
+  /// Returns the `Instant` at `epochSecond` whole seconds after the epoch, or `None` when it
+  /// is outside the representable range.
+  ///
+  /// A whole second count is what `secondsSinceEpoch` already holds, so there is nothing to
+  /// split and nothing to carry: `nano` is left at zero on both sides of the epoch, and the
+  /// range check is the only thing that can fail. An `Int64` second count reaches about seven
+  /// orders of magnitude further than either end of the range, so it often does.
+  ///
+  pub def tryOfEpochSecond(epochSecond: Int64): Option[Instant] =
+    Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange |> Result.toOption
+
+  ///
+  /// Returns the `Instant` at `epochSecond` whole seconds after the epoch, clamped to the
+  /// nearest end of the range when it lies outside it.
+  ///
+  pub def saturatingOfEpochSecond(epochSecond: Int64): Instant =
+    match (Instant({secondsSinceEpoch = epochSecond, nano = 0}) |> checkRange) {
+      case Ok(v) => v
+      case Err(v) => v
+    }
+
+  ///
   /// Splits `ms` into the two fields an `Instant` is stored in, without regard for the
   /// representable range.
   ///
@@ -115,7 +137,8 @@ pub mod Time.Instant {
   /// outside the representable range.
   ///
   /// An `Int64` millisecond count reaches about four orders of magnitude further than either
-  /// end of the range, so this is the one constructor whose whole argument type does not fit.
+  /// end of the range, so, as with `tryOfEpochSecond`, not every count it can hold has an
+  /// `Instant`.
   ///
   pub def tryOfEpochMilli(ms: Int64): Option[Instant] =
     splitEpochMilliseconds(ms) |> checkRange |> Result.toOption
