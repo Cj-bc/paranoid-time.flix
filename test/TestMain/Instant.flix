@@ -15,9 +15,15 @@ mod TestTime.Instant {
 
   def epoch(): Instant = instant(0i64, 0)
 
-  def minInstant(): Instant = instant(Int64.minValue(), 0)
+  /// -9999-01-02T00:00:00Z, the earliest representable `Instant`.
+  def min(): Instant = instant(-377_705_116_800i64, 0)
 
-  def maxInstant(): Instant = instant(Int64.maxValue(), 999_999_999)
+  /// 9999-12-30T23:59:59.999999999Z, the latest one.
+  def max(): Instant = instant(253_402_214_399i64, 999_999_999)
+
+  /// The two ends as whole millisecond counts, which is all a `Clock` can report.
+  def earliestClockMillis(): Int64 = -377_705_116_800_000i64
+  def latestClockMillis(): Int64 = 253_402_214_399_999i64
 
   def nanosPerSecond(): Int64 = 1_000_000_000i64
 
@@ -88,19 +94,6 @@ mod TestTime.Instant {
   def nowFrozenAt(epochMilli: Int64): (Int64, Int32) =
     withClockFrozenAt(epochMilli, () -> parts(Time.Instant.now()))
 
-  ///
-  /// `Int64.maxValue()` milliseconds is 9_223_372_036_854_775 whole seconds plus 807
-  /// milliseconds, so the split neither overflows nor loses the leftover milliseconds.
-  ///
-  def latestClockInstant(): Instant = instant(9_223_372_036_854_775i64, 807_000_000)
-
-  ///
-  /// `Int64.minValue()` milliseconds is 808 milliseconds short of -9_223_372_036_854_775
-  /// whole seconds. Rounding towards negative infinity puts it one second lower, at
-  /// -9_223_372_036_854_776 seconds plus the remaining 192 milliseconds.
-  ///
-  def earliestClockInstant(): Instant = instant(-9_223_372_036_854_776i64, 192_000_000)
-
   @Test
   def now01_underTheClockHandler_hasWholeMillisecondNano(): Unit \ Assert + IO =
     // `Clock` only offers millisecond resolution, so `nano` is a whole number of milliseconds.
@@ -116,139 +109,154 @@ mod TestTime.Instant {
   def now03_oneMillisecondBeforeTheEpoch_borrowsASecondIntoTheNano(): Unit \ Assert =
     Assert.assertEq(expected = (-1i64, 999_000_000), nowFrozenAt(-1i64))
 
+  /// An `Int64` millisecond count runs far past the range, so the clock extremes clamp.
   @Test
-  def now04_atTheLatestClockValue_splitsItWithoutOverflowing(): Unit \ Assert =
-    Assert.assertEq(expected = parts(latestClockInstant()), nowFrozenAt(Int64.maxValue()))
+  def now04_atTheLatestClockValue_clampsToTheLatestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(max()), nowFrozenAt(Int64.maxValue()))
 
   @Test
-  def now05_atTheEarliestClockValue_keepsTheNanoNonNegative(): Unit \ Assert =
-    Assert.assertEq(expected = parts(earliestClockInstant()), nowFrozenAt(Int64.minValue()))
+  def now05_atTheEarliestClockValue_clampsToTheEarliestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(min()), nowFrozenAt(Int64.minValue()))
 
-  /// Guards the two hand-computed boundary instants against a slip in their arithmetic.
+  ///
+  /// The two ends of the range are still split rather than clamped.
+  ///
+  /// A millisecond count cannot name the last nanosecond of the latest instant, so the
+  /// latest one a clock can report lands 999 microseconds short of it.
+  ///
   @Test
-  def now06_atEitherClockExtreme_reconstructsTheMillisecondsItWasGiven(): Unit \ Assert =
+  def now06_atEitherEndOfTheRange_splitsTheMillisecondsItWasGiven(): Unit \ Assert = {
+    Assert.assertEq(expected = (253_402_214_399i64, 999_000_000), nowFrozenAt(latestClockMillis()));
+    Assert.assertEq(expected = parts(min()), nowFrozenAt(earliestClockMillis()))
+  }
+
+  /// Guards the two millisecond counts above against a slip in their arithmetic.
+  @Test
+  def now07_theTwoEndsAsMilliseconds_agreeWithTheInstantsTheyName(): Unit \ Assert =
     let asMillis = t -> {
       let (seconds, nano) = parts(t);
       seconds * 1_000i64 + Int32.toInt64(nano) / 1_000_000i64
     };
-    Assert.assertEq(expected = (Int64.maxValue(), Int64.minValue()),
-                    (asMillis(latestClockInstant()), asMillis(earliestClockInstant())))
+    Assert.assertEq(expected = (latestClockMillis(), earliestClockMillis()),
+                    (asMillis(max()), asMillis(min())))
 
   //
-  // tryAdd/saturatingAdd
+  // tryPlus/saturatingPlus
   //
 
   @Test
-  def tryAdd01_wholeSeconds_addsToSecondsSinceEpoch(): Unit \ Assert =
+  def tryPlus01_wholeSeconds_addsToSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((3i64, 0)),
-                    Time.Instant.tryAdd(epoch(), Duration.seconds(3)) |> Option.map(parts))
+                    Time.Instant.tryPlus(epoch(), Duration.seconds(3)) |> Option.map(parts))
 
   /// Adding nanoseconds carries over into `secondsSinceEpoch`.
   @Test
-  def tryAdd02_nanosPastTheNextSecond_carriesIntoSecondsSinceEpoch(): Unit \ Assert =
+  def tryPlus02_nanosPastTheNextSecond_carriesIntoSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((1i64, 500_000_000)),
-                    Time.Instant.tryAdd(instant(0i64, 750_000_000), Duration.milliseconds(750))
+                    Time.Instant.tryPlus(instant(0i64, 750_000_000), Duration.milliseconds(750))
                       |> Option.map(parts))
 
   /// Adding a negative duration borrows from `secondsSinceEpoch`.
   @Test
-  def tryAdd03_negativeDuration_borrowsFromSecondsSinceEpoch(): Unit \ Assert =
+  def tryPlus03_negativeDuration_borrowsFromSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((0i64, 750_000_000)),
-                    Time.Instant.tryAdd(instant(1i64, 500_000_000), Duration.milliseconds(-750))
+                    Time.Instant.tryPlus(instant(1i64, 500_000_000), Duration.milliseconds(-750))
                       |> Option.map(parts))
 
   /// `nano` stays non-negative even before the epoch.
   @Test
-  def tryAdd04_negativeDurationCrossingTheEpoch_keepsNanoNonNegative(): Unit \ Assert =
+  def tryPlus04_negativeDurationCrossingTheEpoch_keepsNanoNonNegative(): Unit \ Assert =
     Assert.assertEq(expected = Some((-1i64, 500_000_000)),
-                    Time.Instant.tryAdd(epoch(), Duration.milliseconds(-500)) |> Option.map(parts))
+                    Time.Instant.tryPlus(epoch(), Duration.milliseconds(-500)) |> Option.map(parts))
 
   @Test
-  def tryAdd05_reachingTheLatestSecond_returnsThatInstant(): Unit \ Assert =
-    Assert.assertEq(expected = Some((Int64.maxValue(), 0)),
-                    Time.Instant.tryAdd(instant(Int64.maxValue() - 1i64, 0), Duration.seconds(1))
+  def tryPlus05_reachingTheLatestSecond_returnsThatInstant(): Unit \ Assert =
+    let (latestSecond, _) = parts(max());
+    Assert.assertEq(expected = Some((latestSecond, 0)),
+                    Time.Instant.tryPlus(instant(latestSecond - 1i64, 0), Duration.seconds(1))
                       |> Option.map(parts))
 
   /// Overflowing `secondsSinceEpoch` gives None.
   @Test
-  def tryAdd06_pastTheLatestInstant_returnsNone(): Unit \ Assert =
-    Assert.assertEq(expected = None, Time.Instant.tryAdd(maxInstant(), Duration.nanoseconds(1i64))
+  def tryPlus06_pastTheLatestInstant_returnsNone(): Unit \ Assert =
+    Assert.assertEq(expected = None, Time.Instant.tryPlus(max(), Duration.nanoseconds(1i64))
                                        |> Option.map(parts))
 
   /// A carry alone is enough to overflow.
   @Test
-  def tryAdd07_carryPastTheLatestInstant_returnsNone(): Unit \ Assert =
-    // The duration is under a second, so only the carry out of `nano` overflows the seconds.
+  def tryPlus07_carryPastTheLatestInstant_returnsNone(): Unit \ Assert =
+    // The duration is under a second, so only the carry out of `nano` leaves the range.
+    let (latestSecond, _) = parts(max());
     Assert.assertEq(expected = None,
-                    Time.Instant.tryAdd(instant(Int64.maxValue(), 500_000_000), Duration.milliseconds(600))
+                    Time.Instant.tryPlus(instant(latestSecond, 500_000_000), Duration.milliseconds(600))
                       |> Option.map(parts))
 
   @Test
-  def saturatingAdd01_pastTheLatestInstant_returnsTheLatestInstant(): Unit \ Assert =
-    Assert.assertEq(expected = parts(maxInstant()),
-                    parts(Time.Instant.saturatingAdd(maxInstant(), Duration.days(1))))
+  def saturatingPlus01_pastTheLatestInstant_returnsTheLatestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(max()),
+                    parts(Time.Instant.saturatingPlus(max(), Duration.days(1))))
 
   @Test
-  def saturatingAdd02_pastTheEarliestInstant_returnsTheEarliestInstant(): Unit \ Assert =
-    Assert.assertEq(expected = parts(minInstant()),
-                    parts(Time.Instant.saturatingAdd(minInstant(), Duration.days(-1))))
+  def saturatingPlus02_pastTheEarliestInstant_returnsTheEarliestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(min()),
+                    parts(Time.Instant.saturatingPlus(min(), Duration.days(-1))))
 
   @Test
-  def saturatingAdd03_withinRange_addsTheDuration(): Unit \ Assert =
-    Assert.assertEq(expected = (60i64, 0), parts(Time.Instant.saturatingAdd(epoch(), Duration.minutes(1))))
+  def saturatingPlus03_withinRange_addsTheDuration(): Unit \ Assert =
+    Assert.assertEq(expected = (60i64, 0), parts(Time.Instant.saturatingPlus(epoch(), Duration.minutes(1))))
 
   //
-  // trySub/saturatingSub
+  // tryMinus/saturatingMinus
   //
 
   @Test
-  def trySub01_wholeSeconds_subtractsFromSecondsSinceEpoch(): Unit \ Assert =
+  def tryMinus01_wholeSeconds_subtractsFromSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((-3i64, 0)),
-                    Time.Instant.trySub(epoch(), Duration.seconds(3)) |> Option.map(parts))
+                    Time.Instant.tryMinus(epoch(), Duration.seconds(3)) |> Option.map(parts))
 
   /// Subtracting nanoseconds borrows from `secondsSinceEpoch`.
   @Test
-  def trySub02_nanosPastThePreviousSecond_borrowsFromSecondsSinceEpoch(): Unit \ Assert =
+  def tryMinus02_nanosPastThePreviousSecond_borrowsFromSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((0i64, 750_000_000)),
-                    Time.Instant.trySub(instant(1i64, 500_000_000), Duration.milliseconds(750))
+                    Time.Instant.tryMinus(instant(1i64, 500_000_000), Duration.milliseconds(750))
                       |> Option.map(parts))
 
   /// Subtracting a negative duration carries over into `secondsSinceEpoch`.
   @Test
-  def trySub03_negativeDuration_carriesIntoSecondsSinceEpoch(): Unit \ Assert =
+  def tryMinus03_negativeDuration_carriesIntoSecondsSinceEpoch(): Unit \ Assert =
     Assert.assertEq(expected = Some((1i64, 500_000_000)),
-                    Time.Instant.trySub(instant(0i64, 750_000_000), Duration.milliseconds(-750))
+                    Time.Instant.tryMinus(instant(0i64, 750_000_000), Duration.milliseconds(-750))
                       |> Option.map(parts))
 
   /// `Int64.minValue()` nanoseconds cannot be negated as a whole, but is still subtracted exactly.
   @Test
-  def trySub04_theSmallestDuration_subtractsItExactly(): Unit \ Assert =
+  def tryMinus04_theSmallestDuration_subtractsItExactly(): Unit \ Assert =
     Assert.assertEq(expected = Some(parts(epochPastLargestDuration())),
-                    Time.Instant.trySub(epoch(), Duration.nanoseconds(Int64.minValue()))
+                    Time.Instant.tryMinus(epoch(), Duration.nanoseconds(Int64.minValue()))
                       |> Option.map(parts))
 
   @Test
-  def trySub05_pastTheEarliestInstant_returnsNone(): Unit \ Assert =
-    Assert.assertEq(expected = None, Time.Instant.trySub(minInstant(), Duration.nanoseconds(1i64))
+  def tryMinus05_pastTheEarliestInstant_returnsNone(): Unit \ Assert =
+    Assert.assertEq(expected = None, Time.Instant.tryMinus(min(), Duration.nanoseconds(1i64))
                                        |> Option.map(parts))
 
   @Test
-  def saturatingSub01_pastTheEarliestInstant_returnsTheEarliestInstant(): Unit \ Assert =
-    Assert.assertEq(expected = parts(minInstant()),
-                    parts(Time.Instant.saturatingSub(minInstant(), Duration.days(1))))
+  def saturatingMinus01_pastTheEarliestInstant_returnsTheEarliestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(min()),
+                    parts(Time.Instant.saturatingMinus(min(), Duration.days(1))))
 
   @Test
-  def saturatingSub02_pastTheLatestInstant_returnsTheLatestInstant(): Unit \ Assert =
-    Assert.assertEq(expected = parts(maxInstant()),
-                    parts(Time.Instant.saturatingSub(maxInstant(), Duration.days(-1))))
+  def saturatingMinus02_pastTheLatestInstant_returnsTheLatestInstant(): Unit \ Assert =
+    Assert.assertEq(expected = parts(max()),
+                    parts(Time.Instant.saturatingMinus(max(), Duration.days(-1))))
 
   /// Subtracting a duration undoes adding it.
   @Test
-  def trySub06_theDurationJustAdded_returnsTheOriginalInstant(): Unit \ Assert =
+  def tryMinus06_theDurationJustAdded_returnsTheOriginalInstant(): Unit \ Assert =
     let t = instant(1_735_689_600i64, 123_456_789);
     let d = Duration.milliseconds(1_500);
     Assert.assertEq(expected = Some(parts(t)),
-                    Time.Instant.tryAdd(t, d) |> Option.flatMap(u -> Time.Instant.trySub(u, d))
+                    Time.Instant.tryPlus(t, d) |> Option.flatMap(u -> Time.Instant.tryMinus(u, d))
                       |> Option.map(parts))
 
   //
@@ -284,7 +292,7 @@ mod TestTime.Instant {
   /// A difference that does not fit in a `Duration` gives None.
   @Test
   def between06_theWholeRepresentableRange_returnsNone(): Unit \ Assert =
-    Assert.assertEq(expected = None, Time.Instant.between(minInstant(), maxInstant()))
+    Assert.assertEq(expected = None, Time.Instant.between(min(), max()))
 
   /// The largest difference that still fits in a `Duration`.
   @Test

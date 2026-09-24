@@ -5,11 +5,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1785340538,
-        "narHash": "sha256-7ffagOpLpJih2T2YooDs8Tg3fMoA+lKvaBllyVl9ad8=",
+        "lastModified": 1790064883,
+        "narHash": "sha256-lFNJRCAQpgNyddXerLy3qjHQUwNkyYmmeQo9CAanUak=",
         "owner": "Cj-bc",
         "repo": "flix.nix",
-        "rev": "d973612e0866a626be88d28f3ff270ba49b11e50",
+        "rev": "58255853eb19103ed6fc5773172d64a3fa90cadf",
         "type": "github"
       },
       "original": {
@@ -36,11 +36,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1786106723,
-        "narHash": "sha256-zDSUbpoeo/9ZmD2+wXnzxoo1+uhL8vxc0b8yuYMKYq0=",
+        "lastModified": 1790185690,
+        "narHash": "sha256-xJ+X4hBtOcAFGBOe5nAMyMUeF9foJBmIOu3NjBqBycU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f13ff45afd1bb73e640eaa08a7066dbed07e3238",
+        "rev": "4975466d324710c576dc11ad614684e6bd8cad8e",
         "type": "github"
       },
       "original": {

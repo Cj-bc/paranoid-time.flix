@@ -2,6 +2,6 @@
 name        = "paranoid-time.flix"
 description = "simple DateTime library for flix, usable with paranoid context."
 version     = "0.1.1"
-flix        = "0.75.1"
+flix        = "0.76.2"
 authors     = ["Cj-bc <cj.bc-sd@outlook.jp>"]
 repository  = "github:Cj-bc/paranoid-time.flix"
