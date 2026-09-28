@@ -38,9 +38,9 @@ is a date and one that would wrap round is not. The month and year arithmetic an
 functions count from the fields, which such a value has none of, and report it as out of
 range.
 
-**Year 0 and negative years.** Every date test262's `PlainDate` basics pick is between 1900
-and 2100. `Fields.flix` checks the accessors on either side of year 0 and at the ends of the
-range, including leap years numbered astronomically.
+**Year 0 and negative years.** The ported cases all use years from 1 onwards, nearly all of
+them between 1900 and 2100. `Fields.flix` checks the accessors on either side of year 0 and at
+the ends of the range, including leap years numbered astronomically.
 
 ## Checked by mutation
 
