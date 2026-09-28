@@ -50,9 +50,9 @@ pub mod Time.LocalDate {
   /// UTC offset can be applied without leaving it. A `LocalDate` has no offset to apply,
   /// so it takes the whole range.
   ///
-  /// -9999-01-01 is 4371588 days before the epoch.
+  /// -9999-01-01 is 4371587 days before the epoch.
   ///
-  pub def min(): LocalDate = LocalDate(-4_371_588i64)
+  pub def min(): LocalDate = LocalDate(-4_371_587i64)
 
   ///
   /// The latest representable `LocalDate`: 9999-12-31.
