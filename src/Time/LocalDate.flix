@@ -296,24 +296,21 @@ pub mod Time.LocalDate {
   /// beyond the end it is outside of.
   ///
   def shiftMonths(d: LocalDate, months: BigInt): Result[LocalDate, LocalDate] =
-    // No two months in the range are more than 239999 months apart. Anything larger is
-    // ruled out here, which keeps the Int64 arithmetic below from overflowing.
-    let limit = 240_000ii;
     match checkRange(d) {
       case Err(end) => Err(end)
       case Ok(_) =>
-        if (limit < months) Err(max())
-        else if (months < -limit) Err(min())
-        else {
-          let (year, month, day) = fields(d);
-          let m = BigInt.clampToInt64(min = -240_000i64, max = 240_000i64, months);
-          let total = year * 12i64 + Int32.toInt64(month - 1) + m;
-          let newYear = floorDiv(total, 12i64);
-          let newMonth = Int64.truncateToInt32(Int64.modulo(total, 12i64)) + 1;
-          if (maxYear() < newYear) Err(max())
-          else if (newYear < minYear()) Err(min())
-          else Ok(LocalDate(daysFromCivil(newYear, newMonth, Int32.min(day, daysInMonth(newYear, newMonth)))))
-        }
+        let (year, month, day) = fields(d);
+        // The first month of the range and the last, -9999-01 and 9999-12, are 239987
+        // months apart, so an amount clamped to +/-240000 still lands outside the range on
+        // the same side as the amount it stands for. The clamp is what keeps the Int64
+        // arithmetic below from overflowing.
+        let m = BigInt.clampToInt64(min = -240_000i64, max = 240_000i64, months);
+        let total = year * 12i64 + Int32.toInt64(month - 1) + m;
+        let newYear = floorDiv(total, 12i64);
+        let newMonth = Int64.truncateToInt32(Int64.modulo(total, 12i64)) + 1;
+        if (maxYear() < newYear) Err(max())
+        else if (newYear < minYear()) Err(min())
+        else Ok(LocalDate(daysFromCivil(newYear, newMonth, Int32.min(day, daysInMonth(newYear, newMonth)))))
     }
 
   pub def tryPlusDays(d: LocalDate, days: Int64): Option[LocalDate] =
