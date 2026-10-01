@@ -43,6 +43,13 @@ pub mod Time.LocalDate {
   /// The largest year a `LocalDate` can have.
   def maxYear(): Int64 = 9_999i64
 
+  // @Cj-bc confirmed daycounts of min()/max() by using Kotlin code:
+  //
+  //   println(LocalDate(9999, Month.DECEMBER, 31).toEpochDays())
+  //   println(LocalDate(-9999, Month.JANUARY, 1).toEpochDays())
+  //
+  // https://play.kotlinlang.org/#eyJ2ZXJzaW9uIjoiMi40LjIwIiwicGxhdGZvcm0iOiJqYXZhIiwiYXJncyI6IiIsIm5vbmVNYXJrZXJzIjp0cnVlLCJ0aGVtZSI6ImlkZWEiLCJjb2RlIjoiaW1wb3J0IGtvdGxpbnguZGF0ZXRpbWUuKlxuXG5mdW4gbWFpbigpIHsgXG4gICAgcHJpbnRsbihMb2NhbERhdGUoOTk5OSwgTW9udGguREVDRU1CRVIsIDMxKS50b0Vwb2NoRGF5cygpKVxuICAgIHByaW50bG4oTG9jYWxEYXRlKC05OTk5LCBNb250aC5KQU5VQVJZLCAxKS50b0Vwb2NoRGF5cygpKVxufSIsImNvbXBpbGVyQXJndW1lbnRzIjp7fX0=
+
   ///
   /// The earliest representable `LocalDate`: -9999-01-01.
   ///
@@ -58,7 +65,6 @@ pub mod Time.LocalDate {
   /// The latest representable `LocalDate`: 9999-12-31.
   ///
   /// 9999-12-31 is 2932896 days after the epoch.
-  ///
   pub def max(): LocalDate = LocalDate(2_932_896i64)
 
   /// Returns `x / n` rounded towards negative infinity. `n` must be positive.
@@ -80,6 +86,10 @@ pub mod Time.LocalDate {
     case Ok(v)  => v
     case Err(v) => v
   }
+
+  // references of leap year calculation:
+  // - https://www.nao.ac.jp/faq/a0306.html
+  // - https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/determine-a-leap-year
 
   /// Returns true if `year` is a leap year in the proleptic Gregorian calendar.
   def isLeap(year: Int64): Bool =
