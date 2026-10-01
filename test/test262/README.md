@@ -1,12 +1,18 @@
 # test262 ports
 
-`Time.Instant` cases carried over from [tc39/test262][test262], kept in the directory
-layout the originals have so that each file can be read next to its source.
+`Time.Instant` and `Time.LocalDate` cases carried over from [tc39/test262][test262], kept in
+the directory layout the originals have so that each file can be read next to its source.
 
-Source revision: [`2808d41`][rev] (`test/built-ins/Temporal/Instant`).
+Source revisions:
+
+- [`2808d41`][rev] (`test/built-ins/Temporal/Instant`).
+- [`7ab7faf`][rev-plaindate] (`test/built-ins/Temporal/PlainDate`). `Temporal.PlainDate` is the
+  counterpart of `LocalDate`; its cases are covered in [PlainDate](#plaindate) below. The rest
+  of this README, above that section, is about `Instant`.
 
 [test262]: https://github.com/tc39/test262
 [rev]: https://github.com/tc39/test262/tree/2808d4143f00993c2e65456d9a99b8f82b6743f9/test/built-ins/Temporal/Instant
+[rev-plaindate]: https://github.com/tc39/test262/tree/7ab7fafa0003f73fc85c1b95d88094d33f7eb8bd/test/built-ins/Temporal/PlainDate
 
 ## Licence
 
@@ -32,6 +38,7 @@ and is under this repository's own licence, as is the rest of the project.
 test/test262/
   harness/TemporalHelpers.flix        <- test262's harness/temporalHelpers.js
   built-ins/Temporal/Instant/...      <- test/built-ins/Temporal/Instant/...
+  built-ins/Temporal/PlainDate/...    <- test/built-ins/Temporal/PlainDate/...
 ```
 
 `.js` becomes `.flix`; nothing else about a path changes.
@@ -161,3 +168,111 @@ Whole groups of test262 files have nothing to test against here:
 
 `Temporal.Now.instant` lives outside this tree, under
 `test/built-ins/Temporal/Now/instant/`; `now()` is covered by `test/TestMain/Instant.flix`.
+
+## PlainDate
+
+`Temporal.PlainDate` cases, ported for `Time.LocalDate`. Cases about `LocalDate` behaviour
+test262 has nothing to say about are in `test/TestTime/LocalDate/`.
+
+### What each file covers
+
+Paths are under `built-ins/Temporal/PlainDate/`.
+
+| This file | Under test |
+| --- | --- |
+| `basic.flix` | `tryOf` |
+| `limits.flix` | `tryOf` at the ends of the range and of each month |
+| `argument-invalid.flix` | `tryOf` |
+| `from/limits.flix` | `tryOf` at the ends of the range |
+| `from/negative-month-or-day.flix` | `tryOf` |
+| `compare/basic.flix` | `Order[LocalDate]` |
+| `prototype/equals/basic.flix` | `Eq[LocalDate]`, `isEqual` |
+| `prototype/year/basic.flix` | `getYear` |
+| `prototype/month/basic.flix` | `getMonthValue` |
+| `prototype/day/basic.flix` | `getDayOfMonth` |
+| `prototype/dayOfWeek/basic.flix` | `getDayOfWeek` |
+| `prototype/dayOfYear/basic.flix` | `getDayOfYear` |
+| `prototype/daysInMonth/basic.flix` | `lengthOfMonth` |
+| `prototype/daysInYear/basic.flix` | `lengthOfYear` |
+| `prototype/inLeapYear/basic.flix` | `isLeapYear` |
+| `prototype/toString/basic.flix` | `ToString[LocalDate]` |
+| `prototype/toString/year-format.flix` | `ToString[LocalDate]` |
+| `prototype/add/basic.flix` | `tryPlus{Days,Months,Years}`, and mixed units through `tryAddDuration` |
+| `prototype/add/basic-arithmetic.flix` | `tryPlus{Days,Weeks,Months,Years}`, `tryAddDuration` |
+| `prototype/add/blank-duration.flix` | `tryPlus{Days,Weeks,Months,Years}` |
+| `prototype/add/constrain-days.flix` | `tryPlusMonths` |
+| `prototype/add/leap-year-arithmetic.flix` | `tryPlus{Days,Weeks,Months,Years}`, `tryAddDuration` |
+| `prototype/add/limits.flix` | `tryPlusDays`, `saturatingPlusDays` |
+| `prototype/add/month-boundary.flix` | `tryPlusMonths`, `tryPlusDays` |
+| `prototype/add/overflow-adding-months-to-max-year.flix` | `tryAddDuration`, `saturatingPlusMonths` |
+| `prototype/subtract/basic.flix` | `tryMinus{Days,Months,Years}`, and mixed units through `trySubtractDuration` |
+| `prototype/subtract/basic-arithmetic.flix` | `tryMinus{Days,Weeks,Months,Years}`, `trySubtractDuration` |
+| `prototype/subtract/blank-duration.flix` | `tryMinus{Days,Weeks,Months,Years}` |
+| `prototype/subtract/limits.flix` | `tryMinusDays`, `saturatingMinusDays` |
+| `prototype/subtract/month-boundary.flix` | `tryMinusMonths`, `tryMinusDays` |
+| `prototype/subtract/overflow-constrain.flix` | `tryMinusMonths` |
+| `prototype/subtract/overflow-subtracting-months-from-min-year.flix` | `trySubtractDuration`, `saturatingMinusMonths` |
+| `prototype/with/basic-year-month-day.flix` | `tryWithYear`, `tryWithMonth`, `tryWithDayOfMonth` |
+| `prototype/with/constrain-days.flix` | `tryWithMonth` |
+| `prototype/with/leap-year.flix` | `tryWithYear` |
+| `prototype/with/overflow.flix` | `tryWithYear`, `tryWithMonth`, `tryWithDayOfMonth` |
+
+Each file has the same name as the `.js` it came from.
+
+### How the cases were translated
+
+**The date.** `plainDate(y, m, d)` in the harness stands in for both
+`new Temporal.PlainDate(y, m, d)` and `Temporal.PlainDate.from("yyyy-mm-dd")`. It works the
+day count out through ordinal dates rather than through `Time.LocalDate`, and
+`assertPlainDate` checks that count alongside the fields the accessors read back, so a
+slip in the day arithmetic cannot hide behind the same slip in the accessors. The
+constructor itself, where it is what a case is about, becomes `tryOf`.
+
+**The range.** `Temporal.PlainDate` runs from -271821-04-19 to 275760-09-13. `LocalDate`
+runs from -9999-01-01 to 9999-12-31, the four-digit year range. Cases about the ends are
+restated against those two dates; `Instant` stops a day short at each end so that a UTC
+offset can be applied, but a `LocalDate` has no offset.
+
+**The duration.** `add` and `subtract` take a `Temporal.Duration`. `java.time`, and so
+`LocalDate`, has one function per unit instead: `tryPlusDays`, `tryPlusWeeks`,
+`tryPlusMonths`, `tryPlusYears` and their `minus` twins. A single-unit duration becomes
+a call to that unit's function. A duration that mixes units goes through the harness's
+`tryAddDuration` or `trySubtractDuration`, which apply the years and months together and
+then the weeks and days — the order `Temporal` uses, and `java.time`'s `Period` too.
+
+**Out of range.** `Temporal` throws a `RangeError`; `try*` answers `None`. Where the
+boundary is what a case is about, the `saturating*` half is checked beside it, as for
+`Instant`.
+
+**Overflow.** `add`, `subtract` and `with` constrain a day to the end of a short month by
+default, and throw with `{ overflow: "reject" }`. `java.time` has no such option:
+`plusMonths`, `plusYears`, `withYear` and `withMonth` always constrain. So the constrain
+half comes over and the throwing half of `reject` does not. `withMonth` and
+`withDayOfMonth` reject a month above 12 or a day past the end of the month where `with`
+would constrain them, and `with/overflow.flix` pins that.
+
+**The string form.** `LocalDate` formats a year the way `java.time` does: at least four
+digits and a leading `-` when negative, so -1 is `-0001`. `Temporal` writes a year
+outside 0 to 9999 with six digits, `-000001`. `toString/year-format.flix` restates the
+negative years in range accordingly.
+
+### What is not ported
+
+- **Parsing, property bags and calendars.** `from/` apart from `limits.js` and
+  `negative-month-or-day.js`, every `argument-string-*.js`, `argument-propertybag-*.js`,
+  `calendar-*.js`, `monthCode`, `era`, `eraYear`, `calendarId`, `withCalendar`,
+  `year-zero.js`, `leap-second.js`. `LocalDate` has no string form and one calendar.
+- **Argument coercion and JavaScript object plumbing**, as for `Instant`:
+  `argument-wrong-type.js`, `infinity-throws-rangeerror.js`, `builtin.js`, `length.js`,
+  `name.js`, `prop-desc.js`, `branding.js`, `subclass*.js`, `order-of-operations.js`,
+  `options-*.js` and the rest.
+- **The `overflow` option.** `add/`, `subtract/` and `with/`'s `overflow-*.js` except
+  `subtract/overflow-constrain.js`, and the `reject` halves of the constrain cases.
+  `with/constrain-day.js` repeats `constrain-days.js` for the `gregory` calendar.
+- **Durations `LocalDate` cannot take.** `argument-duration-*.js`,
+  `balance-smaller-units*.js`, `argument-mixed-sign.js`, `argument-singular-properties.js`:
+  the amounts are `Int64`s per unit, with no time units to balance and no signs to mix.
+  How they behave at the ends of `Int64` is in `test/TestTime/LocalDate/`.
+- **Unimplemented members.** `since`, `until`, `weekOfYear`, `yearOfWeek`, `daysInWeek`,
+  `monthsInYear`, `toJSON`, `toLocaleString`, `valueOf`, `toPlainDateTime`,
+  `toPlainMonthDay`, `toPlainYearMonth` and `toZonedDateTime`.
