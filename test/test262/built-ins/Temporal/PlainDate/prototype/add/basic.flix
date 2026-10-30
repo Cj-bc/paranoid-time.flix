@@ -10,7 +10,8 @@
 /// argument becomes a call to that unit's function; `Temporal.Duration.from('P43Y')` is
 /// the same argument as `{ years: 43 }` and is not repeated.
 ///
-/// The table at the bottom mixes units. Those go through the harness's `tryAddDuration`,
+/// The table at the bottom includes single-unit and mixed-unit durations. Single-unit
+/// rows call that unit's function; mixed-unit rows go through the harness's `tryAddDuration`,
 /// which adds the years and months together and then the weeks and days, the order
 /// `Temporal` adds them in; its doc comment says why the order matters. The dates in the
 /// table are strings in test262, and become the harness's `plainDate`.
@@ -18,7 +19,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.Basic {
 
     use TemporalHelpers.{assertPlainDatesEqual, assertSomePlainDate, plainDate, tryAddDuration}
-    use Time.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusYears}
+    use Time.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusWeeks, tryPlusYears}
 
     ///
     /// test262: the single-unit cases at the top of the file, one call each.
@@ -40,11 +41,22 @@ mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.Basic {
     /// test262: the `testData` table, as (date, years, months, weeks, days, expected).
     ///
     @Test
-    def add02_mixedUnits_matchTheTable(): Unit \ Assert =
-        List.forEach(match (y, m, d, years, months, weeks, days, ey, em, ed) ->
+    def add02_durations_matchTheTable(): Unit \ Assert =
+        List.forEach(match (y, m, d, years, months, weeks, days, ey, em, ed) -> {
+            let date = plainDate(y, m, d);
+            // Keep single-unit rows on their own API so the harness's conversion to
+            // months and days cannot hide a defect in the year or week operations.
+            let actual = match (years, months, weeks, days) {
+                case (n, 0i64, 0i64, 0i64) => tryPlusYears(date, n)
+                case (0i64, n, 0i64, 0i64) => tryPlusMonths(date, n)
+                case (0i64, 0i64, n, 0i64) => tryPlusWeeks(date, n)
+                case (0i64, 0i64, 0i64, n) => tryPlusDays(date, n)
+                case _ => tryAddDuration(date, years, months, weeks, days)
+            };
             assertPlainDatesEqual(expected = plainDate(ey, em, ed),
-                                  tryAddDuration(plainDate(y, m, d), years, months, weeks, days),
-                                  "${y}-${m}-${d} with (${years}, ${months}, ${weeks}, ${days})"),
+                                  actual,
+                                  "${y}-${m}-${d} with (${years}, ${months}, ${weeks}, ${days})")
+          },
           List#{
             (2020, 2, 29, 1i64, 0i64, 0i64, 0i64, 2021, 2, 28),
             (2020, 2, 29, 4i64, 0i64, 0i64, 0i64, 2024, 2, 29),
