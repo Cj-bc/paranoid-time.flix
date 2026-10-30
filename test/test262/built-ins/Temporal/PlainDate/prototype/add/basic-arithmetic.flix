@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Igalia, S.L.. All rights reserved.
+// Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
 // Adapted for Time.LocalDate; the module doc comment says what changed.
 ///
