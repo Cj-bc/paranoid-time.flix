@@ -10,15 +10,16 @@
 /// argument becomes a call to that unit's function; `Temporal.Duration.from('P43Y')` is
 /// the same argument as `{ years: 43 }` and is not repeated.
 ///
-/// The table at the bottom is the one in `add/basic.js`, subtracted negated. Those go
-/// through the harness's `trySubtractDuration`, which subtracts the years and months
+/// The table at the bottom is the one in `add/basic.js`, subtracted negated. Single-unit
+/// rows call that unit's function; mixed-unit rows go through the harness's
+/// `trySubtractDuration`, which subtracts the years and months
 /// together and then the weeks and days, the order `Temporal` subtracts them in. The
 /// dates in the table are strings in test262, and become the harness's `plainDate`.
 ///
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.Basic {
 
     use TemporalHelpers.{assertPlainDatesEqual, assertSomePlainDate, plainDate, trySubtractDuration}
-    use Time.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusYears}
+    use Time.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
 
     ///
     /// test262: the single-unit cases at the top of the file, one call each.
@@ -40,11 +41,22 @@ mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.Basic {
     /// test262: the `testData` table, as (date, years, months, weeks, days, expected).
     ///
     @Test
-    def subtract02_mixedUnits_matchTheTable(): Unit \ Assert =
-        List.forEach(match (y, m, d, years, months, weeks, days, ey, em, ed) ->
+    def subtract02_durations_matchTheTable(): Unit \ Assert =
+        List.forEach(match (y, m, d, years, months, weeks, days, ey, em, ed) -> {
+            let date = plainDate(y, m, d);
+            // Keep single-unit rows on their own API so the harness's conversion to
+            // months and days cannot hide a defect in the year or week operations.
+            let actual = match (years, months, weeks, days) {
+                case (n, 0i64, 0i64, 0i64) => tryMinusYears(date, -n)
+                case (0i64, n, 0i64, 0i64) => tryMinusMonths(date, -n)
+                case (0i64, 0i64, n, 0i64) => tryMinusWeeks(date, -n)
+                case (0i64, 0i64, 0i64, n) => tryMinusDays(date, -n)
+                case _ => trySubtractDuration(date, -years, -months, -weeks, -days)
+            };
             assertPlainDatesEqual(expected = plainDate(ey, em, ed),
-                                  trySubtractDuration(plainDate(y, m, d), -years, -months, -weeks, -days),
-                                  "${y}-${m}-${d} with (${years}, ${months}, ${weeks}, ${days})"),
+                                  actual,
+                                  "${y}-${m}-${d} with (${years}, ${months}, ${weeks}, ${days})")
+          },
           List#{
             (2020, 2, 29, 1i64, 0i64, 0i64, 0i64, 2021, 2, 28),
             (2020, 2, 29, 4i64, 0i64, 0i64, 0i64, 2024, 2, 29),
