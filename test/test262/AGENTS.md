@@ -84,8 +84,10 @@ Do not port these; there is nothing to test them against.
 
 Both types:
 
-- **Parsing and property bags.** `from/` (apart from PlainDate's `limits.js` and
-  `negative-month-or-day.js`), `constructor.js`, every `argument-string-*.js`,
+- **Parsing and property bags.** `from/` (apart from PlainDate's `limits.js`,
+  `negative-month-or-day.js`, `out-of-range.js`, `with-year-month-day.js` and
+  `roundtrip-from-iso.js`, which use only `{year, month, day}` and become `tryOf`; their
+  `monthCode` and `-Infinity` lines are left out), `constructor.js`, every `argument-string-*.js`,
   `argument-propertybag-*.js`, `*-string*.js`, `year-zero.js`, `leap-second.js`. Neither type
   has a string form.
 - **Argument coercion.** `argument-wrong-type.js`, `argument-not-object.js`,
