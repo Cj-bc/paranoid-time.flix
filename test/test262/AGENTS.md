@@ -118,6 +118,9 @@ PlainDate only:
   There is one calendar.
 - **The `overflow` option.** `overflow-*.js` under `add/`, `subtract/` and `with/` except
   `subtract/overflow-constrain.js`, and the `reject` halves of the constrain cases.
+  `add/overflow-adding-months-to-max-year.js`, `subtract/overflow-subtracting-months-from-min-year.js`
+  and `with/overflow.js` are ported all the same: despite the names, they are about the
+  range, not the option.
 - **Durations `LocalDate` cannot take.** `argument-duration-*.js`. How the `Int64` amounts
   behave at their ends is in `test/TestTime/LocalDate/`.
 - **Unimplemented members.** `since`, `until`, `weekOfYear`, `yearOfWeek`, `daysInWeek`,
