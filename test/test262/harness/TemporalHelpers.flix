@@ -17,6 +17,8 @@ pub mod TemporalHelpers {
 
     use Time.Duration
     use Time.Instant.Instant
+    use Time.LocalDate
+    use Time.LocalDate.LocalDate
 
     ///
     /// Builds an `Instant` from the two fields it is stored in.
@@ -159,5 +161,110 @@ pub mod TemporalHelpers {
     ///
     pub def assertNoNanos(actual: Option[Int64], msg: String): Unit \ Assert =
         Assert.assertEqWithMsg(expected = None, actual, "${msg}: expected None, got ${actual}")
+
+    //
+    // PlainDate
+    //
+
+    ///
+    /// The number of days from 1970-01-01 to `year`-`month`-`day` in the proleptic
+    /// Gregorian calendar, worked out without `Time.LocalDate`.
+    ///
+    /// The date is first moved 25 whole 400-year cycles (146097 days each) forward, which
+    /// puts every year from -9999 on at 1 or later, and then counted the way ordinal dates
+    /// are: days in the whole years before it, in the whole months before it, and the day
+    /// itself. 1970-01-01 is ordinal day 719163 when 0001-01-01 is day 1. This is a
+    /// different route from the one `Time.LocalDate` takes, so a slip in one does not
+    /// hide the same slip in the other.
+    ///
+    /// `month` and `day` must name a real date; nothing is checked.
+    ///
+    pub def epochDayOf(year: Int32, month: Int32, day: Int32): Int64 =
+        let y = Int32.toInt64(year) + 10_000i64;
+        let before = y - 1i64;
+        let leap = Int64.remainder(y, 4i64) == 0i64 and
+            (Int64.remainder(y, 100i64) != 0i64 or Int64.remainder(y, 400i64) == 0i64);
+        let monthLengths = List#{31, if (leap) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        let daysBeforeMonth = List.take(month - 1, monthLengths) |> List.sum |> Int32.toInt64;
+        let ordinal = before * 365i64 + before / 4i64 - before / 100i64 + before / 400i64
+            + daysBeforeMonth + Int32.toInt64(day);
+        ordinal - 719_163i64 - 25i64 * 146_097i64
+
+    ///
+    /// Stands in for test262's `new Temporal.PlainDate(year, month, day)` and
+    /// `Temporal.PlainDate.from("yyyy-mm-dd")`.
+    ///
+    /// The day count comes from `epochDayOf` rather than from `Time.LocalDate.tryOf`, so
+    /// that a case about `tryPlusDays` (say) does not silently depend on that function
+    /// being correct.
+    ///
+    pub def plainDate(year: Int32, month: Int32, day: Int32): LocalDate =
+        LocalDate(epochDayOf(year, month, day))
+
+    ///
+    /// The three fields of `d` as its accessors report them, and its day count.
+    ///
+    pub def dateParts(d: LocalDate): (Int32, Int32, Int32, Int64) =
+        (LocalDate.getYear(d), LocalDate.getMonthValue(d), LocalDate.getDayOfMonth(d), LocalDate.toEpochDay(d))
+
+    ///
+    /// test262's `TemporalHelpers.assertPlainDate`.
+    ///
+    /// test262 reads `year`, `month`, `monthCode` and `day` back off the result. There is
+    /// one calendar and no month codes here, so what is read back is the year, the month,
+    /// the day of the month and, alongside them, the day count, which is checked against
+    /// `epochDayOf`. The fields catch an accessor that is wrong; the day count catches
+    /// accessors that are wrong in the same way as the arithmetic that produced `actual`.
+    ///
+    pub def assertPlainDate(actual: LocalDate, year: Int32, month: Int32, day: Int32, msg: String): Unit \ Assert =
+        let e = (year, month, day, epochDayOf(year, month, day));
+        let a = dateParts(actual);
+        Assert.assertEqWithMsg(expected = e, a, "${msg}: expected ${e}, got ${a}")
+
+    ///
+    /// `assertPlainDate` for the `try` operations, which answer with an `Option` where
+    /// `Temporal` returns the date or throws.
+    ///
+    pub def assertSomePlainDate(actual: Option[LocalDate], year: Int32, month: Int32, day: Int32, msg: String): Unit \ Assert =
+        let e = Some((year, month, day, epochDayOf(year, month, day)));
+        let a = Option.map(dateParts, actual);
+        Assert.assertEqWithMsg(expected = e, a, "${msg}: expected ${e}, got ${a}")
+
+    /// test262's `TemporalHelpers.assertPlainDatesEqual`.
+    pub def assertPlainDatesEqual(expected: {expected = LocalDate}, actual: Option[LocalDate], msg: String): Unit \ Assert =
+        let e = Some(dateParts(expected#expected));
+        let a = Option.map(dateParts, actual);
+        Assert.assertEqWithMsg(expected = e, a, "${msg}: expected ${e}, got ${a}")
+
+    ///
+    /// Stands in for test262's `assert.throws(RangeError, ...)` around an operation that
+    /// makes a `PlainDate`. The `try` operations here answer `None` instead.
+    ///
+    pub def assertNoPlainDate(actual: Option[LocalDate], msg: String): Unit \ Assert =
+        let a = Option.map(dateParts, actual);
+        Assert.assertEqWithMsg(expected = None, a, "${msg}: expected None, got ${a}")
+
+    ///
+    /// Stands in for test262's `date.add(new Temporal.Duration(years, months, weeks, days))`.
+    ///
+    /// `Temporal` adds the years and the months together first, pulling the day back to
+    /// the end of a short month once, and then the weeks and the days. `java.time`'s
+    /// `Period` does the same, and so does this: `tryPlusMonths` with the months the years
+    /// and months come to, then `tryPlusDays` with the days the weeks and days come to.
+    /// Adding the years and the months separately is not the same thing — 2020-02-29 plus
+    /// one year is pulled back to 2021-02-28 before the months are added.
+    ///
+    pub def tryAddDuration(d: LocalDate, years: Int64, months: Int64, weeks: Int64, days: Int64): Option[LocalDate] =
+        LocalDate.tryPlusMonths(d, years * 12i64 + months)
+            |> Option.flatMap(x -> LocalDate.tryPlusDays(x, weeks * 7i64 + days))
+
+    ///
+    /// Stands in for test262's `date.subtract(new Temporal.Duration(years, months, weeks, days))`,
+    /// which is `add` with the duration negated: the months first, then the days, both
+    /// through the `minus` forms.
+    ///
+    pub def trySubtractDuration(d: LocalDate, years: Int64, months: Int64, weeks: Int64, days: Int64): Option[LocalDate] =
+        LocalDate.tryMinusMonths(d, years * 12i64 + months)
+            |> Option.flatMap(x -> LocalDate.tryMinusDays(x, weeks * 7i64 + days))
 
 }
