@@ -23,8 +23,8 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     use TemporalHelpers.{assertInstantsEqual, assertNoInstant, assertSomeInstant, instant}
     use Time.Instant.{max, min, saturatingOfEpochMilli, tryOfEpochMilli}
 
-    /// -9999-01-02T00:00:00Z is -377705116800 whole seconds after the epoch.
-    def earliestMillis(): Int64 = -377_705_116_800_000i64
+    /// -9999-01-02T00:00:00Z is -377705030400 whole seconds after the epoch.
+    def earliestMillis(): Int64 = -377_705_030_400_000i64
 
     /// The last whole millisecond of 9999-12-30, 253402214399 s plus 999 ms.
     def latestMillis(): Int64 = 253_402_214_399_999i64

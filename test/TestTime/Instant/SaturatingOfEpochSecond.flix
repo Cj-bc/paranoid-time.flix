@@ -25,7 +25,7 @@ mod TestTime.Instant.SaturatingOfEpochSecond {
         let (seconds, _) = parts(max());
         seconds
 
-    /// The earliest one, -377705116800.
+    /// The earliest one, -377705030400.
     def earliestSecond(): Int64 =
         let (seconds, _) = parts(min());
         seconds

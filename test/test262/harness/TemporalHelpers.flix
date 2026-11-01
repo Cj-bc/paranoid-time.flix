@@ -40,7 +40,7 @@ pub mod TemporalHelpers {
     /// These are the two dates the `Instant` range is stated against, not its ends: the ends
     /// sit one day inside them, which is what `Range.flix` checks.
     ///
-    pub def dayOfMinus9999January1st(): Int64 = -4_371_588i64
+    pub def dayOfMinus9999January1st(): Int64 = -4_371_587i64
     pub def dayOf9999December31st(): Int64 = 2_932_896i64
 
     /// The number of seconds in one day. No leap seconds are modelled.

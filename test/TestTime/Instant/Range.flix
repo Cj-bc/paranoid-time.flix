@@ -35,7 +35,7 @@ mod TestTime.Instant.Range {
     ///
     /// The earliest instant is midnight one day into -9999, not midnight on its first day.
     ///
-    /// -4371587 days * 86400 s/day = -377705116800 s, with `nano` at 0.
+    /// (-4371587 + 1) days * 86400 s/day = -4371586 * 86400 = -377705030400 s, with `nano` at 0.
     ///
     @Test
     def range01_theEarliestInstant_isMidnightOneDayIntoTheFirstYear(): Unit \ Assert = {
