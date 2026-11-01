@@ -6,7 +6,7 @@
 /// `test/built-ins/Temporal/Instant/prototype/add/minimum-maximum-instant.js`
 /// (esid: sec-temporal.instant.prototype.add).
 ///
-/// The two ends are different here — -9999-01-02T00:00:00Z and
+/// The two ends are different here — -9999-01-01T00:00:00Z and
 /// 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom and at 999999999 at the
 /// top — but the shape of the file carries over: adding zero leaves an end alone, one
 /// nanosecond inwards is fine, and one nanosecond outwards is not.

@@ -3,16 +3,11 @@
 ///
 /// `Temporal.Instant` ends at +/-8.64e21 nanoseconds, a round number of nanoseconds with no
 /// calendar meaning of its own. The range here is stated as two calendar instants instead —
-/// -9999-01-02T00:00:00Z and 9999-12-30T23:59:59.999999999Z — so there is something to pin
+/// -9999-01-01T00:00:00Z and 9999-12-30T23:59:59.999999999Z — so there is something to pin
 /// that test262 never asks: that the second counts the library clamps to really are those
-/// two instants, and that they sit one day inside the four-digit year range rather than on
-/// its edge.
-///
-/// That one day of slack is what makes the range usable with a UTC offset: every instant in
-/// it still names a year in [-9999, 9999] once an offset is applied, and offsets stay well
-/// inside the 24 hours of slack. Without it, -9999-01-01T00:00:00Z read at any positive
-/// offset would fall in the year -10000, and 9999-12-31T23:59:59Z at any negative one in
-/// the year 10000.
+/// two instants. The lower one is the first moment of the four-digit year range, the same
+/// day as `LocalDate.min()`; the upper one stops a day short of its last moment, so the
+/// whole of 9999-12-31 is outside the range.
 ///
 /// Each end is checked twice over: against `Time.Instant`'s own constant, and against what
 /// `saturatingOfEpochMilli` clamps to, since an `Int64` millisecond count runs about four
@@ -33,17 +28,17 @@ mod TestTime.Instant.Range {
                      , saturatingPlus, tryPlus, max, min}
 
     ///
-    /// The earliest instant is midnight one day into -9999, not midnight on its first day.
+    /// The earliest instant is midnight on the first day of -9999.
     ///
     /// -4371587 days * 86400 s/day = -377705116800 s, with `nano` at 0.
     ///
     @Test
-    def range01_theEarliestInstant_isMidnightOneDayIntoTheFirstYear(): Unit \ Assert = {
-        let expected = instant((dayOfMinus9999January1st() + 1i64) * secondsPerDay(), 0);
+    def range01_theEarliestInstant_isMidnightOnTheFirstDayOfTheFirstYear(): Unit \ Assert = {
+        let expected = instant(dayOfMinus9999January1st() * secondsPerDay(), 0);
         assertInstantsEqual(expected = expected, saturatingOfEpochMilli(Int64.minValue()),
-                            "-9999-01-02T00:00:00Z");
+                            "-9999-01-01T00:00:00Z");
         assertInstantsEqual(expected = expected, min(),
-                            "-9999-01-02T00:00:00Z as Time.Instant names it")
+                            "-9999-01-01T00:00:00Z as Time.Instant names it")
     }
 
     ///

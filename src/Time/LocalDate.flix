@@ -53,9 +53,8 @@ pub mod Time.LocalDate {
   ///
   /// The earliest representable `LocalDate`: -9999-01-01.
   ///
-  /// `Instant` stops one day short of the four-digit year range at each end, so that a
-  /// UTC offset can be applied without leaving it. A `LocalDate` has no offset to apply,
-  /// so it takes the whole range.
+  /// `Instant` starts on the same day but stops before the last day of 9999. A `LocalDate`
+  /// takes the whole four-digit year range.
   ///
   /// -9999-01-01 is 4371587 days before the epoch.
   ///

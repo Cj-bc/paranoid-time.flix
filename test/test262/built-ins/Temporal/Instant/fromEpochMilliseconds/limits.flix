@@ -6,7 +6,7 @@
 /// (esid: sec-temporal.instant.fromepochmilliseconds, "Min/max range").
 ///
 /// test262 accepts +/-8640000000000000 ms and expects a `RangeError` one millisecond
-/// outside either of them. The range here is a calendar one — -9999-01-02T00:00:00Z to
+/// outside either of them. The range here is a calendar one — -9999-01-01T00:00:00Z to
 /// 9999-12-30T23:59:59.999999999Z — so the two numbers are different, but the shape of the
 /// case carries over unchanged: the last millisecond inside an end is split as given, and
 /// one further out is not representable.
@@ -23,7 +23,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Limits {
     use TemporalHelpers.{assertInstantsEqual, assertNoInstant, assertSomeInstant, instant}
     use Time.Instant.{max, min, saturatingOfEpochMilli, tryOfEpochMilli}
 
-    /// -9999-01-02T00:00:00Z is -377705116800 whole seconds after the epoch.
+    /// -9999-01-01T00:00:00Z is -377705116800 whole seconds after the epoch.
     def earliestMillis(): Int64 = -377_705_116_800_000i64
 
     /// The last whole millisecond of 9999-12-30, 253402214399 s plus 999 ms.

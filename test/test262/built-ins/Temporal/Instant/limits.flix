@@ -7,7 +7,7 @@
 ///
 /// test262 pins the range at +/-8.64e21 nanoseconds and checks that one nanosecond
 /// beyond either end throws a `RangeError`. The range here is a different one —
-/// -9999-01-02T00:00:00Z to 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the
+/// -9999-01-01T00:00:00Z to 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the
 /// bottom and at its ceiling at the top — and there is no validating constructor to make
 /// throw, so the ends are pinned through the arithmetic instead: stepping one nanosecond
 /// past either end fails.

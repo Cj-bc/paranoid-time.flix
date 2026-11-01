@@ -15,7 +15,7 @@ mod TestTime.Instant {
 
   def epoch(): Instant = instant(0i64, 0)
 
-  /// -9999-01-02T00:00:00Z, the earliest representable `Instant`.
+  /// -9999-01-01T00:00:00Z, the earliest representable `Instant`.
   def min(): Instant = instant(-377_705_116_800i64, 0)
 
   /// 9999-12-30T23:59:59.999999999Z, the latest one.

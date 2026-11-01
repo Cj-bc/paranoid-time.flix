@@ -43,7 +43,7 @@ and why. Each case's doc comment quotes the test262 assertion it stands for.
   as that pair, with the arithmetic in the comment. Before the epoch `nano` stays
   non-negative, so the second count is one below the truncating division.
 - **The range.** `Temporal.Instant` ends at ±8.64e21 ns; `Time.Instant` ends at two
-  calendar instants a day inside the four-digit year range. Cases that step one unit past
+  calendar instants: the first moment of -9999 and the last nanosecond of 9999-12-30. Cases that step one unit past
   an end come over; cases that walk from one end to the other in one operation do not,
   since no `Duration` spans the range.
 - **The duration.** `Time.Duration` is one `Int64` nanosecond count, a little over 292

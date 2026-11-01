@@ -15,8 +15,8 @@ pub mod Time.Instant {
   /// representation and structural equality coincides with equality in time.
   ///
   /// Not every pair of field values is a valid `Instant`. The representable range runs from
-  /// -9999-01-02T00:00:00Z to 9999-12-30T23:59:59.999999999Z; see `min` and
-  /// `max` for what puts it one day inside the four-digit year range at each end.
+  /// -9999-01-01T00:00:00Z to 9999-12-30T23:59:59.999999999Z; see `min` and
+  /// `max` for how it relates to the four-digit year range at each end.
   /// Every operation here either stays inside it or reports that it could not.
   ///
   pub enum Instant({
@@ -63,15 +63,13 @@ pub mod Time.Instant {
   def nanosPerMilli(): Int64 = 1_000_000i64
 
   ///
-  /// The earliest representable `Instant`: -9999-01-02T00:00:00Z.
+  /// The earliest representable `Instant`: -9999-01-01T00:00:00Z.
   ///
-  /// The range is the four-digit year range of the proleptic Gregorian calendar, pulled in
-  /// by one day at each end. The day of slack is what lets a UTC offset be applied without
-  /// leaving the range: offsets stay inside +/-18:00, so every instant here still names a
-  /// year in [-9999, 9999] once one is applied. Without it, -9999-01-01T00:00:00Z read at
-  /// any positive offset would fall in the year -10000.
+  /// This is the very start of the four-digit year range of the proleptic Gregorian
+  /// calendar, the same day as `LocalDate.min`. Only the top end stops short of the range:
+  /// see `max`.
   ///
-  /// -9999-01-02 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
+  /// -9999-01-01 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
   ///
   pub def min(): Instant =
     Instant({secondsSinceEpoch = -377_705_116_800i64, nano = 0})
@@ -80,7 +78,9 @@ pub mod Time.Instant {
   /// The latest representable `Instant`: 9999-12-30T23:59:59.999999999Z.
   ///
   /// One nanosecond before 9999-12-31T00:00:00Z, which is 2932896 days after the epoch:
-  /// 2932896 * 86400 = 253402214400, one second below which is 253402214399.
+  /// 2932896 * 86400 = 253402214400, one second below which is 253402214399. So, unlike
+  /// `min`, the range stops a day short of the end of the four-digit year range: the whole
+  /// of 9999-12-31 is outside it.
   ///
   pub def max(): Instant =
     Instant({secondsSinceEpoch = 253_402_214_399i64, nano = 999_999_999})

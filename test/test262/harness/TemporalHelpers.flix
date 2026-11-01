@@ -37,10 +37,11 @@ pub mod TemporalHelpers {
     /// The first day of -9999 and the last day of 9999, as whole days from the epoch in the
     /// proleptic Gregorian calendar with astronomical year numbering.
     ///
-    /// These are the two dates the `Instant` range is stated against, not its ends: the ends
-    /// sit one day inside them, which is what `Range.flix` checks.
+    /// -9999-01-01 is `LocalDate.min()` and also where the `Instant` range starts, at
+    /// midnight. 9999-12-31 is `LocalDate.max()`, but the `Instant` range ends one nanosecond
+    /// before its midnight, which is what `Range.flix` checks.
     ///
-    pub def dayOfMinus9999January1st(): Int64 = -4_371_588i64
+    pub def dayOfMinus9999January1st(): Int64 = -4_371_587i64
     pub def dayOf9999December31st(): Int64 = 2_932_896i64
 
     /// The number of seconds in one day. No leap seconds are modelled.

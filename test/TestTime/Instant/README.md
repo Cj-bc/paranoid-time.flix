@@ -31,12 +31,12 @@ Three differences account for all of them.
 and the borrow between the two fields, `nano` staying non-negative on both sides of the
 epoch, and the splits at the two ends of `Int64` are all questions that only arise here.
 
-The range is stated as two calendar instants — -9999-01-02T00:00:00Z to
+The range is stated as two calendar instants — -9999-01-01T00:00:00Z to
 9999-12-30T23:59:59.999999999Z — and `Temporal` names its own ends by parsing a string,
 which `Instant` has no form for. So that the second counts everything else is written
-against really are those two dates is a claim only `Range.flix` can make, along with the
-reason the ends sit one day inside the four-digit year range rather than on its edge: a UTC
-offset has to be able to move an instant by up to 18 hours without leaving it.
+against really are those two dates is a claim only `Range.flix` can make, along with where
+the ends sit relative to the four-digit year range: the lower end is its very first moment,
+and the upper end stops a day short of its last.
 
 **`Duration` is one `Int64` of nanoseconds.** Its range — a little over 292 years — is far
 narrower than `Instant`'s, and `Temporal.Duration` has no comparable ceiling. Its two

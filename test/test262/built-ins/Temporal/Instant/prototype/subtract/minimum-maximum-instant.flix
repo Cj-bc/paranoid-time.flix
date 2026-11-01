@@ -7,7 +7,7 @@
 /// (esid: sec-temporal.instant.prototype.subtract).
 ///
 /// The mirror image of `add/minimum-maximum-instant.js`. The two ends are different here —
-/// -9999-01-02T00:00:00Z and 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom
+/// -9999-01-01T00:00:00Z and 9999-12-30T23:59:59.999999999Z, with `nano` at 0 at the bottom
 /// and at 999999999 at the top — but the shape of the file carries over.
 ///
 /// Each `RangeError` becomes two cases: `tryMinus` answers `None`, and `saturatingMinus` answers
