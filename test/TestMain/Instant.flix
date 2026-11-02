@@ -16,13 +16,13 @@ mod TestTime.Instant {
   def epoch(): Instant = instant(0i64, 0)
 
   /// -9999-01-02T00:00:00Z, the earliest representable `Instant`.
-  def min(): Instant = instant(-377_705_116_800i64, 0)
+  def min(): Instant = instant(-377_705_030_400i64, 0)
 
   /// 9999-12-30T23:59:59.999999999Z, the latest one.
   def max(): Instant = instant(253_402_214_399i64, 999_999_999)
 
   /// The two ends as whole millisecond counts, which is all a `Clock` can report.
-  def earliestClockMillis(): Int64 = -377_705_116_800_000i64
+  def earliestClockMillis(): Int64 = -377_705_030_400_000i64
   def latestClockMillis(): Int64 = 253_402_214_399_999i64
 
   def nanosPerSecond(): Int64 = 1_000_000_000i64
