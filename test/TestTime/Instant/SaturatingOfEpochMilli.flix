@@ -30,8 +30,8 @@ mod TestTime.Instant.SaturatingOfEpochMilli {
     ///
     /// The borrow still happens at the far end of the range, where the counts are largest.
     ///
-    /// One millisecond after the earliest instant is the case: -377705116799999 ms divides
-    /// to -377705116800 whole seconds with 1 ms left over, so the second count is the same
+    /// One millisecond after the earliest instant is the case: -377705030399999 ms divides
+    /// to -377705030400 whole seconds with 1 ms left over, so the second count is the same
     /// as the earliest instant's and only `nano` moves. Where those two ends themselves
     /// fall is pinned by the port in
     /// `test/test262/built-ins/Temporal/Instant/fromEpochMilliseconds/limits.flix`; counts
@@ -39,8 +39,8 @@ mod TestTime.Instant.SaturatingOfEpochMilli {
     ///
     @Test
     def saturatingOfEpochMilli03_atEitherEndOfTheRange_stillBorrows(): Unit \ Assert = {
-        assertInstantsEqual(expected = instant(-377_705_116_800i64, 1_000_000),
-                            saturatingOfEpochMilli(-377_705_116_799_999i64),
+        assertInstantsEqual(expected = instant(-377_705_030_400i64, 1_000_000),
+                            saturatingOfEpochMilli(-377_705_030_399_999i64),
                             "one millisecond after the earliest instant");
         assertInstantsEqual(expected = instant(253_402_214_399i64, 0),
                             saturatingOfEpochMilli(253_402_214_399_000i64),

@@ -71,10 +71,10 @@ pub mod Time.Instant {
   /// year in [-9999, 9999] once one is applied. Without it, -9999-01-01T00:00:00Z read at
   /// any positive offset would fall in the year -10000.
   ///
-  /// -9999-01-02 is 4371587 days before the epoch, and 4371587 * 86400 = 377705116800.
+  /// -9999-01-02 is 4371586 days before the epoch, and 4371586 * 86400 = 377705030400.
   ///
   pub def min(): Instant =
-    Instant({secondsSinceEpoch = -377_705_116_800i64, nano = 0})
+    Instant({secondsSinceEpoch = -377_705_030_400i64, nano = 0})
 
   ///
   /// The latest representable `Instant`: 9999-12-30T23:59:59.999999999Z.
