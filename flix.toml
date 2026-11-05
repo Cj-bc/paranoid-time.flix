@@ -1,4 +1,4 @@
 [package]
-version     = "v0.3.4"
+version     = "0.3.5"
 flix        = "0.79.0"
 repository  = "github:Cj-bc/paranoid-time.flix"
