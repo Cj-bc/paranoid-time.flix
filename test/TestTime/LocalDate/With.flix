@@ -9,7 +9,7 @@
 mod TestTime.LocalDate.With {
 
     use TemporalHelpers.{assertNoPlainDate, assertSomePlainDate, plainDate}
-    use Time.LocalDate.{LocalDate, max, tryWithDayOfMonth, tryWithDayOfYear, tryWithMonth, tryWithYear}
+    use ParanoidTime.LocalDate.{LocalDate, max, tryWithDayOfMonth, tryWithDayOfYear, tryWithMonth, tryWithYear}
 
     @Test
     def tryWithDayOfYear01_withinTheYear_isThatDay(): Unit \ Assert = {

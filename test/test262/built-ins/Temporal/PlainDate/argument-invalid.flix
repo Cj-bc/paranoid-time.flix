@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/argument-invalid.js`
 /// (esid: sec-temporal.plaindate).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.ArgumentInvalid {
 
     use TemporalHelpers.assertNoPlainDate
-    use Time.LocalDate.tryOf
+    use ParanoidTime.LocalDate.tryOf
 
     @Test
     def argumentInvalid01_noSuchMonthOrDay_isNotADate(): Unit \ Assert =

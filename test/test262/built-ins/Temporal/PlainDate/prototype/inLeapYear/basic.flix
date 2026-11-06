@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/inLeapYear/basic.js`
 /// (esid: sec-get-temporal.plaindate.prototype.inleapyear).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.InLeapYear.Basic {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.isLeapYear
+    use ParanoidTime.LocalDate.isLeapYear
 
     @Test
     def inLeapYear01_basic(): Unit \ Assert = {

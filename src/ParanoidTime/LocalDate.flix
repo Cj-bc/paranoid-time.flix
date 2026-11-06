@@ -1,6 +1,6 @@
-pub mod Time.LocalDate {
-  use Time.DayOfWeek
-  use Time.DayOfWeek.DayOfWeek
+pub mod ParanoidTime.LocalDate {
+  use ParanoidTime.DayOfWeek
+  use ParanoidTime.DayOfWeek.DayOfWeek
 
   ///
   /// A date without a time-zone in the ISO-8601 calendar system, such as 2007-12-03.

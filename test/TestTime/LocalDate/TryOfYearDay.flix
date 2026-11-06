@@ -6,7 +6,7 @@
 mod TestTime.LocalDate.TryOfYearDay {
 
     use TemporalHelpers.{assertNoPlainDate, assertSomePlainDate}
-    use Time.LocalDate.tryOfYearDay
+    use ParanoidTime.LocalDate.tryOfYearDay
 
     @Test
     def tryOfYearDay01_theFirstAndLastDays_ofACommonYear(): Unit \ Assert = {

@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/since/add-subtract.js`
 /// (esid: sec-temporal.instant.prototype.since).
@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.AddSubtract {
 
     use TemporalHelpers.{assertSomeDuration, assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{Instant, between, tryPlus, tryMinus}
+    use ParanoidTime.Instant.{Instant, between, tryPlus, tryMinus}
 
     /// 1976-11-18T15:23:30.123456789Z.
     def earlier(): Instant = instant(217_178_610i64, 123_456_789)

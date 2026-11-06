@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/subtract/blank-duration.js`
 /// (esid: sec-temporal.plaindate.prototype.subtract).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.BlankDuration {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
+    use ParanoidTime.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
 
     @Test
     def blankDuration01_zeroOfEveryUnit_leavesTheDateUnchanged(): Unit \ Assert = {

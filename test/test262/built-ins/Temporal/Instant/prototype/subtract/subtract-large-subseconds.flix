@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/subtract/subtract-large-subseconds.js`
@@ -19,7 +19,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.SubtractLargeSubseconds
 
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, tryMinus}
+    use ParanoidTime.Instant.{Instant, tryMinus}
 
     /// test262's `i1`: 1582966647747612578 ns, which is 1582966647 s plus 747612578 ns.
     def i1(): Instant = fromNanos(1_582_966_647_747_612_578i64)

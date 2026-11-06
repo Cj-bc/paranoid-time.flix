@@ -15,7 +15,7 @@
 mod TestTime.LocalDate.DayArithmetic {
 
     use TemporalHelpers.{assertNoPlainDate, assertPlainDate, assertSomePlainDate, plainDate}
-    use Time.LocalDate.{LocalDate, max, min, saturatingMinusDays, saturatingMinusWeeks,
+    use ParanoidTime.LocalDate.{LocalDate, max, min, saturatingMinusDays, saturatingMinusWeeks,
                         saturatingPlusDays, saturatingPlusWeeks, tryMinusDays, tryMinusWeeks,
                         tryPlusDays, tryPlusWeeks}
 

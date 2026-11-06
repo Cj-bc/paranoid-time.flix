@@ -1,6 +1,6 @@
 // Copyright (C) 2021 the V8 project authors. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/with/constrain-days.js`
 /// (esid: sec-temporal.plaindate.prototype.with).
@@ -17,7 +17,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.With.ConstrainDays {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.tryWithMonth
+    use ParanoidTime.LocalDate.tryWithMonth
 
     def lastDays(februaryLength: Int32): List[(Int32, Int32)] =
         List#{(2, februaryLength), (3, 31), (4, 30), (5, 31), (6, 30), (7, 31), (8, 31),

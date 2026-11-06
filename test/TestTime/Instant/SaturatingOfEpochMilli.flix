@@ -11,7 +11,7 @@
 mod TestTime.Instant.SaturatingOfEpochMilli {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.saturatingOfEpochMilli
+    use ParanoidTime.Instant.saturatingOfEpochMilli
 
     /// A whole number of seconds leaves `nano` at zero on both sides of the epoch.
     @Test

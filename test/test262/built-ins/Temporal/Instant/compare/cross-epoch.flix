@@ -1,6 +1,6 @@
 // Copyright (C) 2018 Bloomberg LP. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/compare/cross-epoch.js`
 /// (esid: sec-temporal.instant.compare).
@@ -18,7 +18,7 @@
 mod Test262.BuiltIns.Temporal.Instant.Compare.CrossEpoch {
 
     use TemporalHelpers.instant
-    use Time.Instant.Instant
+    use ParanoidTime.Instant.Instant
 
     /// 1963-02-13T09:36:29.123456789Z, before the epoch.
     def i1(): Instant = instant(-217_175_011i64, 123_456_789)

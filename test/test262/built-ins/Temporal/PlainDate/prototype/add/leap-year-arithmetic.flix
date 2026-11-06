@@ -1,6 +1,6 @@
 // Copyright (C) 2021 the V8 project authors. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/add/leap-year-arithmetic.js`
 /// (esid: sec-temporal.plaindate.prototype.add).
@@ -20,7 +20,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.LeapYearArithmetic {
 
     use TemporalHelpers.{assertSomePlainDate, tryAddDuration, plainDate}
-    use Time.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusWeeks, tryPlusYears}
+    use ParanoidTime.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusWeeks, tryPlusYears}
 
     /// test262: Years.
     @Test

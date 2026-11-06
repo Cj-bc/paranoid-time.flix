@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/add/basic.js`
 /// (esid: sec-temporal.plaindate.prototype.add).
@@ -19,7 +19,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.Basic {
 
     use TemporalHelpers.{assertPlainDatesEqual, assertSomePlainDate, plainDate, tryAddDuration}
-    use Time.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusWeeks, tryPlusYears}
+    use ParanoidTime.LocalDate.{tryPlusDays, tryPlusMonths, tryPlusWeeks, tryPlusYears}
 
     ///
     /// test262: the single-unit cases at the top of the file, one call each.

@@ -1,10 +1,10 @@
 ///
-/// Tests for `Time.DayOfWeek`, which `Temporal` has no counterpart for: its `dayOfWeek` is
+/// Tests for `ParanoidTime.DayOfWeek`, which `Temporal` has no counterpart for: its `dayOfWeek` is
 /// a plain number.
 ///
 mod TestTime.LocalDate.DayOfWeek {
 
-    use Time.DayOfWeek.{DayOfWeek, getValue, tryOf}
+    use ParanoidTime.DayOfWeek.{DayOfWeek, getValue, tryOf}
 
     @Test
     def dayOfWeek01_tryOf_undoesGetValue(): Unit \ Assert =

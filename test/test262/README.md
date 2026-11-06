@@ -1,9 +1,9 @@
 # test262 ports
 
-`Time.Instant` and `Time.LocalDate` cases carried over from [tc39/test262][test262], kept in
+`ParanoidTime.Instant` and `ParanoidTime.LocalDate` cases carried over from [tc39/test262][test262], kept in
 the directory layout the originals have so that each file can be read next to its source.
-`Temporal.Instant` is ported for `Time.Instant`, and `Temporal.PlainDate` for
-`Time.LocalDate`.
+`Temporal.Instant` is ported for `ParanoidTime.Instant`, and `Temporal.PlainDate` for
+`ParanoidTime.LocalDate`.
 
 Source revisions:
 

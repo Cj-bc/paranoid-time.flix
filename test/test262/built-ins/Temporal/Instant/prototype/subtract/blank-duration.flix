@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/subtract/blank-duration.js`
@@ -12,7 +12,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.BlankDuration {
 
     use TemporalHelpers.{assertSomeInstant, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.tryMinus
+    use ParanoidTime.Instant.tryMinus
 
     /// test262: `new Temporal.Instant(1n).subtract(new Temporal.Duration())` is unchanged.
     @Test

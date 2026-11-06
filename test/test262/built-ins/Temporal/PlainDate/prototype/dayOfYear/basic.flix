@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/dayOfYear/basic.js`
 /// (esid: sec-get-temporal.plaindate.prototype.dayofyear).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.DayOfYear.Basic {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.getDayOfYear
+    use ParanoidTime.LocalDate.getDayOfYear
 
     @Test
     def dayOfYear01_aWeekInNovember(): Unit \ Assert =

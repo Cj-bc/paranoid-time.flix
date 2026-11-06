@@ -9,7 +9,7 @@
 mod TestTime.LocalDate.Range {
 
     use TemporalHelpers.{assertPlainDate, epochDayOf}
-    use Time.LocalDate.{max, min, toEpochDay}
+    use ParanoidTime.LocalDate.{max, min, toEpochDay}
 
     @Test
     def range01_min_isMinus9999JanuaryTheFirst(): Unit \ Assert =

@@ -14,7 +14,7 @@ mod TestTime.Instant.Between {
     use TemporalHelpers.{assertNoDuration, assertSomeDuration, epoch, instant}
     use TemporalHelpers.largestInstantPairToNanoseconds
     use Time.Duration
-    use Time.Instant.{between, max, min}
+    use ParanoidTime.Instant.{between, max, min}
 
     ///
     /// The gap is zero at the two ends of the range as well, rather than overflowing on the way

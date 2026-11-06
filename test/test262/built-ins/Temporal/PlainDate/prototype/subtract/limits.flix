@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/subtract/limits.js`
 /// (esid: sec-temporal.plaindate.prototype.subtract).
@@ -16,7 +16,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.Limits {
 
     use TemporalHelpers.{assertNoPlainDate, assertPlainDate}
-    use Time.LocalDate.{max, min, saturatingMinusDays, tryMinusDays}
+    use ParanoidTime.LocalDate.{max, min, saturatingMinusDays, tryMinusDays}
 
     /// test262: `min.subtract({ days: 1 })` throws.
     @Test

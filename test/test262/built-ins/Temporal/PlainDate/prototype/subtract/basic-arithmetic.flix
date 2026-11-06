@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/subtract/basic-arithmetic.js`
 /// (esid: sec-temporal.plaindate.prototype.subtract).
@@ -15,7 +15,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.BasicArithmetic {
 
     use TemporalHelpers.{assertSomePlainDate, trySubtractDuration, plainDate}
-    use Time.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
+    use ParanoidTime.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
 
     /// test262: Years.
     @Test

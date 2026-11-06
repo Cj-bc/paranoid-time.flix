@@ -1,6 +1,6 @@
 // Copyright 2025 Igalia S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/with/basic-year-month-day.js`
 /// (esid: sec-temporal.plaindate.prototype.with).
@@ -13,7 +13,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.With.BasicYearMonthDay {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.{tryWithDayOfMonth, tryWithMonth, tryWithYear}
+    use ParanoidTime.LocalDate.{tryWithDayOfMonth, tryWithMonth, tryWithYear}
 
     def check(name: String, year: Int32, month: Int32, day: Int32): Unit \ Assert = {
         let inCal = plainDate(year, month, day);

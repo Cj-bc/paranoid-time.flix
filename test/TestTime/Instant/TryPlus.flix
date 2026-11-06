@@ -14,7 +14,7 @@ mod TestTime.Instant.TryPlus {
 
     use TemporalHelpers.{assertSomeInstant, instant}
     use Time.Duration
-    use Time.Instant.{tryPlus, max, min}
+    use ParanoidTime.Instant.{tryPlus, max, min}
 
     ///
     /// The zero duration leaves even the two ends of the range unchanged, rather than tipping

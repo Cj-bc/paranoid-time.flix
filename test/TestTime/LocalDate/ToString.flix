@@ -9,7 +9,7 @@
 mod TestTime.LocalDate.ToString {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.{LocalDate, max, min, toEpochDay}
+    use ParanoidTime.LocalDate.{LocalDate, max, min, toEpochDay}
 
     @Test
     def toString01_theEnds(): Unit \ Assert =

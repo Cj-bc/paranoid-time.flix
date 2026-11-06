@@ -18,7 +18,7 @@
 mod TestTime.Instant.TryOfEpochSecond {
 
     use TemporalHelpers.{assertNoInstant, assertSomeInstant, instant, parts}
-    use Time.Instant.{max, min, tryOfEpochSecond}
+    use ParanoidTime.Instant.{max, min, tryOfEpochSecond}
 
     /// The latest whole second in range, 253402214399.
     def latestSecond(): Int64 =

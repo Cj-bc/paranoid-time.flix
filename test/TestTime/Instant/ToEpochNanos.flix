@@ -15,7 +15,7 @@
 mod TestTime.Instant.ToEpochNanos {
 
     use TemporalHelpers.{epoch, instant}
-    use Time.Instant.{ofEpochNanos, toEpochNanos}
+    use ParanoidTime.Instant.{ofEpochNanos, toEpochNanos}
 
     ///
     /// One nanosecond either side of the epoch, the smallest counts that show the two

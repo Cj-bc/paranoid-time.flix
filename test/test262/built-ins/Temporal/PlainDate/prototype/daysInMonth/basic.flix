@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/daysInMonth/basic.js`
 /// (esid: sec-get-temporal.plaindate.prototype.daysinmonth).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.DaysInMonth.Basic {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.lengthOfMonth
+    use ParanoidTime.LocalDate.lengthOfMonth
 
     @Test
     def daysInMonth01_basic(): Unit \ Assert =

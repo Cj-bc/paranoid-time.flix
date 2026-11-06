@@ -14,7 +14,7 @@
 /// offset would fall in the year -10000, and 9999-12-31T23:59:59Z at any negative one in
 /// the year 10000.
 ///
-/// Each end is checked twice over: against `Time.Instant`'s own constant, and against what
+/// Each end is checked twice over: against `ParanoidTime.Instant`'s own constant, and against what
 /// `saturatingOfEpochMilli` clamps to, since an `Int64` millisecond count runs about four
 /// orders of magnitude past both ends. Where exactly those bounds fall to the millisecond
 /// is pinned by the port in
@@ -29,7 +29,7 @@ mod TestTime.Instant.Range {
                         , assertSaturated, dayOf9999December31st
                         , dayOfMinus9999January1st, instant, secondsPerDay}
     use Time.Duration
-    use Time.Instant.{between, saturatingOfEpochMilli
+    use ParanoidTime.Instant.{between, saturatingOfEpochMilli
                      , saturatingPlus, tryPlus, max, min}
 
     ///
@@ -43,7 +43,7 @@ mod TestTime.Instant.Range {
         assertInstantsEqual(expected = expected, saturatingOfEpochMilli(Int64.minValue()),
                             "-9999-01-02T00:00:00Z");
         assertInstantsEqual(expected = expected, min(),
-                            "-9999-01-02T00:00:00Z as Time.Instant names it")
+                            "-9999-01-02T00:00:00Z as ParanoidTime.Instant names it")
     }
 
     ///
@@ -60,7 +60,7 @@ mod TestTime.Instant.Range {
         assertInstantsEqual(expected = expected, saturatingOfEpochMilli(Int64.maxValue()),
                             "9999-12-30T23:59:59.999999999Z");
         assertInstantsEqual(expected = expected, max(),
-                            "9999-12-30T23:59:59.999999999Z as Time.Instant names it")
+                            "9999-12-30T23:59:59.999999999Z as ParanoidTime.Instant names it")
     }
 
     ///
