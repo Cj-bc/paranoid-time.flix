@@ -18,7 +18,7 @@
 mod TestTime.Instant.SaturatingOfEpochSecond {
 
     use TemporalHelpers.{assertInstantsEqual, assertSaturated, instant, parts}
-    use Time.Instant.{max, min, saturatingOfEpochSecond}
+    use ParanoidTime.Instant.{max, min, saturatingOfEpochSecond}
 
     /// The latest whole second in range, 253402214399.
     def latestSecond(): Int64 =

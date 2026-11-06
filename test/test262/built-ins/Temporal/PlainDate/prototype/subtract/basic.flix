@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/subtract/basic.js`
 /// (esid: sec-temporal.plaindate.prototype.subtract).
@@ -19,7 +19,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.Basic {
 
     use TemporalHelpers.{assertPlainDatesEqual, assertSomePlainDate, plainDate, trySubtractDuration}
-    use Time.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
+    use ParanoidTime.LocalDate.{tryMinusDays, tryMinusMonths, tryMinusWeeks, tryMinusYears}
 
     ///
     /// test262: the single-unit cases at the top of the file, one call each.

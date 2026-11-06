@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/since/float64-representable-integer.js`
@@ -21,7 +21,7 @@
 mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.Float64RepresentableInteger {
 
     use TemporalHelpers.{assertNoDuration, epoch, instant}
-    use Time.Instant.between
+    use ParanoidTime.Instant.between
 
     ///
     /// test262's `i1.since(i2)` over a gap of 2^64 nanoseconds.

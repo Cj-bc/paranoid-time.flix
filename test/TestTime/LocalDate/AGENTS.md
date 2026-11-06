@@ -1,4 +1,4 @@
-# Writing `Time.LocalDate` tests
+# Writing `ParanoidTime.LocalDate` tests
 
 What to know before adding a case here. Ports of test262 cases go under
 `test/test262/built-ins/Temporal/PlainDate` instead; see `test/test262/AGENTS.md`.
@@ -22,7 +22,7 @@ A case belongs here when `Temporal.PlainDate` has nothing to port it from:
 
 Use the test262 harness (`TemporalHelpers`): `plainDate` to build a date and
 `assertPlainDate` / `assertSomePlainDate` / `assertNoPlainDate` to check one. `plainDate`
-works the day count out without `Time.LocalDate`, so a case does not depend on `tryOf`. It
+works the day count out without `ParanoidTime.LocalDate`, so a case does not depend on `tryOf`. It
 reaches back to year -9999 only; build anything earlier from `min()`.
 
 ## Checking a guard

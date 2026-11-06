@@ -1,4 +1,4 @@
-pub mod Time.DayOfWeek {
+pub mod ParanoidTime.DayOfWeek {
 
   ///
   /// A day-of-week, such as Tuesday.

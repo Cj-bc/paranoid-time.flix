@@ -8,7 +8,7 @@
 mod TestTime.LocalDate.OfEpochDay {
 
     use TemporalHelpers.{assertNoPlainDate, assertPlainDate, assertSomePlainDate}
-    use Time.LocalDate.{max, min, saturatingOfEpochDay, toEpochDay, tryOfEpochDay}
+    use ParanoidTime.LocalDate.{max, min, saturatingOfEpochDay, toEpochDay, tryOfEpochDay}
 
     @Test
     def tryOfEpochDay01_zero_isTheEpoch(): Unit \ Assert =

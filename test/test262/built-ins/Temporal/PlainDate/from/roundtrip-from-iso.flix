@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/from/roundtrip-from-iso.js`
 /// (esid: sec-temporal.plaindate.from).
@@ -15,7 +15,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.From.RoundtripFromIso {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.{getDayOfMonth, getMonthValue, getYear, tryOf}
+    use ParanoidTime.LocalDate.{getDayOfMonth, getMonthValue, getYear, tryOf}
 
     def testRoundtrip(year: Int32, month: Int32, day: Int32): Unit \ Assert = {
         let date = plainDate(year, month, day);

@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/equals/basic.js`
 /// (esid: sec-temporal.plaindate.protoype.equals).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Equals.Basic {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.isEqual
+    use ParanoidTime.LocalDate.isEqual
 
     @Test
     def equals01_basic(): Unit \ Assert = {

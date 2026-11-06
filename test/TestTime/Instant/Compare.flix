@@ -11,7 +11,7 @@
 mod TestTime.Instant.Compare {
 
     use TemporalHelpers.{instant, parts}
-    use Time.Instant.{max, min}
+    use ParanoidTime.Instant.{max, min}
 
     /// The seconds decide first, and a larger `nano` never makes up for a smaller second.
     @Test

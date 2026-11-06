@@ -15,7 +15,7 @@ mod TestTime.Instant.TryMinus {
     use TemporalHelpers.{assertSomeInstant, epoch, fromNanos, instant
                         , largestInstantPairToNanoseconds}
     use Time.Duration
-    use Time.Instant.{Instant, tryPlus, tryMinus, max, min}
+    use ParanoidTime.Instant.{Instant, tryPlus, tryMinus, max, min}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

@@ -6,7 +6,7 @@
 mod TestTime.LocalDate.Compare {
 
     use TemporalHelpers.plainDate
-    use Time.LocalDate.{isAfter, isBefore, isEqual, max, min}
+    use ParanoidTime.LocalDate.{isAfter, isBefore, isEqual, max, min}
 
     @Test
     def compare01_twoDifferentDates(): Unit \ Assert = {

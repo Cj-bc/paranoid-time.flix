@@ -1,7 +1,7 @@
-# `Time.Instant` tests with no test262 counterpart
+# `ParanoidTime.Instant` tests with no test262 counterpart
 
 `test/test262` holds the cases carried over from [tc39/test262][test262]. This directory
-holds the rest: assertions about `Time.Instant` that test262 has nothing to say about, one
+holds the rest: assertions about `ParanoidTime.Instant` that test262 has nothing to say about, one
 file per function.
 
 [test262]: https://github.com/tc39/test262

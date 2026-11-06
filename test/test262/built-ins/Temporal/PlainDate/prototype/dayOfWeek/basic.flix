@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/dayOfWeek/basic.js`
 /// (esid: sec-get-temporal.plaindate.prototype.dayofweek).
@@ -12,8 +12,8 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.DayOfWeek.Basic {
 
     use TemporalHelpers.plainDate
-    use Time.DayOfWeek.getValue
-    use Time.LocalDate.getDayOfWeek
+    use ParanoidTime.DayOfWeek.getValue
+    use ParanoidTime.LocalDate.getDayOfWeek
 
     /// 1976-11-15 to 1976-11-21 run from Monday to Sunday.
     @Test

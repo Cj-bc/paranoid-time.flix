@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/toString/basic.js`
 /// (esid: sec-temporal.plaindate.protoype.tostring).

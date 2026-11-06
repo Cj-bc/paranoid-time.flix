@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/add/limits.js`
 /// (esid: sec-temporal.plaindate.prototype.add).
@@ -16,7 +16,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.Limits {
 
     use TemporalHelpers.{assertNoPlainDate, assertPlainDate}
-    use Time.LocalDate.{max, min, saturatingPlusDays, tryPlusDays}
+    use ParanoidTime.LocalDate.{max, min, saturatingPlusDays, tryPlusDays}
 
     /// test262: `min.add({ days: -1 })` throws.
     @Test

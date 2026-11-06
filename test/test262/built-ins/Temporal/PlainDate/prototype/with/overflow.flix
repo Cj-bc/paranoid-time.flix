@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/with/overflow.js`
 /// (esid: sec-temporal.plaindate.prototype.with).
@@ -18,7 +18,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.With.Overflow {
 
     use TemporalHelpers.{assertNoPlainDate, plainDate}
-    use Time.LocalDate.{tryWithDayOfMonth, tryWithMonth, tryWithYear}
+    use ParanoidTime.LocalDate.{tryWithDayOfMonth, tryWithMonth, tryWithYear}
 
     ///
     /// test262: a year of -300000 or 300000 throws even with `constrain`.

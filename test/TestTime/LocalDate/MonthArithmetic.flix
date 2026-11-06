@@ -12,7 +12,7 @@
 mod TestTime.LocalDate.MonthArithmetic {
 
     use TemporalHelpers.{assertNoPlainDate, assertPlainDate, assertSomePlainDate, plainDate}
-    use Time.LocalDate.{LocalDate, max, min, saturatingMinusMonths, saturatingMinusYears,
+    use ParanoidTime.LocalDate.{LocalDate, max, min, saturatingMinusMonths, saturatingMinusYears,
                         saturatingPlusMonths, saturatingPlusYears, tryMinusMonths, tryMinusYears,
                         tryPlusMonths, tryPlusYears}
 

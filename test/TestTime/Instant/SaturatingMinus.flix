@@ -16,7 +16,7 @@ mod TestTime.Instant.SaturatingMinus {
 
     use TemporalHelpers.{assertInstantsEqual, fromNanos, instant}
     use Time.Duration
-    use Time.Instant.{Instant, saturatingMinus, min}
+    use ParanoidTime.Instant.{Instant, saturatingMinus, min}
 
     /// 50000 ns after the epoch, the starting point of test262's `prototype/subtract/basic.js`.
     def inst(): Instant = fromNanos(50_000i64)

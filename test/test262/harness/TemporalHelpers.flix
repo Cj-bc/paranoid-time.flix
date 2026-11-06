@@ -16,9 +16,9 @@
 pub mod TemporalHelpers {
 
     use Time.Duration
-    use Time.Instant.Instant
-    use Time.LocalDate
-    use Time.LocalDate.LocalDate
+    use ParanoidTime.Instant.Instant
+    use ParanoidTime.LocalDate
+    use ParanoidTime.LocalDate.LocalDate
 
     ///
     /// Builds an `Instant` from the two fields it is stored in.
@@ -60,7 +60,7 @@ pub mod TemporalHelpers {
     ///
     /// Stands in for test262's `new Temporal.Instant(ns)`.
     ///
-    /// The split is done here rather than through `Time.Instant.ofEpochNanos`
+    /// The split is done here rather than through `ParanoidTime.Instant.ofEpochNanos`
     /// so that a case about `tryPlus` (say) does not silently depend on that function
     /// being correct. `ns` is divided towards negative infinity, which keeps the
     /// remainder — and therefore `nano` — non-negative.
@@ -172,13 +172,13 @@ pub mod TemporalHelpers {
 
     ///
     /// The number of days from 1970-01-01 to `year`-`month`-`day` in the proleptic
-    /// Gregorian calendar, worked out without `Time.LocalDate`.
+    /// Gregorian calendar, worked out without `ParanoidTime.LocalDate`.
     ///
     /// The date is first moved 25 whole 400-year cycles (146097 days each) forward, which
     /// puts every year from -9999 on at 1 or later, and then counted the way ordinal dates
     /// are: days in the whole years before it, in the whole months before it, and the day
     /// itself. 1970-01-01 is ordinal day 719163 when 0001-01-01 is day 1. This is a
-    /// different route from the one `Time.LocalDate` takes, so a slip in one does not
+    /// different route from the one `ParanoidTime.LocalDate` takes, so a slip in one does not
     /// hide the same slip in the other.
     ///
     /// `month` and `day` must name a real date; nothing is checked.
@@ -198,7 +198,7 @@ pub mod TemporalHelpers {
     /// Stands in for test262's `new Temporal.PlainDate(year, month, day)` and
     /// `Temporal.PlainDate.from("yyyy-mm-dd")`.
     ///
-    /// The day count comes from `epochDayOf` rather than from `Time.LocalDate.tryOf`, so
+    /// The day count comes from `epochDayOf` rather than from `ParanoidTime.LocalDate.tryOf`, so
     /// that a case about `tryPlusDays` (say) does not silently depend on that function
     /// being correct.
     ///

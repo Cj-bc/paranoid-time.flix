@@ -1,6 +1,6 @@
 // Copyright (C) 2023 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/add/argument-duration-max.js`
@@ -21,7 +21,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.ArgumentDurationMax {
 
     use TemporalHelpers.{assertSomeInstant, epoch, instant}
     use Time.Duration
-    use Time.Instant.tryPlus
+    use ParanoidTime.Instant.tryPlus
 
     ///
     /// The largest `Duration`, 9223372036854775807 ns, is 9223372036 s plus 854775807 ns.

@@ -11,7 +11,7 @@
 mod TestTime.Instant.OfEpochNanos {
 
     use TemporalHelpers.{assertInstantsEqual, instant}
-    use Time.Instant.ofEpochNanos
+    use ParanoidTime.Instant.ofEpochNanos
 
     /// One nanosecond either side of the epoch, the smallest counts that show the rounding.
     @Test

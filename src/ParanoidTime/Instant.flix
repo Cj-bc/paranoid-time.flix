@@ -1,4 +1,4 @@
-pub mod Time.Instant {
+pub mod ParanoidTime.Instant {
   use Time.Clock
   use Time.Duration
   use Time.TimeUnit

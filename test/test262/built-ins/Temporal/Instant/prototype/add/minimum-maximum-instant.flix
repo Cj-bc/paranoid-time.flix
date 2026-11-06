@@ -1,6 +1,6 @@
 // Copyright (C) 2022 André Bargull. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/add/minimum-maximum-instant.js`
@@ -22,7 +22,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Add.MinimumMaximumInstant {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant, instant, parts}
     use Time.Duration
-    use Time.Instant.{saturatingPlus, tryPlus, max, min}
+    use ParanoidTime.Instant.{saturatingPlus, tryPlus, max, min}
 
     /// test262's `one`.
     def one(): Duration = Duration.nanoseconds(1i64)

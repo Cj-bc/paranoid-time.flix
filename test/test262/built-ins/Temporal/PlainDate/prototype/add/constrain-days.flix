@@ -1,6 +1,6 @@
 // Copyright (C) 2021 the V8 project authors. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/add/constrain-days.js`
 /// (esid: sec-temporal.plaindate.prototype.add).
@@ -16,7 +16,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Add.ConstrainDays {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.{tryPlusMonths}
+    use ParanoidTime.LocalDate.{tryPlusMonths}
 
     /// test262: Common year, forwards.
     @Test

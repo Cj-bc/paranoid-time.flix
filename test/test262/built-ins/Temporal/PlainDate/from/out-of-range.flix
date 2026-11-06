@@ -1,6 +1,6 @@
 // Copyright (C) 2021 the V8 project authors. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/from/out-of-range.js`
 /// (esid: sec-temporal.plaindate.from).
@@ -15,7 +15,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.From.OutOfRange {
 
     use TemporalHelpers.assertNoPlainDate
-    use Time.LocalDate.tryOf
+    use ParanoidTime.LocalDate.tryOf
 
     def check(cases: List[(Int32, Int32)], msg: String): Unit \ Assert =
         List.forEach(match (month, day) ->

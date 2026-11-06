@@ -3,14 +3,14 @@
 /// to 2026: before the epoch, around year 0, and at the ends of the range.
 ///
 /// Every date here is built by the harness's `plainDate`, whose day count is worked out
-/// independently of `Time.LocalDate`, and `assertPlainDate` reads the year, month and day
+/// independently of `ParanoidTime.LocalDate`, and `assertPlainDate` reads the year, month and day
 /// back through the accessors.
 ///
 mod TestTime.LocalDate.Fields {
 
     use TemporalHelpers.{assertPlainDate, plainDate}
-    use Time.DayOfWeek.DayOfWeek
-    use Time.LocalDate.{getDayOfWeek, getDayOfYear, isLeapYear, lengthOfMonth, lengthOfYear, max, min}
+    use ParanoidTime.DayOfWeek.DayOfWeek
+    use ParanoidTime.LocalDate.{getDayOfWeek, getDayOfYear, isLeapYear, lengthOfMonth, lengthOfYear, max, min}
 
     ///
     /// The accessors undo `plainDate` on dates the other cases do not reach: the day before

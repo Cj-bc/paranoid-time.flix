@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/with/leap-year.js`
 /// (esid: sec-temporal.plaindate.prototype.with).
@@ -12,7 +12,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.With.LeapYear {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.tryWithYear
+    use ParanoidTime.LocalDate.tryWithYear
 
     @Test
     def leapYear01_toAnotherLeapYear_keepsTheLeapDay(): Unit \ Assert =

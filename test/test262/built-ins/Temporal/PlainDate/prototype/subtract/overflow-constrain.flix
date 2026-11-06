@@ -1,6 +1,6 @@
 // Copyright (C) 2022 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/PlainDate/prototype/subtract/overflow-constrain.js`
 /// (esid: sec-temporal.plaindate.prototype.subtract).
@@ -11,7 +11,7 @@
 mod Test262.BuiltIns.Temporal.PlainDate.Prototype.Subtract.OverflowConstrain {
 
     use TemporalHelpers.{assertSomePlainDate, plainDate}
-    use Time.LocalDate.tryMinusMonths
+    use ParanoidTime.LocalDate.tryMinusMonths
 
     @Test
     def overflowConstrain01_marchTheThirtyFirstMinusAMonth_isTheLastDayOfFebruary(): Unit \ Assert =

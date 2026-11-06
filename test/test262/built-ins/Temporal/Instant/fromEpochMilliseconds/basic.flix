@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/fromEpochMilliseconds/basic.js`
 /// (esid: sec-temporal.instant.fromepochmilliseconds).
@@ -14,7 +14,7 @@ mod Test262.BuiltIns.Temporal.Instant.FromEpochMilliseconds.Basic {
 
     use TemporalHelpers.assertInstantsEqual
     use TemporalHelpers.instant
-    use Time.Instant.saturatingOfEpochMilli
+    use ParanoidTime.Instant.saturatingOfEpochMilli
 
     ///
     /// test262: `fromEpochMilliseconds(217175010_123).epochNanoseconds` is

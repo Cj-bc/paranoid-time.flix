@@ -30,7 +30,7 @@ Starts with the copyright line of the test262 file it came from, then:
 
 ```flix
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.LocalDate; the module doc comment says what changed.
+// Adapted for ParanoidTime.LocalDate; the module doc comment says what changed.
 ```
 
 The module doc comment names the source file and its `esid`, and says what was restated
@@ -38,11 +38,11 @@ and why. Each case's doc comment quotes the test262 assertion it stands for.
 
 ## Translating Instant cases
 
-- **The instant.** `Temporal.Instant` is one signed nanosecond count; `Time.Instant` is a
+- **The instant.** `Temporal.Instant` is one signed nanosecond count; `ParanoidTime.Instant` is a
   second count plus a nanosecond-of-second in `[0, 999999999]`. Restate every expectation
   as that pair, with the arithmetic in the comment. Before the epoch `nano` stays
   non-negative, so the second count is one below the truncating division.
-- **The range.** `Temporal.Instant` ends at ±8.64e21 ns; `Time.Instant` ends at two
+- **The range.** `Temporal.Instant` ends at ±8.64e21 ns; `ParanoidTime.Instant` ends at two
   calendar instants a day inside the four-digit year range. Cases that step one unit past
   an end come over; cases that walk from one end to the other in one operation do not,
   since no `Duration` spans the range.
@@ -60,7 +60,7 @@ and why. Each case's doc comment quotes the test262 assertion it stands for.
 - **The date.** Build dates with the harness's `plainDate(y, m, d)`, which stands in for
   both `new Temporal.PlainDate` and `Temporal.PlainDate.from("yyyy-mm-dd")`; check them with
   `assertPlainDate` and its `Option` variants. `plainDate` works the day count out through
-  ordinal dates rather than `Time.LocalDate`, so a slip in the day arithmetic cannot hide
+  ordinal dates rather than `ParanoidTime.LocalDate`, so a slip in the day arithmetic cannot hide
   behind the same slip in the accessors. Use `tryOf` only where the constructor is what the
   case is about. `plainDate` reaches back to year -9999 only.
 - **The range.** `Temporal.PlainDate` runs from -271821-04-19 to 275760-09-13; `LocalDate`

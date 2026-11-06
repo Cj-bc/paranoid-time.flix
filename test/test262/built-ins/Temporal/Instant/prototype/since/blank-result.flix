@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/prototype/since/blank-result.js`
 /// (esid: sec-temporal.instant.prototype.since).
@@ -12,7 +12,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Since.BlankResult {
 
     use TemporalHelpers.{assertSomeDuration, fromNanos}
     use Time.Duration
-    use Time.Instant.between
+    use ParanoidTime.Instant.between
 
     /// test262: `new Temporal.Instant(1n).since(new Temporal.Instant(1n))` is blank.
     @Test

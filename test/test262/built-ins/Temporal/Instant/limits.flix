@@ -1,6 +1,6 @@
 // Copyright (C) 2018 Bloomberg LP. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262 `test/built-ins/Temporal/Instant/limits.js`
 /// (esid: sec-temporal.instant, "Min/max range").
@@ -20,7 +20,7 @@ mod Test262.BuiltIns.Temporal.Instant.Limits {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated, assertSomeInstant}
     use Time.Duration
-    use Time.Instant.{saturatingPlus, saturatingMinus, tryPlus, tryMinus, max, min}
+    use ParanoidTime.Instant.{saturatingPlus, saturatingMinus, tryPlus, tryMinus, max, min}
 
     /// test262: `new Temporal.Instant(limit + 1n)` throws.
     @Test

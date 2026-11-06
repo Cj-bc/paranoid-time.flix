@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Igalia, S.L. All rights reserved.
 // This code is governed by the BSD license found in test/test262/LICENSE.
-// Adapted for Time.Instant; the module doc comment says what changed.
+// Adapted for ParanoidTime.Instant; the module doc comment says what changed.
 ///
 /// Ported from test262
 /// `test/built-ins/Temporal/Instant/prototype/subtract/result-out-of-range.js`
@@ -15,7 +15,7 @@ mod Test262.BuiltIns.Temporal.Instant.Prototype.Subtract.ResultOutOfRange {
 
     use TemporalHelpers.{assertNoInstant, assertSaturated}
     use Time.Duration
-    use Time.Instant.{saturatingMinus, tryMinus, max, min}
+    use ParanoidTime.Instant.{saturatingMinus, tryMinus, max, min}
 
     /// test262's `fields`, as one unit of each.
     def oneOfEachUnit(): List[(String, Duration)] =
